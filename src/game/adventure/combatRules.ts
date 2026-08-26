@@ -113,7 +113,7 @@ export function isInWeaponThrowRange(
   target: Position,
   hasTrident = false,
 ): boolean {
-  if (!hasTrident) return false;
+  if (!hasTrident || (state.weaponCooldownRemaining ?? 0) > 0) return false;
   const sameAxis = state.playerPosition.x === target.x || state.playerPosition.y === target.y;
   if (!sameAxis || positionsEqual(state.playerPosition, target)) return false;
   const throwDistance = Math.abs(state.playerPosition.x - target.x)

@@ -17,7 +17,7 @@ import { formatWholeAmount } from "./numbers";
 import { MATERIAL_META, type MaterialId } from "./items";
 import { POTION_META, type PotionId } from "./potions";
 import type { PortalType, Position, Stats, WeaponAbilityId } from "./types";
-import { weaponSkill } from "./weapon-skills";
+import { WEAPON_SKILLS, weaponSkill } from "./weapon-skills";
 import { playerBasicAttackVisual } from "./attack-visuals";
 import {
   hazardAvoidChance,
@@ -1773,8 +1773,9 @@ function throwAdventureWeapon(
   );
   const enemyKind = tile.enemyKind ?? enemyKindForAdventure(state, room);
   const enemyStats = adventureEnemyStats(room.ring, enemyKind);
+  const throwSkill = WEAPON_SKILLS["trident-throw"];
   const damage = hasTrident
-    ? specialDamage(playerStats.spAttack.mul(1.1), enemyStats.spDefense)
+    ? specialDamage(playerStats.spAttack.mul(throwSkill.damageMultiplier), enemyStats.spDefense)
     : physicalDamage(playerStats.attack.mul(1.35), enemyStats.defense);
   const remainingHp = Decimal.max(0, (tile.enemyHp ?? enemyStats.hp).sub(damage));
   const materialGained = remainingHp.lte(0) ? materialForEnemy(enemyKind) : null;
@@ -1812,7 +1813,8 @@ function throwAdventureWeapon(
     setEnemyFootprintHp(nextRoom, tile.enemyId, target, remainingHp);
   }
   next.playerMustPass = true;
-  next.weaponCooldownRemaining = 2;
+  // finishAdventureAction consumes the thrower's current turn immediately.
+  next.weaponCooldownRemaining = throwSkill.cooldownTurns + 1;
   if (completedQuestId === "rescue-me") {
     next.log = [`${state.playerName} defeats the final Spider. Recruited Worm! You own zero Worm containers, so he will be loose in the menus.`, ...next.log].slice(0, 8);
   } else if (enemyKind === "merman" && remainingHp.lte(0) && nextRoom.tiles.flat().some((tile) => tile.kind === "tridentChest")) {

@@ -3087,6 +3087,7 @@ describe("adventure generation", () => {
       kind: "trident",
     });
     expect(thrown.state.playerMustPass).toBe(true);
+    expect(thrown.state.weaponCooldownRemaining).toBe(4);
     const forcedState = { ...thrown.state, activeActorId: ADVENTURE_KNIGHT_ID };
     expect(moveInAdventure(
       forcedState,
@@ -3095,7 +3096,9 @@ describe("adventure generation", () => {
       thrown.hp,
       thrown.stamina,
     ).error).toMatch(/must recover/i);
-    expect(passAdventureTurn(forcedState, knight.stats).playerMustPass).toBe(false);
+    const recovered = passAdventureTurn(forcedState, knight.stats);
+    expect(recovered.playerMustPass).toBe(false);
+    expect(recovered.weaponCooldownRemaining).toBe(3);
   });
 
   it("keeps manual basic and secondary weapon attacks on separate mouse inputs", () => {

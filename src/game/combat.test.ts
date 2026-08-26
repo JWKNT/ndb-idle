@@ -27,6 +27,7 @@ import {
   type PlayerBattleSetup,
 } from "./combat";
 import { EMPTY_TRAINING, type TrainingLevels } from "./types";
+import { WEAPON_SKILLS } from "./weapon-skills";
 
 describe("combat", () => {
   it("mirrors units after horizontal movement while preserving facing on vertical movement", () => {
@@ -483,6 +484,7 @@ describe("combat", () => {
     if (!thrown.ok) return;
     const afterThrow = thrown.state.units.find((unit) => unit.id === knight.id)!;
     expect(afterThrow.forcedPasses).toBe(1);
+    expect(afterThrow.weaponCooldownRemaining).toBe(4);
     expect(thrown.state.lastAttack?.attackName).toBe("Tidecaller Throw");
     expect(thrown.state.lastAttack?.visual).toBe("trident-throw");
     expect(thrown.state.units.find((unit) => unit.id === squid.id)?.hp.eq(squidHp)).toBe(true);
@@ -495,7 +497,16 @@ describe("combat", () => {
     expect(passed.ok).toBe(true);
     if (!passed.ok) return;
     expect(passed.state.units.find((unit) => unit.id === knight.id)?.forcedPasses).toBe(0);
+    expect(passed.state.units.find((unit) => unit.id === knight.id)?.weaponCooldownRemaining).toBe(3);
     expect(passed.state.log[0]).toContain("must pass");
+
+    const prematureThrow = performAction(
+      { ...passed.state, status: "fighting", activeUnitId: knight.id },
+      { type: "weaponThrow", targetId: squid.id },
+    );
+    expect(prematureThrow.ok).toBe(false);
+    if (prematureThrow.ok) return;
+    expect(prematureThrow.error).toMatch(/ready in 3 turns/i);
   });
 
   it("lets the Abyssal Squid attack while its Tentacle ward is active", () => {
@@ -555,8 +566,9 @@ describe("combat", () => {
     expect(tridentHit.ok).toBe(true);
     if (!tridentHit.ok) return;
     const hitTentacle = tridentHit.state.units.find((unit) => unit.id === westTentacle.id)!;
+    expect(WEAPON_SKILLS["trident-throw"].damageMultiplier).toBe(3);
     expect(westTentacle.hp.sub(hitTentacle.hp).eq(specialDamage(
-      effectiveStat(battle, knight, "spAttack").mul(1.1),
+      effectiveStat(battle, knight, "spAttack").mul(WEAPON_SKILLS["trident-throw"].damageMultiplier),
       effectiveStat(battle, westTentacle, "spDefense"),
     ))).toBe(true);
 

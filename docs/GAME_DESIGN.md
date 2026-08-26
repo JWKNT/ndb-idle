@@ -102,7 +102,7 @@ Battle 6 awards the unique Shaman's Ring accessory. It adds flat Sp. Attack and 
 
 Gold training starts at 3 gold. Its per-level cost growth is 1.1× for levels 1–10, 1.2× for 11–20, and increases by another 0.1× each ten-level band. Training prices are whole numbers, and any fractional remainder in the balance is rounded down after purchase. Training instantly adds one multiplicative level. Gear and fish modify base stats before the `1.05^training` multiplier. Each fish adds three base-stat points, and each member/stat accepts at most `floor(highest completed Battle ÷ 2)` fish.
 
-Knight uses short-range physical attacks. Worm uses special Acid Shot in a straight cardinal line up to exactly four tiles. Learned Weapon Throw travels along an unobstructed cardinal line and forces the next turn to pass. An equipped Tidecaller Trident replaces melee with a one-tile physical thrust using Attack and makes throws use Sp. Attack.
+Knight uses short-range physical attacks. Worm uses special Acid Shot in a straight cardinal line up to exactly four tiles. Learned Weapon Throw travels along an unobstructed cardinal line and forces the next turn to pass. An equipped Tidecaller Trident replaces melee with a one-tile physical thrust using Attack; Tidecaller Throw uses 3× Sp. Attack and has a four-turn cooldown, with the forced retrieval pass counting as its first cooldown turn.
 
 ## Economy and saves
 

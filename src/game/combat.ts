@@ -11,7 +11,7 @@ import {
   type GearItem,
 } from "./gear";
 import { FISH_BASE_STAT_BONUS } from "./items";
-import { weaponSkill } from "./weapon-skills";
+import { WEAPON_SKILLS, weaponSkill } from "./weapon-skills";
 import { basicAttackVisual } from "./attack-visuals";
 import {
   battleHazards,
@@ -622,6 +622,9 @@ export function performAction(
     if (isWeaponThrow && (!actor.weaponThrowUnlocked || !actor.hasTrident)) {
       return failure(state, "Weapon Throw requires the equipped Tidecaller Trident.");
     }
+    if (isWeaponThrow && (actor.weaponCooldownRemaining ?? 0) > 0) {
+      return failure(state, `Tidecaller Throw is ready in ${actor.weaponCooldownRemaining} turn${actor.weaponCooldownRemaining === 1 ? "" : "s"}.`);
+    }
     if (isWeaponThrow
       ? !isInWeaponThrowRange(actor, target.position, state)
       : !isInAttackRange(actor, target.position, state)
@@ -639,7 +642,10 @@ export function performAction(
       target.position,
       actor.facing ?? defaultFacing(actor),
     );
-    if (isWeaponThrow) units[actorIndex].forcedPasses += 1;
+    if (isWeaponThrow) {
+      units[actorIndex].forcedPasses += 1;
+      units[actorIndex].weaponCooldownRemaining = WEAPON_SKILLS["trident-throw"].cooldownTurns;
+    }
     lastAttack = {
       attackName,
       attackType: isWeaponThrow || actor.attackType === "special" ? "special" : "physical",
@@ -698,7 +704,9 @@ export function performAction(
         }
         const damage = special
           ? specialDamage(
-              tridentThrow ? attackPower.mul(1.1) : attackPower,
+              tridentThrow
+                ? attackPower.mul(WEAPON_SKILLS["trident-throw"].damageMultiplier)
+                : attackPower,
               effectiveStat(state, affectedTarget, "spDefense"),
             )
           : physicalDamage(
@@ -765,7 +773,11 @@ export function performAction(
   if (actor.oozeBelch && action.type !== "oozeBelch") {
     units[actorIndex].oozeBelchCooldown = Math.max(0, (units[actorIndex].oozeBelchCooldown ?? 0) - 1);
   }
-  if (action.type !== "weaponSkill" && (units[actorIndex].weaponCooldownRemaining ?? 0) > 0) {
+  if (
+    action.type !== "weaponSkill"
+    && action.type !== "weaponThrow"
+    && (units[actorIndex].weaponCooldownRemaining ?? 0) > 0
+  ) {
     units[actorIndex].weaponCooldownRemaining = Math.max(0, units[actorIndex].weaponCooldownRemaining - 1);
   }
 
@@ -1132,7 +1144,11 @@ export function isInWeaponThrowRange(
   target: Position,
   state: BattleState,
 ): boolean {
-  if (!unit.weaponThrowUnlocked || !unit.hasTrident) return false;
+  if (
+    !unit.weaponThrowUnlocked
+    || !unit.hasTrident
+    || (unit.weaponCooldownRemaining ?? 0) > 0
+  ) return false;
   const targetUnit = unitAt(state, target);
   const targetTiles = targetUnit ? occupiedPositions(targetUnit) : [target];
   const blockingTiles = new Set(state.units

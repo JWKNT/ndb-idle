@@ -68,8 +68,8 @@ export const WEAPON_SKILLS: Record<WeaponAbilityId, WeaponSkillDefinition> = {
     attackPattern: "orthogonal",
     visual: "trident-throw",
     area: "trident",
-    damageMultiplier: 1.1,
-    cooldownTurns: 1,
+    damageMultiplier: 3,
+    cooldownTurns: 4,
     forcesPass: true,
   },
 };
