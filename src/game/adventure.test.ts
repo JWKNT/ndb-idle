@@ -341,7 +341,7 @@ describe("adventure generation", () => {
     expect(resolvedRoom.lotteryResolved).toBe(true);
     expect(resolvedRoom.tiles.flat().filter((tile) => tile.kind === "lotteryGate")).toHaveLength(0);
     expect(resolvedRoom.tiles.flat().filter((tile) => tile.kind === "exit")).toHaveLength(2);
-    expect(collected.state.log[0]).toMatch(/every gate opened/i);
+    expect(collected.state.log[0]).toMatch(/gates opened/i);
   });
 
   it("seals the adjacent side of a locked Lottery-room entrance", () => {
@@ -1473,7 +1473,7 @@ describe("adventure generation", () => {
     expect(interacted.error).toBeUndefined();
     expect(interacted.discoveredTowerDoor).toBe(true);
     expect(interacted.unlockedGreatTower).toBe(true);
-    expect(interacted.state.log[0]).toMatch(/Tower Key turns/i);
+    expect(interacted.state.log[0]).toMatch(/Tower Key unlocked the Great Tower/i);
   });
 
   it("builds zone 4 as an 11x11 volcanic room with hidden wall-to-wall beams and 1x2 Fire Alligators", () => {
@@ -1816,7 +1816,7 @@ describe("adventure generation", () => {
     expect(currentAdventureRoom(settled).tiles.flat().filter((tile) =>
       tile.kind === "exit"
     )).toHaveLength(2);
-    expect(settled.log.filter((entry) => /weakening curse/i.test(entry))).toHaveLength(1);
+    expect(settled.log.filter((entry) => /non-vital stats are reduced by 25%/i.test(entry))).toHaveLength(1);
 
     const curse = createAdventureDiceCurse(3);
     const weakened = diceCursedAdventureStats(knight.stats, curse);

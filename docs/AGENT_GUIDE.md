@@ -53,11 +53,13 @@ The anchor line is:
 
 > NDB MEGASOFTWARE PRESENTS...
 
-The voice is an absurdly self-important software company presenting tiny, broken, or
-dangerous events as historic product launches. It is corporate confidence applied to
+The comedic voice is an absurdly self-important software company presenting tiny, broken,
+or dangerous events as historic product launches. It is corporate confidence applied to
 graves, bad bridges, hostile puddles, wet machinery, and integers. It should feel crass,
 overconfident, meta-ironic, and specific—not regal, literary, wistful, or generically
-quirky.
+quirky. That voice is deliberately restricted to pre-battle stories, actual character or
+NPC dialogue, bestiary prose, and item descriptions. The title's requested anchor line is
+product identity, not a template for informational UI.
 
 Good tonal ingredients:
 
@@ -77,16 +79,20 @@ Avoid:
 
 ### Copy has different jobs
 
-Do not apply the same comedic density everywhere.
+Humor must not leak into text whose job is to explain state or mechanics. Logs, Help,
+toasts, errors, controls, quest objectives, Battle objectives, reward summaries, prices,
+status messages, and labels are standard, brief, and informative.
 
 | Surface | Rule |
 | --- | --- |
 | Pre-battle stories | Corporate spectacle. Name only the headline boss, never supporting mobs. No tactics or solution hints. |
 | NPC conversations | Character-driven absurdity in clickable beats with speaker name and sprite. |
 | Bestiary | A short creature descriptor only. No stats, mechanics, loot, drops, turns, range, or strategy. |
-| Repeated logs | Factual and compact: damage, gold, material obtained, movement, failure. Repeated jokes become noise. |
+| Item descriptions | May use the NDB voice while still stating the item's effect accurately. |
+| Logs and toasts | Factual and compact: damage, gold, material obtained, movement, failure, unlock, or status. No jokes. |
 | First-clear popup | `Defeated <boss>` plus only a concise actual reward or quest. No generic next-Battle sentence. |
-| Help | Raw mechanics and controls, grouped into a small index. Unlock-aware, funny, and not a wiki. |
+| Help | Plain mechanics and controls, grouped into a small index. Unlock-aware, concise, and not a wiki. |
+| Quest and Battle objectives | Directly state the objective without jokes, lore, or unnecessary commentary. |
 | Persistent UI | Titles, numbers, costs, status, and action labels. Let layout and sprites explain the rest. |
 
 All story, dialogue, NPC copy, and bestiary prose lives in
@@ -94,9 +100,10 @@ All story, dialogue, NPC copy, and bestiary prose lives in
 source-readable. The story tests enforce compact lengths, line width, forbidden tactics,
 and supporting-mob exclusions.
 
-Do not put room lore, individual equipment entries, exact quest solutions, or named-room
-walkthroughs in Help. Help explains what controls and systems do. It should not reveal
-undiscovered activities through generic pages on a fresh save.
+Do not put room lore, individual equipment entries, exact quest solutions, named-room
+walkthroughs, or jokes in Help. Help explains what controls and systems do in the shortest
+clear language available. It should not reveal undiscovered activities through generic
+pages on a fresh save.
 
 ## Visual direction
 

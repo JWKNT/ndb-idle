@@ -423,7 +423,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       commitProgression(nextProgress);
       commitBattle(result.state);
       if (newlyDefeated.length > 0) {
-        showToast(`${newlyDefeated.join(" and ")} defeated! Respawned with 10% HP and all the same bruises.`);
+        showToast(`${newlyDefeated.join(" and ")} defeated. Respawned with 10% HP.`);
       }
     },
     [commitBattle, commitProgression, showToast],
@@ -516,18 +516,18 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
 
   const toggleAdventureMember = useCallback((memberId: PlayerId, selected: boolean) => {
     if (selected && battleReservedPlayerIds(battleRef.current).includes(memberId)) {
-      showToast(`${getPlayer(memberId).name} is already in Battle. You only have one of them!`);
+      showToast(`${getPlayer(memberId).name} is already in Battle.`);
       return;
     }
     if (selected && progressionRef.current.fishingAssignment?.memberId === memberId) {
-      showToast(`${getPlayer(memberId).name} is already Fishing. Put the rod down first!`);
+      showToast(`${getPlayer(memberId).name} is already Fishing.`);
       return;
     }
     if (selected && miningMemberIds(
       miningStateRef.current,
       pendingMiningRestartMemberIdRef.current,
     ).includes(memberId)) {
-      showToast(`${getPlayer(memberId).name} is already Mining. You can't swing a Pickaxe from two rooms at once.`);
+      showToast(`${getPlayer(memberId).name} is already Mining.`);
       return;
     }
     commitProgression(setAdventureMemberSelected(progressionRef.current, memberId, selected));
@@ -566,7 +566,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
             pendingMiningRestartMemberIdRef.current,
           )
         ) {
-          showToast(`${getPlayer(selectedId).name} is busy somewhere else. One person, one horrible activity at a time.`);
+          showToast(`${getPlayer(selectedId).name} is assigned to another activity.`);
           return;
         }
         const result = occupant?.team === "player"
@@ -593,7 +593,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
           ? `${actor.name} has no secondary weapon attack available for that target.`
           : "Right-click an enemy to use the equipped weapon's secondary attack.");
       } else if (occupant?.team === "enemy") {
-        showToast(`${actor.name} cannot reach that enemy. Move closer! Your sword is not THAT long.`);
+        showToast(`${actor.name} cannot reach that enemy. Move closer.`);
       } else {
         showToast("Move to one of the four highlighted tiles. Diagonal movement exceeded the current movement budget.");
       }
@@ -620,7 +620,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         pendingMiningRestartMemberIdRef.current,
       )
     ) {
-      showToast(`${getPlayer(memberId).name} is already doing something else. Stop trying to duplicate people.`);
+      showToast(`${getPlayer(memberId).name} is assigned to another activity.`);
       return;
     }
     const result = selectDeploymentUnit(battleRef.current, unitId);
@@ -638,7 +638,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         pendingMiningRestartMemberIdRef.current,
       ));
     if (conflicting) {
-      showToast(`${getPlayer(conflicting).name} is busy somewhere else. Bring them back before starting the murder.`);
+      showToast(`${getPlayer(conflicting).name} is assigned to another activity.`);
       return;
     }
     const result = startRaid(battleRef.current);
@@ -808,15 +808,15 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
           const settlement = settleAdventureGold(settledProgress, carriedGold, true);
           commitProgression(settlement.state);
           commitAdventureSession(null);
-          const banked = settlement.banked.gt(0) ? ` Banked ${formatWholeAmount(settlement.banked)} carried gold. You even kept most of it!` : "";
+          const banked = settlement.banked.gt(0) ? ` Banked ${formatWholeAmount(settlement.banked)} carried gold.` : "";
           showToast((completedQuestId === "rescue-me"
-            ? "Rescue Me complete! Worm joined the party. You have a Worm now!"
+            ? "Rescue Me complete. Worm joined the party."
             : completedQuestId === "retrieve-lost-item"
-              ? "Retrieve Lost Item complete! Fishing unlocked. Numbers can go up while you stare at water now."
+              ? "Retrieve Lost Item complete. Fishing unlocked."
               : completedQuestId === "find-miner"
-                ? "Find the Miner complete! Miner joined the party and Mining unlocked. Go hit some rocks!"
-                : "Quest complete! Whatever was blinking in the Quest log can stop now.") + banked
-                + (failedHammer ? " Retrieve Hammer failed. The Hammer is gone again!" : ""));
+                ? "Find the Miner complete. Miner joined the party and Mining unlocked."
+                : "Quest complete.") + banked
+                + (failedHammer ? " Retrieve Hammer failed." : ""));
         };
         const questConversation: ConversationId | null = completedQuestId === "rescue-shopkeeper"
           ? "shopkeeper-rescued"
@@ -842,12 +842,12 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
           const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
           commitProgression(settlement.state);
           commitAdventureSession(null);
-          showToast(`${memberName} died! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} died. Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${unlockedTraining ? " Training unlocked." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
         } else {
           if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
           commitProgression(nextProgress);
           commitAdventureSession(nextSession);
-          showToast(`${memberName} died and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} died and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${unlockedTraining ? " Training unlocked." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
         }
       } else if (result.exhausted) {
         const penalty = penalizeAdventureGold(sessionWithGold, explorerId, 0.2);
@@ -860,7 +860,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
           const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
           commitProgression(settlement.state);
           commitAdventureSession(null);
-          showToast(`${memberName} ran out of stamina! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${failedHammer ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} ran out of stamina. Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${failedHammer ? " Retrieve Hammer failed." : ""}`);
         } else {
           if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
           commitProgression(nextProgress);
@@ -906,7 +906,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
             nextSession.diceCurse,
           );
           commitAdventureSession(restored);
-          showToast(`The expedition returned from ${result.returnedPortalType === "forge" ? "The Forge" : "the Water Dungeon"}. Count your fingers before moving on.`);
+          showToast(`The expedition returned from ${result.returnedPortalType === "forge" ? "The Forge" : "the Water Dungeon"}.`);
           return;
         }
         if (result.enteredPortalType === "water" && nextSession) {
@@ -920,7 +920,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
                 nextSession.diceCurse,
                 nextSession,
               ));
-          showToast("Entered the Water Dungeon! Your socks are ruined immediately.");
+          showToast("Entered the Water Dungeon.");
           return;
         }
         if (result.enteredPortalType === "forge" && nextSession) {
@@ -934,7 +934,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
                 nextSession.diceCurse,
                 nextSession,
               ));
-          showToast("Entered The Forge! Do not touch anything. This includes the air.");
+          showToast("Entered The Forge.");
           return;
         }
         if (
@@ -954,7 +954,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
                 nextSession.diceCurse,
                 nextSession,
               ));
-          showToast("Everybody is on the teleport! Entered the Water Dungeon with roughly the correct number of limbs.");
+          showToast("The full expedition entered the Water Dungeon.");
           return;
         }
         commitAdventureSession(discardedLoot && nextSession
@@ -967,17 +967,17 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
             })
           : nextSession);
         if (pausedForOffering) {
-          showToast("Offering chamber found! Auto paused so you don't feed the wrong fish to the floor.");
+          showToast("Offering chamber found. Auto Adventure paused for manual interaction.");
         } else if (discardedLoot) {
-          showToast(`${discardedLoot} was discarded because the backpack or stack is full. Make more room, hoarder!`);
+          showToast(`${discardedLoot} was discarded because the backpack or stack is full.`);
         } else if (result.completedTridentTrial) {
-          showToast("Tidecaller Trident obtained! Right-click an enemy to throw your brand new pointy stick.");
+          showToast("Tidecaller Trident obtained. Right-click an enemy to use Tidecaller Throw.");
         } else if (result.materialGained) {
-          showToast(`Collected ${MATERIAL_META[result.materialGained].name}. Pick up the squishy end.`);
+          showToast(`Obtained ${MATERIAL_META[result.materialGained].name}.`);
         } else if (result.returnedHammer) {
           startConversation("blacksmith-hammer-returned");
         } else if (result.recoveredHammer) {
-          showToast("Recovered the Blacksmith's Hammer! Return it during this expedition or it disappears again. Don't ask.");
+          showToast("Recovered the Blacksmith's Hammer. Return it during this expedition or the quest will fail.");
         } else if (result.unlockedBlacksmith && !progress.blacksmithDiscovered) {
           startConversation("blacksmith-met");
         } else if (result.completedCartographerSurvey) {
@@ -1000,7 +1000,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const room = currentAdventureRoom(explorer);
     const tile = room.tiles[explorer.playerPosition.y]?.[explorer.playerPosition.x];
     if (room.kind !== "offering" || tile?.kind !== "offering" || tile.offeringStat !== tileStat) {
-      showToast("Stand on a colored offering tile first. The floor will not accept fish from over there.");
+      showToast("Stand on a colored offering tile before selecting a fish.");
       return;
     }
     const requiredStats = [...new Set(room.tiles.flatMap((row) => row.flatMap((roomTile) =>
@@ -1012,9 +1012,9 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     if (result.solved) {
       const opened = openOfferingChamber(explorer, memberStats(result.state, memberId));
       commitAdventureSession(updateAdventureSession(session, memberId, opened));
-      showToast("Four correct fish open the door! Three angry Mermen come out because nothing can ever be simple.");
+      showToast("All four offerings were accepted. The door opened and three Mermen appeared.");
     } else {
-      showToast(`${FISH_META[fishStat].name} placed on the offering tile. The floor eats it. Ew.`);
+      showToast(`${FISH_META[fishStat].name} placed on the offering tile.`);
     }
   }, [commitAdventureSession, commitProgression, showToast]);
 
@@ -1051,7 +1051,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         return;
       }
       commitProgression(result.state);
-      showToast(`${getPlayer(memberId).name}'s ${STAT_META[stat].label} increased! You shoved Gold into the problem until it got better.`);
+      showToast(`${getPlayer(memberId).name}'s ${STAT_META[stat].label} increased.`);
     },
     [commitProgression, showToast],
   );
@@ -1099,12 +1099,12 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
         commitProgression(settlement.state);
         commitAdventureSession(null);
-        showToast(`${memberName} died! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} died. Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${unlockedTraining ? " Training unlocked." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
       } else {
         if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
         commitProgression(nextProgress);
         commitAdventureSession(nextSession);
-        showToast(`${memberName} died and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} died and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${unlockedTraining ? " Training unlocked." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
       }
     } else if (result.exhausted) {
       const penalty = penalizeAdventureGold(session, explorerId, 0.2);
@@ -1117,7 +1117,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
         commitProgression(settlement.state);
         commitAdventureSession(null);
-        showToast(`${memberName} ran out of stamina! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${failedHammer ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} ran out of stamina. Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${failedHammer ? " Retrieve Hammer failed." : ""}`);
       } else {
         if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
         commitProgression(nextProgress);
@@ -1138,7 +1138,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const currentAdventure = explorerId ? session?.explorers[explorerId] : null;
     if (!session || !explorerId || !currentAdventure || (progress.adventureAutoMode && !automatic)) return;
     if (!isAdventurePlayerTurn(currentAdventure)) {
-      if (!automatic) showToast("Wait for the enemy to take its turn. Yes, it gets one too.");
+      if (!automatic) showToast("Wait for the enemy to finish its turn.");
       return;
     }
     const next = passAdventureTurn(
@@ -1159,14 +1159,14 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     }
     commitProgression(result.state);
     const item = result.state.inventory.find((candidate) => candidate.id === itemId);
-    if (item) showToast(`${item.name} equipped to ${getPlayer(memberId).name}. Perfect fit! Dungeon clothes are creepy like that.`);
+    if (item) showToast(`${item.name} equipped to ${getPlayer(memberId).name}.`);
   }, [commitProgression, showToast]);
 
   const handleUnequipGear = useCallback((memberId: PlayerId, slot: GearSlot) => {
     const result = unequipGear(progressionRef.current, memberId, slot);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast("Gear unequipped and put back in the backpack. It takes up one square no matter how huge it is.");
+    showToast("Gear unequipped and returned to the backpack.");
   }, [commitProgression, showToast]);
 
   const handlePurchaseQuest = useCallback((questId: QuestId) => {
@@ -1178,13 +1178,13 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     }
     commitProgression(result.state);
     showToast(result.state.activeQuestId === questId && current.activeQuestId !== questId
-      ? "Quest purchased and set active! You paid money for extra chores."
-      : "Quest purchased! Choose it from the Adventure Quest log when you feel like suffering.");
+      ? "Quest purchased and set active."
+      : "Quest purchased. Activate it from the Quest log.");
   }, [commitProgression, showToast]);
 
   const handleActivateQuest = useCallback((questId: QuestId) => {
     if (adventureSessionRef.current) {
-      showToast("Finish the current expedition before changing quests. The dungeon cannot move the marker while you're looking.");
+      showToast("Finish the current expedition before changing quests.");
       return;
     }
     const result = activateQuest(progressionRef.current, questId);
@@ -1193,13 +1193,13 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       return;
     }
     commitProgression(result.state);
-    showToast(`${getQuest(questId)?.name ?? "Quest"} is now active! Follow the weird marker.`);
+    showToast(`${getQuest(questId)?.name ?? "Quest"} is now active.`);
   }, [commitProgression, showToast]);
 
   const handleActivateCartographerQuest = useCallback(() => {
     const session = adventureSessionRef.current;
     if (!session || !session.order.some((id) => (session.explorers[id]?.cartographerSurveyTargets?.length ?? 0) > 0)) {
-      showToast("Find the Cartographer and accept the survey first. Standing on random spots does not count!");
+      showToast("Find the Cartographer and accept the survey first.");
       return;
     }
     const explorers = { ...session.explorers };
@@ -1219,35 +1219,35 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const result = purchasePotion(progressionRef.current, potionId);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast(`${POTION_META[potionId].name} purchased! Try not to confuse it with normal drinking liquid.`);
+    showToast(`${POTION_META[potionId].name} purchased.`);
   }, [commitProgression, showToast]);
 
   const handlePurchaseUndeadGem = useCallback(() => {
     const result = purchaseUndeadGem(progressionRef.current);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast("Undead Gem purchased! Equip it in an accessory slot before fighting the Skele-King.");
+    showToast("Undead Gem purchased.");
   }, [commitProgression, showToast]);
 
   const handlePurchaseEscapeRope = useCallback((level: EscapeRopeLevel) => {
     const result = purchaseEscapeRope(progressionRef.current, level);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast(`Level ${level} Escape Rope purchased! Even running away has levels now.`);
+    showToast(`Level ${level} Escape Rope purchased.`);
   }, [commitProgression, showToast]);
 
   const handlePurchaseInventorySlots = useCallback(() => {
     const result = purchaseInventorySlots(progressionRef.current);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast("Backpack expanded by 2 slots! It is not physically any bigger. Magic, probably.");
+    showToast("Backpack capacity increased by 2 slots.");
   }, [commitProgression, showToast]);
 
   const handlePurchaseInventoryStackSize = useCallback(() => {
     const result = purchaseInventoryStackSize(progressionRef.current);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast("Every item stack expanded by 100! Put more junk on top of the old junk.");
+    showToast("Item stack capacity increased by 100.");
   }, [commitProgression, showToast]);
 
   const handlePurchaseHammerQuest = useCallback(() => {
@@ -1262,7 +1262,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       ])) as AdventureSession["explorers"];
       commitAdventureSession({ ...session, explorers });
     }
-    showToast("Hammer quest purchased! Accept it from the Quest log while visiting the Blacksmith. Yes, there are TWO steps.");
+    showToast("Hammer quest purchased. Visit the Blacksmith to activate it.");
   }, [commitAdventureSession, commitProgression, showToast]);
 
   const handleActivateHammerQuest = useCallback(() => {
@@ -1270,7 +1270,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const memberId = session?.focusedMemberId;
     const explorer = memberId ? session?.explorers[memberId] : null;
     if (!session || !memberId || !explorer) {
-      showToast("Visit the Blacksmith during an expedition to activate this quest. He wants to complain in person.");
+      showToast("Visit the Blacksmith during an expedition to activate this quest.");
       return;
     }
     const result = activateHammerQuestAtBlacksmith(explorer, Math.random);
@@ -1280,14 +1280,14 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     }
     commitProgression(beginHammerQuestAttempt(progressionRef.current));
     commitAdventureSession(updateAdventureSession(session, memberId, result.state));
-    showToast("Retrieve Hammer accepted! The vault is marked 5–10 rooms away in the Clay Catacombs. Start walking.");
+    showToast("Retrieve Hammer accepted. The vault is marked 5–10 rooms away in the Clay Catacombs.");
   }, [commitAdventureSession, commitProgression, showToast]);
 
   const handlePurchaseBlacksmithPotion = useCallback(() => {
     const result = purchaseBlacksmithHealingPotion(progressionRef.current);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast("Blacksmith Healing Potion purchased! Contains 200 HP and one small piece of metal you should spit out.");
+    showToast("Blacksmith Healing Potion purchased. Restores 200 HP during Adventure.");
   }, [commitProgression, showToast]);
 
   const handleCompletePotionmasterQuest = useCallback(() => {
@@ -1314,7 +1314,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     commitProgression(result.state);
     const requested = result.state.anglerRequestedFish;
     if (requested) startConversation("angler-request");
-    else showToast("The Angler accepted the bait! Now he wants one very specific fish. Of course he does.");
+    else showToast("The Angler accepted the bait materials and requested a specific fish.");
   }, [commitProgression, showToast, startConversation]);
 
   const handleDeliverAnglerFish = useCallback(() => {
@@ -1335,16 +1335,16 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       const activated = activateMinerQuestAtBlacksmith(explorer, Math.random);
       if (!activated.error) {
         commitAdventureSession(updateAdventureSession(session, memberId, activated.state));
-        showToast("Pickaxe purchased! The Miner's cave is marked in the Clay Catacombs. Bring him his pointy rock-hitter.");
+        showToast("Pickaxe purchased. The Miner's cave is marked in the Clay Catacombs.");
         return;
       }
     }
-    showToast("Pickaxe purchased! Find the Miner next expedition and make him stop using his forehead.");
+    showToast("Pickaxe purchased. Find the Miner during an expedition.");
   }, [commitAdventureSession, commitProgression, showToast]);
 
   const handleDeliverForgeBlueprints = useCallback(() => {
     const next = deliverForgeBlueprints(progressionRef.current);
-    if (next === progressionRef.current) return showToast("The Blacksmith needs the Blueprints first. He tried guessing the measurements and made a very small table.");
+    if (next === progressionRef.current) return showToast("The Blacksmith needs the Blueprints first.");
     commitProgression(next);
     startConversation("forge-blueprints-delivered");
   }, [commitProgression, showToast, startConversation]);
@@ -1353,7 +1353,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const result = purchaseCraftingTable(progressionRef.current);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast("Crafting Table purchased! Crafting unlocked. Put junk in sixteen squares and hope it becomes hat-shaped.");
+    showToast("Crafting Table purchased. Crafting unlocked.");
   }, [commitProgression, showToast]);
 
   const handleCraft = useCallback((grid: CraftingGrid) => {
@@ -1368,27 +1368,27 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
 
   const handleUseBlacksmithPotion = useCallback((memberId: PlayerId) => {
     if (!adventureSessionRef.current?.explorers[memberId]) {
-      showToast("This potion only works on someone in Adventure. Apparently the bottle knows where it is.");
+      showToast("This potion can only be used on a party member in Adventure.");
       return;
     }
     const result = useBlacksmithHealingPotion(progressionRef.current, memberId);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast(`${getPlayer(memberId).name} recovered 200 HP! The empty bottle smells like hot cherries.`);
+    showToast(`${getPlayer(memberId).name} recovered 200 HP.`);
   }, [commitProgression, showToast]);
 
   const handleUseMapmakerChalk = useCallback((memberId: PlayerId) => {
     const session = adventureSessionRef.current;
     const explorer = session?.explorers[memberId];
     if (!session || !explorer) {
-      showToast("Mapmaker's Chalk only works on someone in Adventure. You can't map the dungeon from the Party tab!");
+      showToast("Mapmaker's Chalk can only be used on a party member in Adventure.");
       return;
     }
     const consumed = consumeMapmakerChalk(progressionRef.current);
     if (consumed.error) return showToast(consumed.error);
     commitProgression(consumed.state);
     commitAdventureSession(updateAdventureSession(session, memberId, revealChalkArea(explorer)));
-    showToast(`${getPlayer(memberId).name} revealed a 5×5 map area! Chalk is faster than exploring.`);
+    showToast(`${getPlayer(memberId).name} revealed a 5×5 map area.`);
   }, [commitAdventureSession, commitProgression, showToast]);
 
   const handleConsumePotion = useCallback((potionId: PotionId) => {
@@ -1396,8 +1396,8 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     if (result.error) return showToast(result.error);
     commitProgression(clampPartyVitals(result.state));
     showToast(result.mysteryEffect
-      ? `Mystery Potion drank! ${mysteryPotionEffectDescription(result.mysteryEffect)}. It tastes like every color at once.`
-      : `${POTION_META[potionId].name} active for 30 minutes! Your stomach glows faintly.`);
+      ? `Mystery Potion active. ${mysteryPotionEffectDescription(result.mysteryEffect)}.`
+      : `${POTION_META[potionId].name} active for 30 minutes.`);
   }, [commitProgression, showToast]);
 
   const handleSellMaterial = useCallback((materialId: MaterialId, amount: number) => {
@@ -1422,35 +1422,35 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const result = feedFish(progressionRef.current, memberId, stat);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast(`${getPlayer(memberId).name} ate the fish and permanently gained 3 ${STAT_META[stat].label}! Swallow the bones too.`);
+    showToast(`${getPlayer(memberId).name} permanently gained 3 ${STAT_META[stat].label}.`);
   }, [commitProgression, showToast]);
 
   const handleStartFishing = useCallback((memberId: PlayerId, baitId: MaterialId, mode: "manual" | "auto") => {
     const session = adventureSessionRef.current;
     if (session?.explorers[memberId]) {
-      showToast(`${getPlayer(memberId).name} must leave Adventure before Fishing. The dungeon has no good fishing chairs.`);
+      showToast(`${getPlayer(memberId).name} must leave Adventure before Fishing.`);
       return;
     }
     if (battleReservedPlayerIds(battleRef.current).includes(memberId)) {
-      showToast(`${getPlayer(memberId).name} must finish Battle before Fishing. The enemy will not wait THAT long.`);
+      showToast(`${getPlayer(memberId).name} must finish Battle before Fishing.`);
       return;
     }
     if (miningMemberIds(
       miningStateRef.current,
       pendingMiningRestartMemberIdRef.current,
     ).includes(memberId)) {
-      showToast(`${getPlayer(memberId).name} must stop Mining before Fishing. Put down the Pickaxe before holding the Rod.`);
+      showToast(`${getPlayer(memberId).name} must stop Mining before Fishing.`);
       return;
     }
     const result = startFishing(progressionRef.current, memberId, baitId, mode);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast(`${getPlayer(memberId).name} started ${mode === "auto" ? "auto Fishing" : "Fishing with one bait"}. Stare at the water until a number happens!`);
+    showToast(`${getPlayer(memberId).name} started ${mode === "auto" ? "auto Fishing" : "Fishing with one bait"}.`);
   }, [commitProgression, showToast]);
 
   const handleStopFishing = useCallback(() => {
     commitProgression(stopFishing(progressionRef.current));
-    showToast("Fishing stopped. The active bait fell off the hook and is gone forever. Fish probably ate it while you weren't looking.");
+    showToast("Fishing stopped. The active bait was consumed.");
   }, [commitProgression, showToast]);
 
   const handleChooseFavoredFish = useCallback((stat: StatKey | null) => {
@@ -1477,10 +1477,10 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     else commitPendingMiningRestart(null);
     commitMiningState(null);
     showToast(result.depthLimitReached
-      ? `${getPlayer(memberId).name} reached Mining Room 10 and returned exhausted. The next tunnel is blocked by Chapter 2-shaped rocks.`
+      ? `${getPlayer(memberId).name} reached Mining Room 10 and returned exhausted. The next tunnel is blocked.`
       : result.died
-        ? `${getPlayer(memberId).name} was defeated in Mining and respawned with 10% HP. Never trust a rock with a health bar.`
-        : `${getPlayer(memberId).name} ran out of stamina and left the mine. The rocks remain smug.`);
+        ? `${getPlayer(memberId).name} was defeated in Mining and respawned with 10% HP.`
+        : `${getPlayer(memberId).name} ran out of stamina and left the mine.`);
   }, [commitMiningState, commitPendingMiningRestart, commitProgression, showToast]);
 
   const handleChooseMiningMember = useCallback((memberId: PlayerId) => {
@@ -1490,31 +1490,31 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
   const handleStartMining = useCallback((memberId: PlayerId) => {
     const current = progressionRef.current;
     if (!current.miningUnlocked || !current.pickaxeOwned) {
-      showToast("You need a Pickaxe and the Miner to begin Mining. Bare hands only make the rocks laugh.");
+      showToast("You need the Pickaxe and the Miner to begin Mining.");
       return;
     }
     if (!current.party[memberId]) {
-      showToast("That party member has not joined yet. You cannot send imaginary friends into the mine.");
+      showToast("That party member has not joined yet.");
       return;
     }
     if (adventureSessionRef.current?.explorers[memberId]) {
-      showToast(`${getPlayer(memberId).name} must leave Adventure before Mining. They are already in one dark hole.`);
+      showToast(`${getPlayer(memberId).name} must leave Adventure before Mining.`);
       return;
     }
     if (battleReservedPlayerIds(battleRef.current).includes(memberId)) {
-      showToast(`${getPlayer(memberId).name} must finish Battle before Mining. Kill first, rocks second.`);
+      showToast(`${getPlayer(memberId).name} must finish Battle before Mining.`);
       return;
     }
     if (current.fishingAssignment?.memberId === memberId) {
-      showToast(`${getPlayer(memberId).name} must stop Fishing before Mining. Rod down, Pickaxe up.`);
+      showToast(`${getPlayer(memberId).name} must stop Fishing before Mining.`);
       return;
     }
     if (getPartyMember(current, memberId).stamina.lte(0)) {
-      showToast(`${getPlayer(memberId).name} needs stamina before Mining. Those rocks are not going to hit themselves.`);
+      showToast(`${getPlayer(memberId).name} needs stamina before Mining.`);
       return;
     }
     if (miningStateRef.current || pendingMiningRestartMemberIdRef.current) {
-      showToast("Only one party member can Mine at a time. There is only one Pickaxe. Stop trying to share it.");
+      showToast("Only one party member can Mine at a time.");
       return;
     }
     const selected = setMiningMember(current, memberId);
@@ -1582,14 +1582,14 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
   const stopMining = useCallback(() => {
     commitPendingMiningRestart(null);
     commitMiningState(null);
-    showToast("Mining stopped. Somewhere underground, a rock breathes a tiny sigh of relief.");
+    showToast("Mining stopped.");
   }, [commitMiningState, commitPendingMiningRestart, showToast]);
 
   const enterDungeon = useCallback((dungeonId: AdventureDungeonId = "starting") => {
     const current = progressionRef.current;
     if (dungeonId === "great-tower") {
       if (!current.greatTowerUnlocked) {
-        showToast("The Great Tower is still locked. You need the giant Tower Key for the giant Tower lock."
+        showToast("The Great Tower is locked. Obtain the Tower Key to enter."
         );
       }
       return;
@@ -1606,12 +1606,12 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       && !miningMembers.has(id)
     );
     if (selectedIds.length === 0) {
-      showToast("Select at least one party member. The dungeon will not explore itself, no matter how long you idle.");
+      showToast("Select at least one party member.");
       return;
     }
     const exhausted = selectedIds.find((id) => getPartyMember(current, id).stamina.lte(0));
     if (exhausted) {
-      showToast(`${getPlayer(exhausted).name} needs stamina before Adventuring. Let the poor thing breathe.`);
+      showToast(`${getPlayer(exhausted).name} needs stamina before Adventuring.`);
       return;
     }
     const firstId = selectedIds[0];
@@ -1667,7 +1667,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     if (!session) return;
     const requiredLevel = requiredEscapeRopeLevel(session);
     if (!ESCAPE_ROPE_LEVELS.includes(requiredLevel as EscapeRopeLevel)) {
-      showToast(`No Escape Rope reaches ${requiredLevel} room${requiredLevel === 1 ? "" : "s"} from the entrance. You should have bought a rope with a bigger number.`);
+      showToast(`A Level ${requiredLevel} Escape Rope is required at this distance.`);
       return;
     }
     const consumed = consumeEscapeRope(progressionRef.current, requiredLevel as EscapeRopeLevel);
@@ -1683,7 +1683,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     );
     commitProgression(settlement.state);
     commitAdventureSession(null);
-    showToast(`Level ${requiredLevel} Escape Rope used! Banked ${formatWholeAmount(settlement.banked)} carried gold and climbed away very bravely.${failedHammer ? " Retrieve Hammer failed." : ""}`);
+    showToast(`Level ${requiredLevel} Escape Rope used. Banked ${formatWholeAmount(settlement.banked)} carried gold.${failedHammer ? " Retrieve Hammer failed." : ""}`);
   }, [commitAdventureSession, commitProgression, showToast]);
 
   useEffect(() => {
@@ -1737,9 +1737,9 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         ]),
       ]);
       commitProgression(next);
-      if (result.completed) showToast(`Caught a ${STAT_META[result.completed].label} fish! Eat it to put the fish inside your stats.`);
-      else if (result.materialCompleted) showToast(`Fished up ${MATERIAL_META[result.materialCompleted].name}. Not a fish. The Rod tried its best.`);
-      else if (result.inventoryFull) showToast("The catch was discarded because the backpack or stack is full. Somewhere, a fish laughs.");
+      if (result.completed) showToast(`Caught a ${STAT_META[result.completed].label} fish.`);
+      else if (result.materialCompleted) showToast(`Obtained ${MATERIAL_META[result.materialCompleted].name} while fishing.`);
+      else if (result.inventoryFull) showToast("The catch was discarded because the backpack or stack is full.");
     }, 200);
     return () => window.clearInterval(timer);
   }, [commitProgression, showToast]);
@@ -1772,10 +1772,10 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     if (popups.length > 0) setRewardPopups(popups);
     else showToast(
       !result.firstClear
-        ? `Battle ${battle.level.number} won again! No new rewards. You already took everything that wasn't nailed down.`
+        ? `Battle ${battle.level.number} won again. No new rewards.`
         : result.unlocked
-          ? `Battle ${battle.level.number + 1} unlocked! Oh boy, more enemies!`
-          : `Battle ${battle.level.number} cleared! You hit all the correct things.`,
+          ? `Battle ${battle.level.number + 1} unlocked.`
+          : `Battle ${battle.level.number} cleared.`,
     );
     const nextLevel = nextRaidNumber(result.state);
     if (nextLevel !== null) {
@@ -2035,7 +2035,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       const current = progressionRef.current;
       commitMiningState(createMiningRoom(memberId, 1, memberStats(current, memberId), Math.random));
       commitPendingMiningRestart(null);
-      showToast(`${getPlayer(memberId).name} returned to Mining Room 1. All the rocks grew back while nobody was looking.`);
+      showToast(`${getPlayer(memberId).name} returned to Mining Room 1.`);
     }, 120);
     return () => window.clearTimeout(timer);
   }, [
@@ -2112,7 +2112,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
           (unit) => unit.team === "enemy" && unit.hp.gt(0) && isInAttackRange(actor, unit.position, current),
         );
         if (target) executeBattleAction({ type: "attack", targetId: target.id });
-        else showToast("No enemy is in basic attack range. Move your sword closer to something with a red bar.");
+        else showToast("No enemy is in basic attack range. Move closer to an enemy.");
       }
     };
     window.addEventListener("keydown", handleKey);

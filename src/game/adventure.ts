@@ -300,13 +300,13 @@ export function moveInAdventure(
     if (completedFishingRodQuest) next.questTarget = null;
     next.log = [
       unlockedGreatTower
-        ? "The Tower Key turns. The Great Tower opens! A horrible wind escapes, ruins your hair, and whispers your full legal name. This feels legally significant."
+        ? "The Tower Key unlocked the Great Tower."
         : firstTowerVisit
           ? "The Tower is locked."
         : completedShopkeeperQuest
-          ? "The Shopkeeper is free! The Shop is now open. You saved his life, so he rewards you with the sacred privilege of paying full price."
+          ? "The Shopkeeper was rescued. The Shop is now available."
         : completedFishingRodQuest
-          ? "Rodney offers the Fishing Rod. He refuses to explain why he was waiting here or where he intends to go next."
+          ? "Rodney gave you the Fishing Rod."
           : "Spoke with the Shopkeeper.",
       ...next.log,
     ].slice(0, 8);
@@ -539,7 +539,7 @@ export function moveInAdventure(
     logMessage = `Obtained ${formatWholeAmount(goldGained)} gold.`;
     nextRoom.tiles[destination.y][destination.x] = { kind: "floor" };
     if (resolveLotteryRoomIfCleared(next, nextRoom)) {
-      logMessage += " That was the last prize, and every gate opened! Gambling has been solved forever. Close the casinos.";
+      logMessage += " The final prize was collected and the gates opened.";
     }
   } else if (tile.kind === "treasureChest" && tile.mimicDisguise) {
     const mimicId = `mimic-${room.key}`;
@@ -551,7 +551,7 @@ export function moveInAdventure(
       enemyKind: "mimic",
       enemyHp: adventureEnemyStats(room.ring, "mimic").hp,
     };
-    logMessage = "The treasure chest grows teeth and bites at you. It's a Mimic! You saw the teeth, clicked anyway, and have only greed to blame.";
+    logMessage = "The treasure chest was a Mimic.";
   } else if (tile.kind === "treasureChest") {
     if (tile.potionId) {
       potionFound = tile.potionId;
@@ -570,7 +570,7 @@ export function moveInAdventure(
   } else if (tile.kind === "tridentChest") {
     gearFound = createTridentGear();
     completedTridentTrial = true;
-    logMessage = "Obtained the Tidecaller Trident! The door opens because the royal weapon was also the doorknob. Merman security has peaked.";
+    logMessage = "Obtained the Tidecaller Trident. The door opened.";
     nextRoom.tiles[destination.y][destination.x] = { kind: "openedChest" };
     openMermanThroneDoor(nextRoom);
   } else if (tile.kind === "portal") {
@@ -611,7 +611,7 @@ export function moveInAdventure(
     nextRoom.diceValue = diceCurseRoll;
     nextRoom.diceValues = [firstDie, secondDie];
     diceCurseRoll = undefined;
-    logMessage = "The giant dice start rolling and every gate slams shut. Surely the room-sized cursed dice covered in skulls are the NICE kind.";
+    logMessage = "The dice started rolling. The gates are locked until the roll is complete.";
   } else if (tile.kind === "blacksmith") {
     unlockedBlacksmith = true;
     if (next.hammerRecovered) {
@@ -627,7 +627,7 @@ export function moveInAdventure(
     if (next.questTarget?.questId === "find-miner") {
       next.questTarget = null;
       completedQuestId = "find-miner";
-      logMessage = `${state.playerName} gave the Pickaxe to the Miner. He joined the party before you finished speaking and licked the point to check if it was real.`;
+      logMessage = `${state.playerName} gave the Pickaxe to the Miner. The Miner joined the party.`;
     } else {
       logMessage = "Spoke with the Miner.";
     }
@@ -642,11 +642,11 @@ export function moveInAdventure(
     recoveredHammer = true;
     openHammerVaultGate(nextRoom);
     updateStateLockedRoomBoundary(next, nextRoom.key, "clayGate", false);
-    logMessage = "Obtained the Blacksmith's Hammer! The clay gate opens. It recognizes the Hammer as legally re-stolen and respects property law.";
+    logMessage = "Obtained the Blacksmith's Hammer. The clay gate opened.";
   } else if (tile.kind === "forgeBlueprintChest") {
     nextRoom.tiles[destination.y][destination.x] = { kind: "openedChest" };
     next.forgeBlueprintTarget = null;
-    logMessage = "Obtained the Blacksmith's Blueprints! The edges are burnt, the middle is wet, and page four is an anatomically ambitious butt. The numbers survived.";
+    logMessage = "Obtained the Blacksmith's Blueprints.";
   } else if (tile.kind === "trap") {
     revealTrapGroup(nextRoom, tile);
     if (!trapIsActive(nextRoom, tile)) {
@@ -773,7 +773,7 @@ export function openOfferingChamber(
   next.shrineSolved = true;
   if (openingNow) {
     next.log = [
-      "All four offerings resonate. The great wooden door opens, proving fish can solve architecture if arranged judgmentally.",
+      "All four offerings were accepted. The wooden door opened.",
       ...next.log,
     ].slice(0, 8);
   }
@@ -862,53 +862,53 @@ function enterExit(
         );
     rooms = { ...state.rooms, [key]: destinationRoom };
     logMessage = destinationRoom.kind === "rescue"
-      ? "Found the marked rescue room. There is a Worm in a cage and seven Spiders licking lips they DO NOT HAVE. This is already too moist."
+      ? "Found the marked rescue room. Defeat the Spiders to free Worm."
       : destinationRoom.kind === "portal"
-        ? "Found the marked teleport room. Put everybody on the glowing floor and count heads afterward. Count your own head first."
+        ? "Found the marked teleport room. Move the full adventuring party onto the portal."
       : destinationRoom.kind === "lostItem"
-        ? "Found a damp stranger clutching the Fishing Rod. He has been waiting here without food, luggage, or a second facial expression."
+        ? "Found the person holding the lost item."
       : destinationRoom.kind === "offering"
-        ? "Found a sealed offering chamber. Four colored floor tiles demand four specific fish. The floor has dietary needs and no mouth. Do not encourage it."
+        ? "Found a sealed offering chamber. Place the required fish on the four offering tiles."
       : destinationRoom.kind === "mermanThrone"
-        ? "Entered the water throne room. The door slams shut and three Mermen throw royal cutlery at your organs. Audience granted!"
+        ? "Entered the water throne room. Defeat the three Mermen to reopen the room."
       : destinationRoom.kind === "treasure"
-        ? "Found a treasure room! The chest looks normal. It has normal hinges, normal wood, and a normal amount of barely concealed breathing."
+        ? "Found a treasure room."
       : destinationRoom.kind === "regen"
-        ? "Found a hot spring! It is either magical healing water or an enormous warm monster mistake. GET IN."
+        ? "Found a hot spring. It restores HP and Stamina."
       : destinationRoom.kind === "shopkeeper"
-        ? "Found a stranger in a cage! Three Skeletons guard him while he hugs a bucket and refuses to explain the bucket. Rescue everything except the bucket."
+        ? "Found a captive stranger. Defeat the three Skeletons to open the cage."
       : destinationRoom.kind === "blacksmith"
-        ? "Found a Blacksmith in the clay tunnels! He is turning wet dirt into armor by hitting it harder than the laws of materials science can object."
+        ? "Found the Blacksmith."
       : destinationRoom.kind === "hammerVault"
-        ? "Entered the stolen-Hammer vault. The clay gate slams shut. The Mummies clutch the Hammer like it contains the last television remote on Earth."
+        ? "Entered the Hammer vault. Defeat the Clay Mummies to reveal the Hammer."
       : destinationRoom.kind === "miner"
-        ? "Found the Miner! He is surrounded by gems and has mined none of them because his current Pickaxe is one forehead. Bring the real Pickaxe."
+        ? "Found the Miner. Bring the Pickaxe to recruit him."
       : destinationRoom.kind === "waterPortal"
-        ? "Found a Water Dungeon portal. It glows blue, drips upward, and makes the exact noise your bathtub should never make. Enter it!"
+        ? "Found the Water Dungeon portal."
       : destinationRoom.kind === "forgePortal"
         ? state.questTarget?.questId === "enter-tower"
-          ? "Found the marked Forge portal. Your eyebrows curl toward it like two frightened caterpillars attempting escape."
-          : "Found a Forge portal. The other side appears to be ALL FIRE plus several smaller, angrier fires. Neat!"
+          ? "Found the marked Forge portal."
+          : "Found a Forge portal."
       : destinationRoom.kind === "lottery"
-        ? "Entered a Lottery room! The gates lock behind you. Spin the wheel and win GOLD or MURDER—the two traditional prize categories!"
+        ? "Entered a Lottery room. Spin the wheel to unlock the room."
       : destinationRoom.kind === "dice"
-        ? "Entered a Dice room. The gates lock. Roll the enormous skull dice! Their previous owner is spread evenly across the grout."
+        ? "Entered a Dice room. Roll the dice to unlock the room."
       : destinationRoom.kind === "potionmaster"
-        ? "Found a Lost Potionmaster! Every bottle is purple. One is breathing. Another stopped breathing when it noticed you noticing."
+        ? "Found the Lost Potionmaster."
       : destinationRoom.kind === "oddityBrewer"
-        ? "Found Charles. He is stirring something chunky with a boot. He has a cleaner boot nearby and deliberately chose this one."
+        ? "Found Charles."
       : destinationRoom.kind === "cartographer"
-        ? "Found a Cartographer! His map has three holes where geography should be and a beautiful self-portrait where the key should be."
+        ? "Found the Cartographer."
       : destinationRoom.kind === "angler"
-        ? "Found an Angler's shack in the Water Dungeon. It smells like fish, bait, and the bucket the Shopkeeper told you not to look at."
+        ? "Found the Angler."
       : destinationRoom.kind === "towerExterior"
-        ? "The tunnels open into a garden beneath the Great Tower. DAYLIGHT attacks your dungeon eyes for emotional damage. No red number appears."
+        ? "Reached the garden beneath the Great Tower."
       : destinationRoom.kind === "forgeArena"
-        ? "Found a Forge arena. The furnaces politely wait for the whole party because fire wants nobody excluded from the screaming."
+        ? "Found a Forge arena. The full party must enter before combat begins."
       : destinationRoom.kind === "forgeTreasure"
-        ? "Found a Forge vault. A recipe is drawn on the floor in soot and one red substance we are filing under soot. Remember the pattern! Hah."
+        ? "Found a Forge recipe. Copy the displayed pattern to craft the item."
       : destinationRoom.kind === "forgeBlueprint"
-        ? "Found the Blueprints beyond the third arena! One more room full of hot little jerks stands between you and advanced garbage arrangement."
+        ? "Found the Blacksmith's Blueprints. Clear the arena to reach them."
       : null;
   } else {
     destinationRoom = cloneDungeonRoom(destinationRoom);
@@ -964,7 +964,7 @@ function enterExit(
     destinationRoom.forgeArenaStarted = true;
     rooms = { ...rooms, [key]: destinationRoom };
     forgeArenaStarted = true;
-    logMessage = "The full expedition assembled. The gates slam shut and four Forgelings jump out. It is ALWAYS four because five failed the fire-code inspection.";
+    logMessage = "The full expedition assembled. The gates closed and four Forgelings appeared.";
   }
 
   const boundaryGate = destinationRoom.kind === "lottery" && !destinationRoom.lotteryResolved
@@ -1494,7 +1494,7 @@ export function performAdventureEnemyTurn(
   }
 
   if (releaseShopkeeperIfCleared(nextRoom)) {
-    logMessage = "The final Skeleton falls and the Shopkeeper's cage opened! Apparently the lock was powered by Skeletons and/or narrative convenience.";
+    logMessage = "The final Skeleton was defeated. The Shopkeeper's cage opened.";
   }
   if (
     hp.lt(currentHp)
@@ -1567,9 +1567,9 @@ function attackAdventureEnemy(
       if (releaseWormIfCleared(nextRoom)) {
         next.questTarget = null;
         completedQuestId = "rescue-me";
-        logMessage = `${state.playerName} defeats the final Spider. Recruited Worm! He is slimy, grateful, and already inside the Party tab getting mucus on the margins.`;
+        logMessage = `${state.playerName} defeated the final Spider. Worm joined the party.`;
       } else {
-        logMessage = `${state.playerName} defeats a Spider. ${spidersRemaining} guard${spidersRemaining === 1 ? " remains" : "s remain"}. Worm screams tactical advice consisting entirely of MORE STABBING.`;
+        logMessage = `${state.playerName} defeated a Spider. ${spidersRemaining} guard${spidersRemaining === 1 ? " remains" : "s remain"}.`;
       }
     } else if (materialGained) {
       logMessage = `${state.playerName} defeats ${enemyArticle} ${enemyName}. Obtained ${MATERIAL_META[materialGained].name}.`;
@@ -1580,20 +1580,20 @@ function attackAdventureEnemy(
       nextRoom.tiles[position.y][position.x].enemyKind !== "merman"
     )) {
       revealTridentChest(nextRoom);
-      logMessage = "Defeated the final Merman. A treasure chest appears! It was not there before. The room insists it was. Gaslighting chest acquired.";
+      logMessage = "Defeated the final Merman. A treasure chest appeared.";
     }
     if (releaseShopkeeperIfCleared(nextRoom)) {
-      logMessage = "Defeated the final Skeleton. The Shopkeeper's cage opened! Skeleton-powered lock confirmed. Engineering accreditation revoked.";
+      logMessage = "Defeated the final Skeleton. The Shopkeeper's cage opened.";
     }
     if (revealHammerChestIfCleared(nextRoom)) {
-      logMessage = "Defeated the final Clay Mummy. The Hammer chest appears! It was behind the UI the whole time, where game objects go to smoke.";
+      logMessage = "Defeated the final Clay Mummy. The Hammer chest appeared.";
     }
     if (resolveLotteryRoomIfCleared(next, nextRoom)) {
-      logMessage += " The last summoned enemy falls and every gate opens. You won at gambling by killing the gambling. Financial advice!";
+      logMessage += " The last summoned enemy was defeated and the gates opened.";
     }
     forgeArenaOpened = resolveForgeArenaIfCleared(next, nextRoom);
     if (forgeArenaOpened) {
-      logMessage += " The final Forgeling falls and the arena gates open. The hot little freaks are gone, leaving four scorch marks and one tiny unpaid invoice!";
+      logMessage += " The final Forgeling was defeated and the arena gates opened.";
     }
   } else {
     setEnemyFootprintHp(nextRoom, tile.enemyId, target, remainingHp);
@@ -1700,7 +1700,7 @@ function castAdventureWeaponSkill(
   const materialNote = firstMaterial ? ` Obtained ${MATERIAL_META[firstMaterial].name}.` : "";
   next.log = [
     completedQuestId === "rescue-me"
-      ? `${state.playerName} uses ${skill.name} and defeats the final Spider. Recruited Worm! He climbs into the Party tab through a hole that was not there before.`
+      ? `${state.playerName} uses ${skill.name} and defeats the final Spider. Worm joined the party.`
       : `${state.playerName} uses ${skill.name}, dealing ${formatWholeAmount(totalDamage)} total damage${defeated > 0 ? ` and defeating ${defeated} enem${defeated === 1 ? "y" : "ies"}` : ""}.${materialNote}${lotteryOpened ? " The last summon falls and the gates open." : ""}${forgeArenaOpened ? " The Forge arena gates open." : ""}`,
     ...next.log,
   ].slice(0, 8);
@@ -1816,9 +1816,9 @@ function throwAdventureWeapon(
   // finishAdventureAction consumes the thrower's current turn immediately.
   next.weaponCooldownRemaining = throwSkill.cooldownTurns + 1;
   if (completedQuestId === "rescue-me") {
-    next.log = [`${state.playerName} defeats the final Spider. Recruited Worm! You own zero Worm containers, so he will be loose in the menus.`, ...next.log].slice(0, 8);
+    next.log = [`${state.playerName} defeated the final Spider. Worm joined the party.`, ...next.log].slice(0, 8);
   } else if (enemyKind === "merman" && remainingHp.lte(0) && nextRoom.tiles.flat().some((tile) => tile.kind === "tridentChest")) {
-    next.log = ["Defeated the final Merman. A treasure chest appears in the throne room! No smoke, no mechanism, just aggressive furniture continuity.", ...next.log].slice(0, 8);
+    next.log = ["Defeated the final Merman. A treasure chest appeared in the throne room.", ...next.log].slice(0, 8);
   } else if (lotteryOpened) {
     const materialNote = materialGained ? ` Obtained ${MATERIAL_META[materialGained].name}.` : "";
     next.log = [`${state.playerName} defeated ${enemyName} with ${hasTrident ? "Tidecaller Throw" : "Weapon Throw"}.${materialNote} The last summon falls and every gate opens.`, ...next.log].slice(0, 8);

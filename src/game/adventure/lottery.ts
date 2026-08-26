@@ -59,7 +59,7 @@ export function spinLotteryWheel(
   completedBattleNumbers: number[],
   random: RandomSource,
 ): string {
-  if (room.kind !== "lottery" || room.lotterySpun) return "You already spun the wheel. Stop touching it. It has nothing left except fingerprints and a growing hatred of you.";
+  if (room.kind !== "lottery" || room.lotterySpun) return "The wheel has already been spun.";
   room.lotterySpun = true;
   room.lotteryResolved = false;
   const goldOutcome = random() < 0.6;
@@ -88,7 +88,7 @@ export function spinLotteryWheel(
       };
     }
     unlockLotteryRoomIfResolved(room);
-    return `The wheel lands on ${landing.color.toUpperCase()} — GOLD RUSH! ${pileCount} piles worth ${formatWholeAmount(total)} gold explode onto the floor. PICK IT UP BEFORE THE FLOOR REALIZES ITS MISTAKE.`;
+    return `The wheel lands on ${landing.color.toUpperCase()}. ${pileCount} gold piles appeared, worth ${formatWholeAmount(total)} gold in total.`;
   }
 
   const landing = ENEMY_LANDINGS[Math.min(
@@ -136,7 +136,7 @@ export function spinLotteryWheel(
     enemyCount += 1;
   }
   unlockLotteryRoomIfResolved(room);
-  return `The wheel lands on ${landing.color.toUpperCase()} — MONSTER MAYHEM! ${enemyCount} enemies appear. Congratulations! You have won several urgent new problems with teeth.`;
+  return `The wheel lands on ${landing.color.toUpperCase()}. ${enemyCount} enem${enemyCount === 1 ? "y appeared" : "ies appeared"}.`;
 }
 
 export function unlockLotteryRoomIfResolved(room: DungeonRoom): boolean {

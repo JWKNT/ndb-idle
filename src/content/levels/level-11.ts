@@ -7,7 +7,7 @@ import { vacationEmperor } from "../enemies/vacation-emperor";
 export const level11: LevelDefinition = {
   number: 11,
   name: "Vacation Emperor",
-  description: "THE WATER IS IMPASSABLE. This Battle has arrived before the part where crossing it makes sense.",
+  description: "The water is impassable. No current party member can reach the enemy islands.",
   reward: "0",
   board: archipelagoBoard,
   playerPositions: {

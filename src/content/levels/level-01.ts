@@ -5,7 +5,7 @@ import type { LevelDefinition } from "../../game/types";
 export const level01: LevelDefinition = {
   number: 1,
   name: "Undertaker",
-  description: "Beat up the Undertaker and steal his rope. He started it! The theft part is unrelated.",
+  description: "Defeat the Undertaker.",
   reward: "0",
   board: graveyardBoard,
   playerPositions: {

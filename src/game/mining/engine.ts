@@ -64,7 +64,7 @@ export function enterNextMiningRoom(
         status: "exhausted" as const,
         activeRockId: null,
         movementProgress: ZERO,
-        log: ["The tunnel after Room 10 is blocked by a geological deposit of NOT YET. The Pickaxe bounces off and briefly learns fear. Mining ended.", ...state.log].slice(0, 8),
+        log: ["The tunnel beyond Room 10 is blocked. Mining ended.", ...state.log].slice(0, 8),
       },
       limitReached: true,
     };
@@ -108,7 +108,7 @@ export function attackMiningEnemy(
     next.playerPosition = { ...enemy.position };
     next.combatProgress = ZERO;
     next.movementProgress = ZERO;
-    next.log = [`Defeated ${indefiniteEnemyName(enemy.name)}. It was living inside solid rock with no food or air. Please stop applying science to the loot cave.`, ...next.log].slice(0, 8);
+    next.log = [`Defeated ${indefiniteEnemyName(enemy.name)}.`, ...next.log].slice(0, 8);
     return {
       state: next,
       hp: currentHp,
@@ -126,7 +126,7 @@ export function attackMiningEnemy(
     next.status = "dead";
     next.activeRockId = null;
     next.movementProgress = ZERO;
-    next.log = [`${state.memberId === "miner" ? "Miner" : "The deployed member"} was defeated by ${indefiniteEnemyName(enemy.name)}. The creature crawls back into its rock and adds this to the tiny résumé inside.`, ...next.log].slice(0, 8);
+    next.log = [`${state.memberId === "miner" ? "Miner" : "The deployed member"} was defeated by ${indefiniteEnemyName(enemy.name)}.`, ...next.log].slice(0, 8);
   }
   return { state: next, hp, stamina: currentStamina, goldGained: ZERO, died: hp.lte(0), exhausted: false };
 }
@@ -269,7 +269,7 @@ function mineSelectedRock(
   if (rock.hidesDoor) {
     next.doorRevealed = true;
     next.tiles[next.doorPosition.y][next.doorPosition.x] = { kind: "door" };
-    next.log = ["There was a whole DOOR behind that rock. Hinges, handle, frame—everything. The cave has been doing carpentry behind your back.", ...next.log].slice(0, 8);
+    next.log = ["Found the room door behind the rock.", ...next.log].slice(0, 8);
   }
   if (rock.content === "enemy") {
     next.enemy = createMiningEnemy(next.roomNumber, rock.position);
@@ -280,7 +280,7 @@ function mineSelectedRock(
     );
     next.combatProgress = ZERO;
     const enemyName = indefiniteEnemyName(next.enemy.name);
-    next.log = [`${enemyName[0]?.toUpperCase()}${enemyName.slice(1)} bursts out of the rock! The rock was an egg. The cave was a mother. You have complicated Mother's Day.`, ...next.log].slice(0, 8);
+    next.log = [`${enemyName[0]?.toUpperCase()}${enemyName.slice(1)} emerged from the rock.`, ...next.log].slice(0, 8);
   } else {
     next.playerFacing = horizontalFacing(
       state.playerPosition,
@@ -293,7 +293,7 @@ function mineSelectedRock(
       next.log = [`Mined ${formatWholeAmount(goldGained)} gold.`, ...next.log].slice(0, 8);
     } else if (rock.content === "key") {
       next.hasKey = true;
-      next.log = ["Found the room key inside a rock. Somebody locked the door, swallowed the key, became sediment, and waited. Respect the commitment.", ...next.log].slice(0, 8);
+      next.log = ["Found the room key inside a rock.", ...next.log].slice(0, 8);
     }
   }
   const exhausted = stamina.lte(0);
@@ -301,7 +301,7 @@ function mineSelectedRock(
     next.status = "exhausted";
     next.activeRockId = null;
     next.movementProgress = ZERO;
-    next.log = ["Stamina ran out after breaking the rock. Mining ended! Put the Pickaxe down gently. Your toes have already suffered enough off-screen content.", ...next.log].slice(0, 8);
+    next.log = ["Stamina ran out after breaking the rock. Mining ended.", ...next.log].slice(0, 8);
   }
   return { state: next, hp: currentHp, stamina, goldGained, died: false, exhausted };
 }

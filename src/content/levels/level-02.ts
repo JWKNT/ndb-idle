@@ -7,7 +7,7 @@ import { skeletonHippo } from "../enemies/skeleton-hippo";
 export const level02: LevelDefinition = {
   number: 2,
   name: "Restless Skeleton",
-  description: "The graves vomited up a dead zoo. Put every animal back in the ground, preferably in smaller pieces.",
+  description: "Defeat every enemy.",
   reward: "0",
   board: graveyardBoard,
   playerPositions: {

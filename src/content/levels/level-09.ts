@@ -19,7 +19,7 @@ const standardMobPositions: Position[] = [
 export const level09: LevelDefinition = {
   number: 9,
   name: "Abyssal Ooze",
-  description: "Kill all three Guardians or deal 1 damage until you die at your keyboard with a very smooth clicking finger.",
+  description: "Defeat the Guardians to weaken the Abyssal Ooze.",
   reward: "Suction Cups",
   board: oozeBoard,
   playerPositions: {

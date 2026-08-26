@@ -490,7 +490,7 @@ describe("combat", () => {
     expect(thrown.state.lastAttack?.attackName).toBe("Tidecaller Throw");
     expect(thrown.state.lastAttack?.visual).toBe("trident-throw");
     expect(thrown.state.units.find((unit) => unit.id === squid.id)?.hp.eq(squidHp)).toBe(true);
-    expect(thrown.state.log[0]).toMatch(/Tentacles.*invulnerable/i);
+    expect(thrown.state.log[0]).toMatch(/Tentacles.*maintaining its shield/i);
 
     const passed = performAction(
       { ...thrown.state, status: "fighting", activeUnitId: knight.id },
@@ -500,7 +500,7 @@ describe("combat", () => {
     if (!passed.ok) return;
     expect(passed.state.units.find((unit) => unit.id === knight.id)?.forcedPasses).toBe(0);
     expect(passed.state.units.find((unit) => unit.id === knight.id)?.weaponCooldownRemaining).toBe(3);
-    expect(passed.state.log[0]).toContain("must pass");
+    expect(passed.state.log[0]).toContain("retrieving the thrown weapon");
 
     const prematureThrow = performAction(
       { ...passed.state, status: "fighting", activeUnitId: knight.id },
@@ -773,7 +773,7 @@ describe("combat", () => {
     expect(effectiveStat(defeated.state, weakenedOoze, "defense").lt(defenseBefore)).toBe(true);
     expect(effectiveStat(defeated.state, weakenedOoze, "speed").lt(speedBefore)).toBe(true);
     expect(weakenedOoze.hp.eq(maxHp(defeated.state, weakenedOoze))).toBe(true);
-    expect(defeated.state.log[0]).toMatch(/fallen guardian drains its power/i);
+    expect(defeated.state.log[0]).toMatch(/weakened after a Guardian is defeated/i);
   });
 
   it("prioritizes Battle 9 Guardians over the Ooze on auto", () => {
@@ -926,7 +926,7 @@ describe("combat", () => {
     expect(blocked.ok).toBe(true);
     if (!blocked.ok) return;
     expect(blocked.state.units.find((unit) => unit.id === king.id)?.hp.eq(king.hp)).toBe(true);
-    expect(blocked.state.log[0]).toMatch(/invulnerable/i);
+    expect(blocked.state.log[0]).toMatch(/protected by its ward/i);
 
     const withGem = deployedBattle(createBattle(4, [{ ...knightParty()[0], hasUndeadGem: true }]));
     const gemKnight = withGem.units.find((unit) => unit.team === "player")!;
@@ -959,7 +959,7 @@ describe("combat", () => {
     expect(fireAnt.summonCaged).toBe(true);
     expect(fireAnt.hp.gt(0)).toBe(true);
     expect(oneSummoned.state.readyAt[fireAnt.id]).toBeDefined();
-    expect(oneSummoned.state.log[0]).toMatch(/a cage crashes down/i);
+    expect(oneSummoned.state.log[0]).toMatch(/summons Fire Ant/i);
 
     const twoSummoned = performAction(
       { ...battle, activeUnitId: tamer.id },
@@ -972,7 +972,7 @@ describe("combat", () => {
     expect(pair).toHaveLength(2);
     expect(pair.every((unit) => unit.definitionId === "bee")).toBe(true);
     expect(pair.every((unit) => twoSummoned.state.readyAt[unit.id] !== undefined)).toBe(true);
-    expect(twoSummoned.state.log[0]).toMatch(/two cages crash down/i);
+    expect(twoSummoned.state.log[0]).toMatch(/summons Bee and Bee/i);
 
     const exitAction = suggestedAction({ ...oneSummoned.state, activeUnitId: fireAnt.id });
     expect(exitAction?.type).toBe("move");
@@ -981,7 +981,7 @@ describe("combat", () => {
     expect(exited.ok).toBe(true);
     if (!exited.ok) return;
     expect(exited.state.units.find((unit) => unit.id === fireAnt.id)?.summonCaged).toBe(false);
-    expect(exited.state.log[0]).toMatch(/walks out/i);
+    expect(exited.state.log[0]).toMatch(/leaves the broken cage/i);
   });
 
   it("has the Goblin Shaman frequently teleport from targets within spell range", () => {
@@ -1052,7 +1052,7 @@ describe("combat", () => {
     expect(blocked.ok).toBe(true);
     if (!blocked.ok) return;
     expect(blocked.state.units.find((unit) => unit.id === tamer.id)?.hp.eq(tamerHp)).toBe(true);
-    expect(blocked.state.log[0]).toMatch(/summoned-beast shield/i);
+    expect(blocked.state.log[0]).toMatch(/protected by living summons/i);
 
     const autoTarget = suggestedAction(shieldedState);
     expect(autoTarget).toEqual({ type: "attack", targetId: summon.id });

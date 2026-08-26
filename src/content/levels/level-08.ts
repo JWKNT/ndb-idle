@@ -7,7 +7,7 @@ import { squidTentacle } from "../enemies/squid-tentacle";
 export const level08: LevelDefinition = {
   number: 8,
   name: "Abyssal Squid",
-  description: "A municipal quantity of Squid has occupied the water and is submitting eight separate invoices for arms.",
+  description: "Defeat the Tentacles, then defeat the Abyssal Squid.",
   reward: "0",
   board: squidBoard,
   playerPositions: { knight: { x: 2, y: 6 }, worm: { x: 2, y: 7 } },

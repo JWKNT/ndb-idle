@@ -50,7 +50,7 @@ beach, and no current party member can cross. Its placeholder Vacation Emperor b
 scale jump. Future Tower-side progression and a Boatmaster party ability are expected to
 converge before this encounter receives final balance or a clear reward.
 
-The Skele-King takes no damage while no deployed party member has the Undead Gem equipped. Defeat without it logs that the King is invulnerable and hints that progress lies outside the Battle. The gem is a 250-gold Shop accessory.
+The Skele-King takes no damage while no deployed party member has the Undead Gem equipped. Attacks against the ward report zero damage without giving the solution. The gem is a 250-gold Shop accessory.
 
 Battle 1 is auto-winnable by a fresh Knight. Battle 2 is not; the balance test requires early HP, Attack, Defense, and Speed training before auto wins.
 

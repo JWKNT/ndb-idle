@@ -8,7 +8,7 @@ import { skeletonRhino } from "../enemies/skeleton-rhino";
 export const level03: LevelDefinition = {
   number: 3,
   name: "Skele-Prince",
-  description: "A Skeleton found a crown and became Prince. Finders keepers has gone TOO FAR. Remove his everything.",
+  description: "Defeat the Skele-Prince and its guards.",
   reward: "Quest: Lost Adventurer",
   board: graveyardBoard,
   playerPositions: {

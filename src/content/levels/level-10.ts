@@ -15,7 +15,7 @@ const dronePositions: Position[] = [
 export const level10: LevelDefinition = {
   number: 10,
   name: "Rusttide Colossus",
-  description: "Walk around the giant leaking boat-monster and smash the huge glowing Dynamo. THE GLOWING THING. HIT IT.",
+  description: "Destroy the Brine Dynamo to remove the Colossus's shield, then defeat the boss.",
   reward: "Rusty Gear",
   board: rustmireBoard,
   playerPositions: {

@@ -7,7 +7,7 @@ import { goblin } from "../enemies/goblin";
 export const level06: LevelDefinition = {
   number: 6,
   name: "Goblin Shaman",
-  description: "Shoot the jerks on the tiny cheating islands, then chase the purple-hatted space wizard around his rug.",
+  description: "Defeat the Goblin Shaman and its guards.",
   reward: "Shaman's Ring",
   board: goblinArcherBoard,
   playerPositions: { knight: { x: 0, y: 5 }, worm: { x: 1, y: 5 } },

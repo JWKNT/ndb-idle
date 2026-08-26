@@ -182,7 +182,7 @@ export function settleDiceRoomRoll(state: AdventureState): AdventureState {
   updateStateLockedRoomBoundary(next, nextRoom.key, "diceGate", false);
   const total = nextRoom.diceValue ?? (nextRoom.diceValues?.[0] ?? 1) + (nextRoom.diceValues?.[1] ?? 1);
   next.log = [
-    `The dice land on ${nextRoom.diceValues?.[0] ?? 1} and ${nextRoom.diceValues?.[1] ?? 1}. Every gate reopens! A weakening curse lowers non-vital stats by 25% for ${total} party turns. The dice call this a prize. The dice are LIARS.`,
+    `The dice landed on ${nextRoom.diceValues?.[0] ?? 1} and ${nextRoom.diceValues?.[1] ?? 1}. The gates reopened. Non-vital stats are reduced by 25% for ${total} party turns.`,
     ...next.log,
   ].slice(0, 8);
   return next;

@@ -3,7 +3,7 @@ import Decimal from "break_eternity.js";
 export const rescueMeQuest = {
   id: "rescue-me",
   name: "Rescue Me",
-  description: "Follow the screaming through the Overgrown Galleries. Remove seven Spiders from one extremely moist Worm.",
+  description: "Follow the marker through the Overgrown Galleries, defeat seven Spiders, and rescue Worm.",
   cost: new Decimal(500),
   unlockBattle: 4,
   shopAvailable: true,

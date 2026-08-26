@@ -9,7 +9,7 @@ import { skeletonRhino } from "../enemies/skeleton-rhino";
 export const level04: LevelDefinition = {
   number: 4,
   name: "Skele-King",
-  description: "EQUIP the Undead Gem, pop the coward bubble, and reduce the King to non-royal calcium chunks.",
+  description: "Defeat the Skele-King and its guards.",
   reward: "0",
   board: graveyardBoard,
   playerPositions: { knight: { x: 0, y: 3 }, worm: { x: 0, y: 4 } },

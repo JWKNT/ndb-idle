@@ -301,42 +301,42 @@ export const STAT_META: Record<
   hp: {
     label: "HP",
     shortLabel: "HP",
-    description: "The amount of horrible stuff your body can contain before it becomes floor decoration.",
+    description: "How much damage a unit can take before being defeated.",
   },
   stamina: {
     label: "Stamina",
     shortLabel: "STA",
-    description: "How long you can walk, stab, and touch cursed furniture before your legs submit a formal resignation.",
+    description: "Spent by Adventure and Mining actions. The member leaves the activity at 0.",
   },
   attack: {
     label: "Attack",
     shortLabel: "ATK",
-    description: "Makes swords, fists, and approved non-sparkly violence produce larger red numbers. Civilization!",
+    description: "Increases damage dealt by physical attacks.",
   },
   defense: {
     label: "Defense",
     shortLabel: "DEF",
-    description: "Convince clubs and teeth to remove slightly less of you per visit. Does not prevent the visit.",
+    description: "Reduces damage received from physical attacks.",
   },
   spAttack: {
     label: "Sp. Attack",
     shortLabel: "SPA",
-    description: "Makes Acid Shot, magic, and weaponized disgustingness violate the enemy more efficiently.",
+    description: "Increases damage dealt by special attacks.",
   },
   spDefense: {
     label: "Sp. Defense",
     shortLabel: "SPD",
-    description: "Protects the parts of your body that lasers, acid, curses, and REALLY weird purple stuff prefer.",
+    description: "Reduces damage received from special attacks.",
   },
   speed: {
     label: "Speed",
     shortLabel: "SPE",
-    description: "Act sooner. This advanced tactic lets you hurt enemies before they hurt you. Historians call it 'being faster.'",
+    description: "Reduces the time until the unit's next turn.",
   },
   luck: {
     label: "Luck",
     shortLabel: "LCK",
-    description: "Find more Gold, find more treasure, and place your feet on fewer of the dungeon's upward-facing opinions.",
+    description: "Improves applicable random rewards and outcomes.",
   },
 };
 

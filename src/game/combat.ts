@@ -203,7 +203,7 @@ export function createBattle(
     activeUnitId: null,
     deploymentUnitId: players[0]?.id ?? null,
     actionCount: 0,
-    log: ["Put warm bodies on the glowing tiles and press Start battle. The enemies politely freeze while you arrange their murder."],
+    log: ["Deploy at least one party member on a highlighted tile, then select Start battle."],
     attackLog: [],
     readyAt: {},
     lastAttack: null,
@@ -290,7 +290,7 @@ export function undeployPlayerUnit(state: BattleState, unitId: string): ActionRe
       ...state,
       units,
       deploymentUnitId: state.deploymentUnitId === unitId ? null : state.deploymentUnitId,
-      log: [`${unit.name} removed. They crouch just outside the board where space, time, and incoming damage cannot reach.`, ...state.log].slice(0, 6),
+      log: [`${unit.name} removed from deployment.`, ...state.log].slice(0, 6),
     },
   };
 }
@@ -330,7 +330,7 @@ export function deployPlayerUnit(state: BattleState, position: Position): Action
       ...state,
       units,
       deploymentUnitId: nextUndeployed?.id ?? selected.id,
-      log: [`${selected.name} deployed! Their family has been notified with an upbeat but non-specific letter.`, ...state.log].slice(0, 6),
+      log: [`${selected.name} deployed.`, ...state.log].slice(0, 6),
     },
   };
 }
@@ -391,7 +391,7 @@ export function startRaid(state: BattleState): ActionResult {
       activeUnitId: null,
       deploymentUnitId: null,
       readyAt,
-      log: ["BATTLE START! Convert every red bar into no red bar using controlled screaming.", ...state.log].slice(0, 6),
+      log: ["Battle started.", ...state.log].slice(0, 6),
     }),
   };
 }
@@ -465,7 +465,7 @@ export function performAction(
     const corrosionDamage = Decimal.max(1, units[actorIndex].corrosionDamage ?? 0);
     units[actorIndex].hp = Decimal.max(0, units[actorIndex].hp.sub(corrosionDamage));
     units[actorIndex].corrosionTurns = Math.max(0, units[actorIndex].corrosionTurns - 1);
-    corrosionMessage = `${actor.name} takes ${formatWholeAmount(corrosionDamage)} corrosion damage${units[actorIndex].hp.eq(0) ? " and becomes a hot little person-flavored puddle" : ""}.`;
+    corrosionMessage = `${actor.name} takes ${formatWholeAmount(corrosionDamage)} corrosion damage${units[actorIndex].hp.eq(0) ? " and is defeated" : ""}.`;
   }
 
   if (units[actorIndex].hp.lte(0)) {
@@ -473,10 +473,10 @@ export function performAction(
     corrosionMessage = "";
   } else if (actor.paralyzedTurns > 0) {
     units[actorIndex].paralyzedTurns = Math.max(0, units[actorIndex].paralyzedTurns - 1);
-    message = `${actor.name} is paralyzed and cannot act. The brain screams MOVE while the legs answer lol no.`;
+    message = `${actor.name} is paralyzed and cannot act.`;
   } else if (actor.forcedPasses > 0) {
     units[actorIndex].forcedPasses = Math.max(0, units[actorIndex].forcedPasses - 1);
-    message = `${actor.name} must pass while retrieving the thrown weapon. String has not been researched. WALK OF SHAME!`;
+    message = `${actor.name} spends the turn retrieving the thrown weapon.`;
   } else if (action.type === "move") {
     if (!actor.canMove) return failure(state, `${actor.name} cannot move.`);
     if (!isOnBoard(state, action.destination) || !isAdjacent(actor.position, action.destination)) {
@@ -508,8 +508,8 @@ export function performAction(
       ? " and enters friendly ground"
       : newMax.lt(oldMax) ? " and leaves friendly ground" : "";
     message = leftSummonCage
-      ? `${actor.name} walks out of the broken cage${zoneNote} using too many legs, smelling like hot fear and whatever was in that straw.`
-      : `${actor.name} moves one tile${zoneNote}. An entire tile! Try to remain calm.`;
+      ? `${actor.name} leaves the broken cage${zoneNote}.`
+      : `${actor.name} moves one tile${zoneNote}.`;
     const oozePool = hazardAt(state, occupiedPositions(units[actorIndex]), actor.team);
     if (oozePool) {
       units[actorIndex].corrosionTurns = Math.max(
@@ -520,7 +520,7 @@ export function performAction(
         units[actorIndex].corrosionDamage,
         oozePool.damagePerTurn,
       );
-      message += ` ${actor.name} puts a foot in corrosive ooze and will take damage for ${oozePool.corrosionTurns} turns. REMOVE FOOT FROM EVIL PUDDING.`;
+      message += ` ${actor.name} enters corrosive ooze and will take damage for ${oozePool.corrosionTurns} turns.`;
     }
   } else if (action.type === "teleport") {
     const range = teleportRange(state, actor);
@@ -545,7 +545,7 @@ export function performAction(
       actor.facing ?? defaultFacing(actor),
     );
     units[actorIndex].teleportCooldown = 2;
-    message = `${actor.name} uses Shadow Step, becomes two-dimensional for a VERY worrying instant, and pops out over there.`;
+    message = `${actor.name} uses Shadow Step.`;
   } else if (action.type === "weaponSkill") {
     const skill = weaponSkill(actor.weaponAbilityId);
     const target = units.find((unit) => unit.id === action.targetId);
@@ -612,7 +612,7 @@ export function performAction(
       attackEntries.push(battleAttackEntry(actor.name, skill.name, affectedTarget.name, damage));
     }
     const weakeningReports = applyGuardianWeakening(state.level.board, units);
-    message = `${actor.name} casts ${skill.name}${hitReports.length > 0 ? `, hitting ${hitReports.join(" and ")}` : ""}. Multiple numbers come out! This is basically endgame.${weakeningReports.length > 0 ? ` ${weakeningReports.join(" ")}` : ""}`;
+    message = `${actor.name} uses ${skill.name}${hitReports.length > 0 ? `, hitting ${hitReports.join(" and ")}` : ""}.${weakeningReports.length > 0 ? ` ${weakeningReports.join(" ")}` : ""}`;
   } else if (action.type === "attack" || action.type === "weaponThrow") {
     const target = units.find((unit) => unit.id === action.targetId);
     if (!target || target.hp.lte(0) || target.team === actor.team) {
@@ -659,23 +659,23 @@ export function performAction(
     const undeadWardActive = target.definitionId === "skeleton-king"
       && !units.some((unit) => unit.team === "player" && unit.hasUndeadGem);
     if (target.summonCaged) {
-      message = `${actor.name}'s ${attackName} cannot reach ${target.name} through the sealed cage. STOP ATTACKING METAL BARS.`;
+      message = `${actor.name}'s ${attackName} cannot reach ${target.name} through the sealed cage.`;
       attackEntries.push(battleAttackEntry(actor.name, attackName, target.name, new Decimal(0)));
     } else if (undeadWardActive) {
-      message = `${actor.name}'s attack makes a sad *plink* on the Skele-King's green bubble. INVULNERABLE! Buy AND EQUIP the Undead Gem, you walnut.`;
+      message = `${actor.name}'s attack deals no damage. The Skele-King is protected by its ward.`;
       attackEntries.push(battleAttackEntry(actor.name, attackName, target.name, new Decimal(0)));
     } else if (target.requiresTridentThrow && (!isWeaponThrow || !actor.hasTrident)) {
-      message = `${actor.name}'s ${attackName} does jack squat to the Squid Tentacle. RIGHT-CLICK IT WITH THE TRIDENT. THROW THE POINTY FORK.`;
+      message = `${actor.name}'s ${attackName} deals no damage to the Squid Tentacle.`;
       attackEntries.push(battleAttackEntry(actor.name, attackName, target.name, new Decimal(0)));
     } else if (isShieldedByLivingEnemy(target, units)) {
       const shieldProvider = target.invulnerableWhileEnemyId
         ? units.find((unit) => unit.hp.gt(0) && unit.definitionId === target.invulnerableWhileEnemyId)
         : undefined;
       message = target.invulnerableWhileSummons
-        ? `${actor.name}'s ${attackName} bounces off ${target.name}'s summoned-beast shield. Remove his screaming zoo FIRST!`
+        ? `${actor.name}'s ${attackName} deals no damage. ${target.name} is protected by living summons.`
         : target.definitionId === "abyssal-squid"
-          ? `${actor.name}'s ${attackName} tickles ${target.name} for zero damage. Four Tentacles keep it invulnerable. AMPUTATE THE ROOM.`
-          : `${actor.name}'s ${attackName} splats against ${target.name}'s pressure shield. Destroy ${shieldProvider?.name ?? "the giant glowing thing"} first! YES, THE GLOWY BIT.`;
+          ? `${actor.name}'s ${attackName} deals no damage. The Squid Tentacles are maintaining its shield.`
+          : `${actor.name}'s ${attackName} deals no damage. ${shieldProvider?.name ?? "Another enemy"} is maintaining the shield.`;
       attackEntries.push(battleAttackEntry(actor.name, attackName, target.name, new Decimal(0)));
     } else {
       const affectedTargets = actor.attackArea === "front-three" && !isWeaponThrow
@@ -728,7 +728,7 @@ export function performAction(
       });
       const attackVerb = attackName === "Attack" ? "hits" : `uses ${attackName} on`;
       const weakeningReports = applyGuardianWeakening(state.level.board, units);
-      message = `${actor.name} ${attackVerb} ${hitReports.join(" and ")}. Delicious red bars become shorter red bars.${weakeningReports.length > 0 ? ` ${weakeningReports.join(" ")}` : ""}`;
+      message = `${actor.name} ${attackVerb} ${hitReports.join(" and ")}.${weakeningReports.length > 0 ? ` ${weakeningReports.join(" ")}` : ""}`;
     }
   } else if (action.type === "oozeBelch") {
     if (!actor.oozeBelch) return failure(state, `${actor.name} cannot belch corrosive ooze.`);
@@ -745,7 +745,7 @@ export function performAction(
       from: { ...actor.position },
       to: { ...hazards[0].position },
     };
-    message = `${actor.name} uses Corrosive Belch and ${hazards.length} puddles of stomach garbage slap onto the floor. GROSS GROSS GROSS.`;
+    message = `${actor.name} uses Corrosive Belch and creates ${hazards.length} corrosive puddle${hazards.length === 1 ? "" : "s"}.`;
   } else if (action.type === "summonBeast") {
     if (!actor.summonPool?.length) return failure(state, `${actor.name} cannot summon beasts.`);
     if ((actor.summonCooldown ?? 0) > 0) return failure(state, "Summon Beast is not ready.");
@@ -759,9 +759,9 @@ export function performAction(
     }
     if (summonedUnits.length === 0) return failure(state, "There is nowhere for a summon cage to land.");
     units[actorIndex].summonCooldown = 3;
-    message = `${actor.name} casts Summon Beast. ${summonedUnits.length === 2 ? "Two cages CRASH" : "A cage CRASHES"} down containing ${summonedUnits.map((unit) => unit.name).join(" and ")}! THE CEILING HAS ANIMALS AGAIN.`;
+    message = `${actor.name} uses Summon Beast and summons ${summonedUnits.map((unit) => unit.name).join(" and ")}.`;
   } else {
-    message = `${actor.name} does absolutely nothing. A flawless execution of the ability known as wasting everybody's time.`;
+    message = `${actor.name} waits.`;
   }
 
   if (actor.summonPool?.length && action.type !== "summonBeast") {
@@ -810,7 +810,7 @@ export function performAction(
     return { ok: true, state: {
       ...next,
       status: "won",
-      log: ["BATTLE COMPLETE! The boss has been converted into floor decoration and maybe one usable organ.", ...next.log].slice(0, 6),
+      log: ["Battle complete.", ...next.log].slice(0, 6),
     } };
   }
   if (!playerAlive) {
@@ -818,10 +818,7 @@ export function performAction(
       ...next,
       status: "lost",
       log: [
-        ...(state.level.number === 4 && !units.some((unit) => unit.team === "player" && unit.hasUndeadGem)
-          ? ["The Skele-King is still invulnerable. Buy the Undead Gem from the Shop and EQUIP IT before trying again!"]
-          : []),
-        "DEFEAT! Make numbers bigger, equip less stupidly, or insist this was a controlled experiment.",
+        "Battle lost.",
         ...next.log,
       ].slice(0, 6),
     } };
@@ -1316,7 +1313,7 @@ function applyGuardianWeakening(board: BoardDefinition, units: Unit[]): string[]
       unweakenedMaximum.mul(weakeningMultiplier(boss)).round(),
     );
     boss.hp = Decimal.min(weakenedMaximum, weakenedMaximum.mul(healthRatio));
-    reports.push(`${boss.name} slumps as its fallen guardian drains its power. Turns out the small blob was full of BIG NUMBERS.`);
+    reports.push(`${boss.name} is weakened after a Guardian is defeated.`);
   }
   return reports;
 }

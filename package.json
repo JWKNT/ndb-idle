@@ -2,7 +2,7 @@
   "name": "ndb-idle",
   "version": "0.1.0",
   "private": true,
-  "description": "A prestige tactical economic fishing mining grave-disturbance experience",
+  "description": "An idle tactics game with grid combat, exploration, equipment, and automation.",
   "homepage": "https://jehlp.net/ndb-idle/",
   "main": "electron/main.cjs",
   "type": "module",

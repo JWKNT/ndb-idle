@@ -18,7 +18,7 @@ export function battleRewardPopups(level: number, rewardDiscarded = false): Rewa
     reward = {
       title: "Lowering Rope obtained",
       sprite: "loweringRope",
-      description: "Adventure unlocked. NDB MEGASOFTWARE has added downward mobility.",
+      description: "Adventure unlocked.",
     };
   } else if (level === 3) {
     reward = {
@@ -30,7 +30,7 @@ export function battleRewardPopups(level: number, rewardDiscarded = false): Rewa
     reward = {
       title: "Quest unlocked: Rescue Me",
       sprite: "questScroll",
-      description: "A horrible wet voice is screaming somewhere in the Overgrown Galleries. It sounds expensive.",
+      description: "Available from the Shop.",
     };
   } else if (level === 5) {
     reward = {
@@ -43,29 +43,29 @@ export function battleRewardPopups(level: number, rewardDiscarded = false): Rewa
       title: rewardDiscarded ? "Shaman's Ring discarded" : "Shaman's Ring obtained",
       sprite: "gearShamanRing",
       description: rewardDiscarded
-        ? "Backpack full. The Ring rolled under the UI and ceased to exist."
+        ? "Backpack full. The Ring was discarded."
         : "It has a 20% chance to teleport you away from Adventure damage.",
     };
   } else if (level === 7) {
     reward = {
       title: "Bestiary obtained",
       sprite: "bestiary",
-      description: "Frogs, Mutant Rats, Fire Ants, and Charles have entered the corporate ecosystem.",
+      description: "Bestiary unlocked. New creatures can now appear in Adventure.",
     };
   } else if (level === 8) {
     reward = {
       title: rewardDiscarded ? "Rotten Tentacle discarded" : "Rotten Tentacle obtained",
       sprite: "rottenTentacle",
       description: rewardDiscarded
-        ? "Backpack full. The Tentacle remains on the floor and immediately sticks to it."
-        : "Reusable forever to fish up Driftwood and Seaweed.",
+        ? "Backpack full. The Tentacle was discarded."
+        : "Reusable bait that can catch Driftwood and Seaweed.",
     };
   } else if (level === 9) {
     reward = {
       title: rewardDiscarded ? "Suction Cups discarded" : "Suction Cups obtained",
       sprite: "gearSuctionCups",
       description: rewardDiscarded
-        ? "Backpack full. The floor is now technically the owner."
+        ? "Backpack full. The Suction Cups were discarded."
         : "When a non-boss hits you, there is a 15% chance the Cups grab it.",
     };
   } else if (level === 10) {
@@ -73,8 +73,8 @@ export function battleRewardPopups(level: number, rewardDiscarded = false): Rewa
       title: rewardDiscarded ? "Rusty Gear discarded" : "Rusty Gear obtained",
       sprite: "rustyGear",
       description: rewardDiscarded
-        ? "Backpack full. The Gear flattened its own receipt and vanished."
-        : "Several hundred pounds of spinning tetanus now occupy one backpack square.",
+        ? "Backpack full. The Rusty Gear was discarded."
+        : "Crafting material obtained.",
     };
   }
 

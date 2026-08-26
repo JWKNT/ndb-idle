@@ -5,7 +5,7 @@ import { beastTamer } from "../enemies/beast-tamer";
 export const level07: LevelDefinition = {
   number: 7,
   name: "Beast Tamer",
-  description: "Smash the cages, kill the petting zoo, then un-tame the Tamer's face with your strongest blunt object.",
+  description: "Break the cages, defeat the summoned beasts, and defeat the Beast Tamer.",
   reward: "0",
   board: beastTamerBoard,
   playerPositions: { knight: { x: 1, y: 4 }, worm: { x: 1, y: 5 } },
