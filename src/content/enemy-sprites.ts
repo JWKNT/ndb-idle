@@ -47,6 +47,9 @@ export const ENEMY_SPRITES: Record<string, SpriteName> = {
   "brine-dynamo": "brineDynamo",
   "barnacle-drone": "barnacleDrone",
   mummy: "mummy",
+  "coconut-bailiff": "coconutBailiff",
+  "reef-auditor": "reefAuditor",
+  "vacation-emperor": "vacationEmperor",
 };
 
 export function enemySprite(definitionId: string): SpriteName {

@@ -36,6 +36,7 @@ const floorSprites = {
   planks: "raidFloorPlanks",
   leaves: "raidFloorLeaves",
   "abyssal-metal": "raidFloorAbyssalMetal",
+  sand: "raidFloorSand",
 } as const satisfies Record<NonNullable<BattleState["level"]["board"]["floorTheme"]>, SpriteName>;
 
 const wallSprites = {
@@ -288,7 +289,7 @@ export function BattleBoard({ battle, manualEnabled, onTile, onSecondaryTile }: 
 
           return (
             <button
-              className={`board-tile zone-${terrain} ${wall ? "raid-wall" : ""} ${gap ? "raid-gap" : ""} ${gap && board.gapTheme === "murky-water" ? "raid-gap-murky-water" : ""} ${blueGap ? "raid-gap-blue-water" : ""} ${acidOoze ? "has-acid-ooze" : ""} ${isUnitAnchor && largeUnit ? "large-unit-anchor" : ""} ${unit?.id === battle.deploymentUnitId ? "deployment-selected" : ""} ${deploymentOption ? "deployment-option" : ""} ${actionable ? "actionable" : ""} ${attackOrigin ? "attack-origin" : ""} ${attackImpact ? "attack-impact" : ""}`}
+              className={`board-tile zone-${terrain} ${wall ? "raid-wall" : ""} ${gap ? "raid-gap" : ""} ${gap && board.gapTheme === "murky-water" ? "raid-gap-murky-water" : ""} ${gap && board.gapTheme === "ocean" ? "raid-gap-ocean" : ""} ${blueGap ? "raid-gap-blue-water" : ""} ${acidOoze ? "has-acid-ooze" : ""} ${isUnitAnchor && largeUnit ? "large-unit-anchor" : ""} ${unit?.id === battle.deploymentUnitId ? "deployment-selected" : ""} ${deploymentOption ? "deployment-option" : ""} ${actionable ? "actionable" : ""} ${attackOrigin ? "attack-origin" : ""} ${attackImpact ? "attack-impact" : ""}`}
               key={`${position.x}-${position.y}`}
               onClick={() => onTile(position)}
               onContextMenu={(event) => {
@@ -315,9 +316,11 @@ export function BattleBoard({ battle, manualEnabled, onTile, onSecondaryTile }: 
               {acidOoze && <span aria-hidden="true" className="acid-ooze-pool"><i /><i /><i /></span>}
               {gap && (
                 <span aria-hidden="true" className="raid-gap-art">
-                  <Sprite name={board.gapTheme === "murky-water"
-                    ? blueGap ? "raidWaterBlue" : "raidWaterMurky"
-                    : "raidGap"} />
+                  <Sprite name={board.gapTheme === "ocean"
+                    ? "raidWaterOcean"
+                    : board.gapTheme === "murky-water"
+                      ? blueGap ? "raidWaterBlue" : "raidWaterMurky"
+                      : "raidGap"} />
                 </span>
               )}
               {attackOrigin && <span aria-hidden="true" className={`attack-windup attack-windup-${attackVisual}`} key={`windup-${battle.actionCount}`} />}

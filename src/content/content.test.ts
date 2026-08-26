@@ -11,9 +11,9 @@ import { createRegenRoomTiles } from "./adventure-rooms/regen-room";
 import { createRescueRoomTiles } from "./adventure-rooms/rescue-room";
 import { createShopkeeperRoomTiles } from "./adventure-rooms/shopkeeper-room";
 import { createTowerExteriorRoomTiles, TOWER_DOOR_HEIGHT, TOWER_DOOR_WIDTH, TOWER_EXTERIOR_SIZE } from "./adventure-rooms/tower-exterior-room";
-import { beastTamerBoard, boards, graveyardBoard, graveyardRandomSpawnPositions, goblinArcherBoard, goblinBridgeBoard, oozeBoard, rustmireBoard, squidBoard } from "./boards";
-import { abyssalOoze, abyssalSquid, alligator, barnacleDrone, basaltWyrm, beastTamer, bee, brineDynamo, caveBat, clayGolem, dragonfly, enemies, fireAlligator, fireAnt, glowScorpion, gloomWisp, goblin, goblinArcher, goblinChief, goblinShaman, mummy, oozeGuardian, oreBeetle, rustmireEngine, squidKnight, squidTentacle, skeleton, skeletonBrachiosaurus, skeletonGiraffe, skeletonHippo, skeletonKing, skeletonPrince, skeletonRhino, undertaker } from "./enemies";
-import { level01, level02, level03, level04, level05, level06, level07, level08, level09, level10, levels } from "./levels";
+import { archipelagoBoard, beastTamerBoard, boards, graveyardBoard, graveyardRandomSpawnPositions, goblinArcherBoard, goblinBridgeBoard, oozeBoard, rustmireBoard, squidBoard } from "./boards";
+import { abyssalOoze, abyssalSquid, alligator, barnacleDrone, basaltWyrm, beastTamer, bee, brineDynamo, caveBat, clayGolem, coconutBailiff, dragonfly, enemies, fireAlligator, fireAnt, glowScorpion, gloomWisp, goblin, goblinArcher, goblinChief, goblinShaman, mummy, oozeGuardian, oreBeetle, reefAuditor, rustmireEngine, squidKnight, squidTentacle, skeleton, skeletonBrachiosaurus, skeletonGiraffe, skeletonHippo, skeletonKing, skeletonPrince, skeletonRhino, undertaker, vacationEmperor } from "./enemies";
+import { level01, level02, level03, level04, level05, level06, level07, level08, level09, level10, level11, levels } from "./levels";
 import { knight, miner, players, worm } from "./players";
 import { ESCAPE_ROPE_SPRITES, FISH_SPRITES, GEAR_SPRITES, KEY_ITEM_SPRITES, MATERIAL_SPRITES, POTION_SPRITES, gearSprite } from "./inventory-sprites";
 import { sprites } from "./sprites";
@@ -143,9 +143,12 @@ describe("prototype content", () => {
       rustmireEngine: expect.any(String),
       brineDynamo: expect.any(String),
       barnacleDrone: expect.any(String),
+      coconutBailiff: expect.any(String),
+      reefAuditor: expect.any(String),
+      vacationEmperor: expect.any(String),
     }));
-    expect(Object.values(boards)).toEqual([graveyardBoard, goblinBridgeBoard, goblinArcherBoard, squidBoard, beastTamerBoard, oozeBoard, rustmireBoard]);
-    expect(levels).toEqual([level01, level02, level03, level04, level05, level06, level07, level08, level09, level10]);
+    expect(Object.values(boards)).toEqual([graveyardBoard, goblinBridgeBoard, goblinArcherBoard, squidBoard, beastTamerBoard, oozeBoard, rustmireBoard, archipelagoBoard]);
+    expect(levels).toEqual([level01, level02, level03, level04, level05, level06, level07, level08, level09, level10, level11]);
   });
 
   it("composes battle 1 as the 10x7 Undertaker graveyard", () => {
@@ -386,6 +389,48 @@ describe("prototype content", () => {
     expect(brineDynamo.hideFromBestiary).toBe(true);
   });
 
+  it("makes Battle 11 a geographically blocked archipelago and the largest arena", () => {
+    expect(level11.board).toBe(archipelagoBoard);
+    expect(archipelagoBoard.width).toBe(39);
+    expect(archipelagoBoard.height).toBe(23);
+    expect(archipelagoBoard.width * archipelagoBoard.height)
+      .toBeGreaterThan(rustmireBoard.width * rustmireBoard.height);
+    expect(archipelagoBoard.floorTheme).toBe("sand");
+    expect(archipelagoBoard.gapTheme).toBe("ocean");
+    expect(archipelagoBoard.gaps?.length).toBeGreaterThan(500);
+
+    const blocked = new Set((archipelagoBoard.gaps ?? []).map(({ x, y }) => `${x},${y}`));
+    const reachable = new Set<string>();
+    const queue = [...(archipelagoBoard.deploymentTiles ?? [])];
+    while (queue.length > 0) {
+      const position = queue.shift()!;
+      const positionKey = `${position.x},${position.y}`;
+      if (reachable.has(positionKey) || blocked.has(positionKey)) continue;
+      reachable.add(positionKey);
+      for (const neighbor of [
+        { x: position.x + 1, y: position.y },
+        { x: position.x - 1, y: position.y },
+        { x: position.x, y: position.y + 1 },
+        { x: position.x, y: position.y - 1 },
+      ]) {
+        if (
+          neighbor.x >= 0 && neighbor.x < archipelagoBoard.width
+          && neighbor.y >= 0 && neighbor.y < archipelagoBoard.height
+        ) queue.push(neighbor);
+      }
+    }
+
+    for (const spawn of level11.enemies) {
+      expect(blocked.has(`${spawn.position.x},${spawn.position.y}`)).toBe(false);
+      expect(reachable.has(`${spawn.position.x},${spawn.position.y}`)).toBe(false);
+    }
+    expect(level11.enemies.filter((spawn) => spawn.unit === coconutBailiff)).toHaveLength(3);
+    expect(level11.enemies.filter((spawn) => spawn.unit === reefAuditor)).toHaveLength(4);
+    expect(level11.enemies.filter((spawn) => spawn.unit === vacationEmperor)).toHaveLength(1);
+    expect(vacationEmperor.stats.hp.eq(1_000_000)).toBe(true);
+    expect(vacationEmperor.stats.hp.gt(rustmireEngine.stats.hp.mul(100))).toBe(true);
+  });
+
   it("defines the Clay Golem as a slow eight-direction special attacker", () => {
     expect(clayGolem.attackPattern).toBe("eight-way");
     expect(clayGolem.attackType).toBe("special");
@@ -447,6 +492,8 @@ describe("prototype content", () => {
     expect(sprites.raidFloorPlanks).toMatch(/^(?:data:image\/svg\+xml|.*raid-floor-planks)/);
     expect(sprites.raidFloorPlanks).not.toBe(sprites.wall);
     expect(sprites.raidWaterMurky).not.toBe(sprites.raidWaterBlue);
+    expect(sprites.raidWaterOcean).not.toBe(sprites.raidWaterBlue);
+    expect(sprites.raidFloorSand).not.toBe(sprites.raidFloorPlanks);
     expect(sprites.raidWaterMurky).not.toBe(sprites.raidGap);
     expect(sprites.lotteryWheelDisc).not.toBe(sprites.lotteryWheelFrame);
     expect(sprites.lotteryWheel).not.toBe(sprites.lotteryWheelDisc);

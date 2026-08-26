@@ -54,6 +54,9 @@ import direRat from "@/assets/sprites/units/dire-rat.svg";
 import soldierAnt from "@/assets/sprites/units/soldier-ant.svg";
 import sewerToad from "@/assets/sprites/units/sewer-toad.svg";
 import oddityBrewer from "@/assets/sprites/units/oddity-brewer.svg";
+import coconutBailiff from "@/assets/sprites/units/coconut-bailiff.svg";
+import reefAuditor from "@/assets/sprites/units/reef-auditor.svg";
+import vacationEmperor from "@/assets/sprites/units/vacation-emperor.svg";
 
 export const unitSprites = {
   abyssalSquid, alligator, ant, beastTamer, bee, clayGolem, dragonfly, fireAlligator, fireAnt,
@@ -65,4 +68,5 @@ export const unitSprites = {
   forgeling, chainForgeling, bellowsForgeling, hammerForgeling,
   rustmireEngine, brineDynamo, barnacleDrone, cartographer, angler, direRat, soldierAnt, sewerToad,
   oddityBrewer,
+  coconutBailiff, reefAuditor, vacationEmperor,
 } as const;

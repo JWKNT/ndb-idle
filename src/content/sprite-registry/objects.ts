@@ -73,6 +73,9 @@ import rustmireValve from "@/assets/sprites/objects/decor/rustmire/valve-wheel.s
 import rustmireGrate from "@/assets/sprites/objects/decor/rustmire/floor-grate.svg";
 import rustmirePuddle from "@/assets/sprites/objects/decor/rustmire/rust-puddle.svg";
 import rustmireLamp from "@/assets/sprites/objects/decor/rustmire/warning-lamp.svg";
+import beachPalm from "@/assets/sprites/objects/decor/beach/palm-tree.svg";
+import beachShells from "@/assets/sprites/objects/decor/beach/shells.svg";
+import beachDriftwood from "@/assets/sprites/objects/decor/beach/driftwood.svg";
 import earthRopeAnchor from "@/assets/sprites/objects/decor/earth/rope-anchor.svg";
 import earthSewerGrate from "@/assets/sprites/objects/decor/earth/sewer-grate.svg";
 import earthLeakingPipe from "@/assets/sprites/objects/decor/earth/leaking-pipe.svg";
@@ -180,6 +183,9 @@ export const objectSprites = {
   rustmireGrate,
   rustmirePuddle,
   rustmireLamp,
+  beachPalm,
+  beachShells,
+  beachDriftwood,
   earthRopeAnchor,
   earthSewerGrate,
   earthLeakingPipe,

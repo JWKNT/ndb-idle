@@ -691,7 +691,7 @@ describe("progression", () => {
       .toHaveLength(1);
   });
 
-  it("never rewards a repeated battle and advances through all ten battles", () => {
+  it("never rewards a repeated battle and advances from the opening ten into the Battle 11 preview", () => {
     const raidOne = recordVictory(defaultProgression(), 1, "45").state;
     const duplicate = recordVictory(raidOne, 1, "45").state;
     expect(duplicate.gold.eq(raidOne.gold)).toBe(true);
@@ -707,7 +707,38 @@ describe("progression", () => {
     expect(recordVictory(progress, 9).state.inventory.filter((item) => item.definitionId === "suction-cups")).toHaveLength(1);
     expect(progress.materials["rusty-gear"]).toBe(1);
     expect(recordVictory(progress, 10).state.materials["rusty-gear"]).toBe(1);
-    expect(nextRaidNumber(progress)).toBeNull();
+    expect(progress.highestUnlockedLevel).toBe(11);
+    expect(progress.selectedLevel).toBe(11);
+    expect(nextRaidNumber(progress)).toBe(11);
+  });
+
+  it("reveals Battle 11 for saves that had already cleared Battle 10", () => {
+    const values = new Map<string, string>();
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => values.set(key, value),
+      removeItem: (key: string) => values.delete(key),
+    });
+
+    try {
+      const key = "idle-game-prototype-save-v2-slot-1";
+      saveProgression(clearedThrough(10), 1);
+      const stored = JSON.parse(values.get(key)!);
+      values.set(key, JSON.stringify({
+        ...stored,
+        version: 46,
+        highestUnlockedLevel: 10,
+        selectedLevel: 10,
+      }));
+
+      const migrated = loadProgression(1);
+      expect(migrated.completedRaids).toContain(10);
+      expect(migrated.highestUnlockedLevel).toBe(11);
+      expect(migrated.selectedLevel).toBe(11);
+      expect(nextRaidNumber(migrated)).toBe(11);
+    } finally {
+      vi.unstubAllGlobals();
+    }
   });
 
   it("records only registered defeated enemies for the Bestiary", () => {

@@ -205,7 +205,7 @@ export {
 const LEGACY_SAVE_KEY = "idle-game-prototype-save-v2";
 const SAVE_SLOT_KEY_PREFIX = "idle-game-prototype-save-v2-slot-";
 const SAVE_SLOT_MIGRATION_KEY = "idle-game-prototype-save-slots-migrated-v1";
-const SAVE_VERSION = 46;
+const SAVE_VERSION = 47;
 const HEALING_RATE_PER_SECOND = 0.08;
 const STAMINA_RECOVERY_RATE_PER_SECOND = 0.2;
 const PLAYER_ORDER: PlayerId[] = ["knight", "worm", "miner"];
@@ -1039,6 +1039,18 @@ function migrateStoredProgression(
           ? Math.max(1, materials["rusty-gear"])
           : materials["rusty-gear"],
       },
+    };
+  }
+  if (
+    storedVersion < 47
+    && Array.isArray(migrated.completedRaids)
+    && migrated.completedRaids.includes(10)
+    && !migrated.completedRaids.includes(11)
+  ) {
+    migrated = {
+      ...migrated,
+      highestUnlockedLevel: Math.max(11, validLevel(migrated.highestUnlockedLevel)),
+      selectedLevel: 11,
     };
   }
   const completedRaids = Array.isArray(migrated.completedRaids) ? migrated.completedRaids : [];

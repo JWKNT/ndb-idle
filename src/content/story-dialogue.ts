@@ -36,7 +36,7 @@ export type ConversationId =
   | "charles-complete"
   | "forge-blueprints-delivered";
 
-type OpeningBattle = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+type OpeningBattle = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
 
 /** Keeps long prose readable in source without inserting visible line breaks. */
 function copy(...lines: string[]): string {
@@ -176,6 +176,19 @@ export const STORY_DIALOGUE: {
           "the Colossus promotes itself from maritime incident to regional weather system.",
           "This is not merely Battle Ten. This is a historic vertical integration of tetanus",
           "and destiny. NDB MEGASOFTWARE accepts full credit and no liability.",
+        ),
+      }],
+    },
+    11: {
+      lines: [{
+        text: copy(
+          "NDB MEGASOFTWARE HORIZON OWNERSHIP presents BATTLE ELEVEN, shipped before",
+          "transportation. The wreckage behind you becomes a",
+          "beach. The beach becomes an ocean. The ocean becomes a blue refusal",
+          "form stretched between privately owned mounds of sand. From the farthest island,",
+          "the Vacation Emperor reclines beneath a crown and declares all visible water his",
+          "personal resort. He waves. The wave is hostile. NDB MEGASOFTWARE congratulates",
+          "the horizon for finally becoming a wall.",
         ),
       }],
     },
@@ -574,6 +587,18 @@ export const BESTIARY_DESCRIPTIONS = {
   "sewer-toad": copy(
     "A Toad swollen with sewer water and poor decisions.",
     "It croaks in a voice normally associated with furniture being dragged upstairs.",
+  ),
+  "coconut-bailiff": copy(
+    "A coconut issued a clipboard, enormous feet, and the confidence to repossess a sunset.",
+    "Its signature is just three wet dents, but every court accepts it.",
+  ),
+  "reef-auditor": copy(
+    "A crab-shaped public servant grown from coral, red tape, and the worst afternoon of your life.",
+    "It has inspected the tide and found the tide suspicious.",
+  ),
+  "vacation-emperor": copy(
+    "A sunburnt monarch wearing sunglasses beneath a crown, because authority requires layers.",
+    "He has annexed every beach his chair can face and several that do not exist.",
   ),
 } satisfies Record<keyof typeof enemies, string>;
 

@@ -11,8 +11,8 @@ import {
 } from "./story-dialogue";
 
 describe("story and dialogue", () => {
-  it("keeps one pre-battle story for each of the first ten Battles", () => {
-    expect(Object.keys(STORY_DIALOGUE.battles)).toHaveLength(10);
+  it("keeps one pre-battle story for every available Battle", () => {
+    expect(Object.keys(STORY_DIALOGUE.battles)).toHaveLength(11);
     for (const level of levels) {
       const passage = battleStory(level.number)?.lines.map((line) => line.text).join(" ") ?? "";
       expect(passage.length, `Battle ${level.number}`).toBeGreaterThanOrEqual(350);
@@ -44,6 +44,8 @@ describe("story and dialogue", () => {
       "Ooze Guardians?",
       "Barnacle Drones?",
       "Brine Dynamo",
+      "Coconut Bailiffs?",
+      "Reef Auditors?",
     ].join("|");
     expect(passages).not.toMatch(new RegExp(`\\b(?:${supportingMobNames})\\b`, "i"));
   });

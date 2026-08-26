@@ -1,7 +1,8 @@
 # Progression Unlock Tree
 
 This is the canonical development map for NDB Idle progression. It records the
-implemented opening from a new save through entering the Great Tower, including
+implemented opening from a new save through entering the Great Tower, plus the
+deliberately blocked Battle 11 preview, including
 mandatory convergence gates, optional NPC branches, activities, quest costs,
 material dependencies, and one-time system unlocks.
 
@@ -62,12 +63,16 @@ flowchart TD
   Table --> Crafting[Crafting]
   B9 --> B10[Clear Battle 10]
   B10 --> Gear[Rusty Gear]
+  B10 --> B11Preview[Battle 11 preview: disconnected islands]
   Tentacle --> Table
   Forge --> Table
   Crafting --> Key[Tower Key recipe]
   Gear --> Key
   Forge --> Key
   Key --> End[Use Tower Key: enter Great Tower]
+  End -. future Tower and side progression .-> Boatmaster[Planned Boatmaster water crossing]
+  B11Preview -. impassable ocean .-> B11Gate[Future Battle 11 clear gate]
+  Boatmaster -.-> B11Gate
 ```
 
 The two deliberately non-linear clear gates are:
@@ -214,7 +219,11 @@ New save
                                                                         │                                       └── Crafting navigation/activity
                                                                         └── Battle 10 available
                                                                             └── Clear Battle 10 — Rustmire Engine
-                                                                                └── Rusty Gear
+                                                                                ├── Rusty Gear
+                                                                                └── Battle 11 preview available
+                                                                                    ├── 39×23 beach and island arena
+                                                                                    ├── Every enemy island is disconnected from deployment
+                                                                                    └── Clear blocked: no current water traversal
 
 Tower entrance convergence
 ├── Crafting Table owned
@@ -226,6 +235,19 @@ Tower entrance convergence
         └── Use Tower Key
             └── Great Tower unlocked and current opening ends
 ```
+
+## Battle 11 preview and planned convergence
+
+Battle 11 is implemented as a visible future wall, not as a complete progression node.
+Clearing Battle 10 exposes the western beach, distant islands, placeholder enemies, and
+the Vacation Emperor. The arena cannot currently be cleared because ocean gaps separate
+the entire party from every enemy.
+
+Planned work before Battle 11 becomes a real clear includes additional Great Tower and
+side-quest progression plus an early Boatmaster party member whose defining ability moves
+characters across water gaps. Those future nodes are architectural intent only: they do
+not yet exist in runtime state, Help, saves, or player-facing promises. Battle 11's enemy
+numbers and reward must be rebalanced when those paths are implemented.
 
 ## Optional branch matrix
 
@@ -287,3 +309,5 @@ Crafting Table ─> Crafting interface ─────────┘
 - `Enter Tower` recovers the Blacksmith's Blueprints; it does not open the
   Tower. The crafted Tower Key and a return to the door do that.
 - The current implemented endpoint is entering the Great Tower with the key.
+- Battle 11 may remain selectable beyond that endpoint while deliberately impossible.
+  Do not make its islands reachable until the planned water-crossing branch exists.

@@ -6,10 +6,10 @@ An idle tactics game built with React, TypeScript, Vite, and Electron. The same 
 
 ## Current progression
 
-New saves begin with **Party** and **Battle** visible. Menu sections appear only after their unlock condition is met:
+New saves begin with **Battle** and **Party** visible, with Battle selected. Menu sections appear only after their unlock condition is met:
 
 - Battle 1 drops the permanent Lowering Rope and unlocks Adventure.
-- Party and Battle are available immediately; Party is the initial game screen.
+- Party and Battle are available immediately.
 - The first Adventure death unlocks Training.
 - Battle 3 awards the marked `Lost Adventurer` quest. Its zone 1 destination contains a guarded cage encounter whose occupant is not revealed in advance; rescuing him unlocks the Shop.
 - Battle 4 unlocks the 500-gold `Rescue Me` quest.
@@ -34,6 +34,9 @@ Content is modular: every enemy, board, and Battle has its own file.
 6. **Goblin Shaman** — a 19×11 leafy arena with scattered tree stumps, isolated cardinal-line Goblin Archers, and one range-3 Shaman that can teleport up to half an arena away. Its first clear awards Shaman's Ring.
 7. **Beast Tamer** — a 13×9 leafy arena with tree-stump walls and central gaps. The boss keeps its distance, usually drops two temporary beast cages but sometimes only one, and awards the persistent Bestiary.
 8. **Abyssal Squid** — a 20×13 wooden route over two tones of water. Four Squid Knights guard a stationary 3×3 boss. The Squid is invulnerable until all four Tentacles are cut by Tidecaller Trident throws; the Squid itself can then be damaged by Trident throws or Worm's Acid Shot.
+9. **Abyssal Ooze** — a 20×13 arena whose Guardians weaken the central Ooze as they fall.
+10. **Rusttide Colossus** — a 27×15 flooded foundry with a shield Dynamo and the Rusty Gear reward.
+11. **Vacation Emperor** — a 39×23 preview arena of disconnected sand islands. It is intentionally impossible with current movement and tuned far above the Battle 10 endpoint.
 
 ## Adventure
 

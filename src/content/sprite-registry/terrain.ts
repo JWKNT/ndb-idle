@@ -51,6 +51,8 @@ import floorForgeB from "@/assets/sprites/terrain/floors/floor-forge-b.svg";
 import forgeWall from "@/assets/sprites/terrain/forge-wall.svg";
 import floorTowerPath from "@/assets/sprites/terrain/floors/floor-tower-path.svg";
 import raidFloorAbyssalMetal from "@/assets/sprites/terrain/raid-floor-abyssal-metal.svg";
+import raidFloorSand from "@/assets/sprites/terrain/raid-floor-sand.svg";
+import raidWaterOcean from "@/assets/sprites/terrain/raid-water-ocean.svg";
 import raidPressureVat from "@/assets/sprites/terrain/raid-pressure-vat.svg";
 
 export const terrainSprites = {
@@ -69,5 +71,5 @@ export const terrainSprites = {
   volcanicWall, fireBeam, fireBeamCross,
   floorForgeA, floorForgeB, forgeWall,
   floorTowerPath,
-  raidFloorAbyssalMetal, raidPressureVat,
+  raidFloorAbyssalMetal, raidFloorSand, raidWaterOcean, raidPressureVat,
 } as const;

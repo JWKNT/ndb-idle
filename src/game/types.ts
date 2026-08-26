@@ -67,6 +67,9 @@ export type SceneryKind =
   | "rustmireGrate"
   | "rustmirePuddle"
   | "rustmireLamp"
+  | "beachPalm"
+  | "beachShells"
+  | "beachDriftwood"
   | "earthRopeAnchor"
   | "earthSewerGrate"
   | "earthLeakingPipe"
@@ -231,8 +234,8 @@ export interface BoardDefinition {
   deploymentExclusions?: Position[];
   deploymentTiles?: Position[];
   blueGaps?: Position[];
-  gapTheme?: "deep" | "murky-water";
-  floorTheme?: "grass" | "planks" | "leaves" | "abyssal-metal";
+  gapTheme?: "deep" | "murky-water" | "ocean";
+  floorTheme?: "grass" | "planks" | "leaves" | "abyssal-metal" | "sand";
   wallTheme?: "tombstone" | "stone" | "tree-stump" | "pressure-vat";
   decorations?: SceneryPlacement[];
 }

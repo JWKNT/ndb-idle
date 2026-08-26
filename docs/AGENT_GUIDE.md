@@ -37,9 +37,11 @@ adventures, escalating numbers, equipment, mining, fishing, crafting, and automa
 `break_eternity.js` is present because the progression is expected to grow far beyond the
 opening content.
 
-The current playable opening contains Battles 1–10 and the associated activities leading
-to the Great Tower. Entering the Tower with the Tower Key is the structural endpoint of
-this opening material. That structure is for development planning only.
+The current complete opening contains Battles 1–10 and the associated activities leading
+to the Great Tower. Entering the Tower with the Tower Key is its structural endpoint.
+Battle 11 is also visible as a deliberately unbeatable preview: its disconnected islands
+require a future water-crossing party ability and its placeholder numbers assume additional
+Tower-side progression. That structure is for development planning only.
 
 Never expose development vocabulary such as **chapter**, **zone**, or **depth** in
 player-facing prose. Use actual place names, visible landmarks, rooms, routes, floors, or

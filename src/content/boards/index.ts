@@ -5,6 +5,7 @@ import { squidBoard } from "./squid-board";
 import { beastTamerBoard } from "./beast-tamer-board";
 import { oozeBoard } from "./ooze-board";
 import { rustmireBoard } from "./rustmire-board";
+import { archipelagoBoard } from "./archipelago-board";
 
 export const boards = {
   [graveyardBoard.id]: graveyardBoard,
@@ -14,6 +15,7 @@ export const boards = {
   [beastTamerBoard.id]: beastTamerBoard,
   [oozeBoard.id]: oozeBoard,
   [rustmireBoard.id]: rustmireBoard,
+  [archipelagoBoard.id]: archipelagoBoard,
 };
 
-export { beastTamerBoard, graveyardBoard, graveyardRandomSpawnPositions, goblinBridgeBoard, goblinArcherBoard, oozeBoard, rustmireBoard, squidBoard };
+export { archipelagoBoard, beastTamerBoard, graveyardBoard, graveyardRandomSpawnPositions, goblinBridgeBoard, goblinArcherBoard, oozeBoard, rustmireBoard, squidBoard };

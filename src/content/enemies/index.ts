@@ -44,6 +44,9 @@ import { hammerForgeling } from "./hammer-forgeling";
 import { direRat } from "./dire-rat";
 import { soldierAnt } from "./soldier-ant";
 import { sewerToad } from "./sewer-toad";
+import { coconutBailiff } from "./coconut-bailiff";
+import { reefAuditor } from "./reef-auditor";
+import { vacationEmperor } from "./vacation-emperor";
 
 export const enemies = {
   [goblin.id]: goblin,
@@ -92,10 +95,13 @@ export const enemies = {
   [direRat.id]: direRat,
   [soldierAnt.id]: soldierAnt,
   [sewerToad.id]: sewerToad,
+  [coconutBailiff.id]: coconutBailiff,
+  [reefAuditor.id]: reefAuditor,
+  [vacationEmperor.id]: vacationEmperor,
 };
 
 export function getEnemy(id: string) {
   return enemies[id as keyof typeof enemies];
 }
 
-export { abyssalOoze, abyssalSquid, alligator, ant, barnacleDrone, basaltWyrm, beastTamer, bee, bellowsForgeling, brineDynamo, caveBat, chainForgeling, clayGolem, direRat, dragonfly, fireAlligator, fireAnt, forgeling, glowScorpion, gloomWisp, goblin, goblinChief, goblinShaman, hammerForgeling, merman, mimic, mummy, octopus, oozeGuardian, oreBeetle, rat, rustmireEngine, sewerToad, soldierAnt, squidKnight, squidTentacle, skeleton, spider, undertaker, skeletonGiraffe, skeletonHippo, skeletonPrince, skeletonRhino, skeletonBrachiosaurus, skeletonKing, goblinArcher };
+export { abyssalOoze, abyssalSquid, alligator, ant, barnacleDrone, basaltWyrm, beastTamer, bee, bellowsForgeling, brineDynamo, caveBat, chainForgeling, clayGolem, coconutBailiff, direRat, dragonfly, fireAlligator, fireAnt, forgeling, glowScorpion, gloomWisp, goblin, goblinChief, goblinShaman, hammerForgeling, merman, mimic, mummy, octopus, oozeGuardian, oreBeetle, rat, reefAuditor, rustmireEngine, sewerToad, soldierAnt, squidKnight, squidTentacle, skeleton, spider, undertaker, vacationEmperor, skeletonGiraffe, skeletonHippo, skeletonPrince, skeletonRhino, skeletonBrachiosaurus, skeletonKing, goblinArcher };

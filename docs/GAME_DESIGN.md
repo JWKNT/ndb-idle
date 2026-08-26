@@ -40,7 +40,15 @@ A navigation section is absent—not disabled—until unlocked. Battle and Party
 | 7 | Beast Tamer | 13×9 leaf arena, tree stumps, central gaps | Bestiary, Frogs/Mutant Rats/Fire Ants and Charles, Battle 8 |
 | 8 | Abyssal Squid | 20×13 wood route over murky and blue water; four Squid Knights and four Tentacles | Rotten Tentacle, Blacksmith rooms, ring targeting, Battle 9 |
 | 9 | Abyssal Ooze | 20×13 ooze arena with three Guardians | Suction Cups, Level 2 Potions, Dice rooms, Tower Exterior, Battle 10 |
-| 10 | Rusttide Colossus | 26×15 rusted platform with a shield Dynamo | Rusty Gear |
+| 10 | Rusttide Colossus | 27×15 rusted platform with a shield Dynamo | Rusty Gear, Battle 11 preview |
+| 11 | Vacation Emperor | 39×23 ocean with a western beach and disconnected sand islands | Not currently clearable |
+
+Battle 11 is intentionally available before it is realistically solvable. Water tiles
+block all current movement, every enemy occupies a separate island from the deployment
+beach, and no current party member can cross. Its placeholder Vacation Emperor begins at
+1,000,000 base HP versus Battle 10's 7,000, establishing the first large post-opening
+scale jump. Future Tower-side progression and a Boatmaster party ability are expected to
+converge before this encounter receives final balance or a clear reward.
 
 The Skele-King takes no damage while no deployed party member has the Undead Gem equipped. Defeat without it logs that the King is invulnerable and hints that progress lies outside the Battle. The gem is a 250-gold Shop accessory.
 
