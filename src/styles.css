@@ -1,0 +1,15 @@
+/*
+ * Ordered style entry point. Keep imports in cascade order: feature foundations
+ * first, then the intentionally rough Renaissance skin and focused overrides.
+ */
+@import "./styles/core.css";
+@import "./styles/battle.css";
+@import "./styles/adventure.css";
+@import "./styles/party-training.css";
+@import "./styles/theme-foundation.css";
+@import "./styles/theme-handcrafted.css";
+@import "./styles/dungeon-map.css";
+@import "./styles/theme-renaissance.css";
+@import "./styles/mining-crafting.css";
+@import "./styles/controls-frames.css";
+@import "./styles/interface-reboot.css";

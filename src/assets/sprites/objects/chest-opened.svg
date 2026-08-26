@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Lid raised upright behind the chest. -->
+  <rect x="3" y="0" width="10" height="1" fill="#3b2517"/>
+  <rect x="2" y="1" width="12" height="5" fill="#4a2d1a"/>
+  <rect x="3" y="1" width="10" height="4" fill="#a9652c"/>
+  <rect x="4" y="2" width="8" height="2" fill="#d08a38"/>
+  <rect x="4" y="2" width="8" height="1" fill="#e2a94d"/>
+  <rect x="2" y="5" width="12" height="1" fill="#2d1d14"/>
+  <rect x="3" y="5" width="2" height="2" fill="#d5a83f"/>
+  <rect x="11" y="5" width="2" height="2" fill="#d5a83f"/>
+
+  <!-- Wide, dark empty interior makes the open state unmistakable. -->
+  <rect x="1" y="7" width="14" height="3" fill="#3b2517"/>
+  <rect x="2" y="7" width="12" height="2" fill="#130e0b"/>
+  <rect x="3" y="8" width="10" height="1" fill="#24160f"/>
+  <rect x="1" y="7" width="1" height="7" fill="#49301e"/>
+  <rect x="14" y="7" width="1" height="7" fill="#49301e"/>
+  <rect x="1" y="9" width="14" height="1" fill="#d09a2f"/>
+
+  <!-- Lower, emptied chest base. -->
+  <rect x="2" y="10" width="12" height="4" fill="#75431f"/>
+  <rect x="3" y="10" width="10" height="1" fill="#9b5b27"/>
+  <rect x="3" y="11" width="10" height="2" fill="#865026"/>
+  <rect x="7" y="9" width="3" height="4" fill="#e9bd45"/>
+  <rect x="8" y="10" width="1" height="2" fill="#5c421f"/>
+  <rect x="3" y="14" width="2" height="1" fill="#3c281a"/>
+  <rect x="11" y="14" width="2" height="1" fill="#3c281a"/>
+</svg>

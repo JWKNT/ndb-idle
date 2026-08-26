@@ -1,0 +1,79 @@
+/* The compact map keeps its parchment treatment, with a quiet tint for depth. */
+.dungeon-map-room.map-depth-0 {
+  background: #e8f0d5;
+}
+.dungeon-map-room.map-depth-1 {
+  background: #d8d8cf;
+}
+
+.dungeon-map-room.map-depth-2 {
+  background: #ead7b5;
+}
+
+.dungeon-map-room.map-depth-3 {
+  background: #d8c6ae;
+}
+
+.dungeon-map-room.map-depth-4 {
+  background: #e3b19b;
+}
+
+.dungeon-map-room.map-depth-5 {
+  background: #bcd7a9;
+}
+
+.dungeon-map-room.is-water-depth {
+  background: #bed9df;
+}
+
+.dungeon-map-room.is-current:not(.is-quest-target) {
+  border-color: var(--page-accent);
+  box-shadow: inset 0 0 0 2px rgb(255 255 255 / 42%);
+}
+
+.dungeon-map-room.is-quest-target {
+  background: #f3c6bf;
+}
+
+/* The Tower is a one-off landmark rather than another ordinary room. The
+   tunnels still attach to the underlying map cell, while this silhouette makes
+   the destination read as something outside the procedural dungeon. */
+.dungeon-map-room.is-tower-landmark {
+  overflow: visible;
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dungeon-map-room.is-tower-landmark::before {
+  content: "";
+  position: absolute;
+  z-index: 1;
+  inset: -8px 2px 1px;
+  clip-path: polygon(
+    0 18%, 12% 18%, 12% 0, 33% 0, 33% 18%,
+    67% 18%, 67% 0, 88% 0, 88% 18%, 100% 18%,
+    100% 100%, 0 100%
+  );
+  background:
+    repeating-linear-gradient(0deg, transparent 0 9px, rgb(36 27 21 / 22%) 10px 11px),
+    #80705d;
+  filter: drop-shadow(0 0 1px #2e231a) drop-shadow(3px 4px 0 rgb(55 39 26 / 24%));
+}
+
+.dungeon-map-room.is-tower-landmark.is-current::before {
+  background:
+    repeating-linear-gradient(0deg, transparent 0 9px, rgb(36 27 21 / 22%) 10px 11px),
+    #8f795c;
+  filter: drop-shadow(0 0 2px var(--page-accent)) drop-shadow(3px 4px 0 rgb(55 39 26 / 24%));
+}
+
+.dungeon-map-room.is-tower-landmark.is-current {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+
+.dungeon-map-room.is-tower-landmark .map-room-marker {
+  z-index: 2;
+}

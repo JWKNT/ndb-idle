@@ -1,0 +1,515 @@
+/* Native selects keep their behavior, but wear the same rough parchment and
+   dark-wood trim as the surrounding game menus. */
+select {
+  appearance: none;
+  padding: 6px 34px 7px 10px;
+  border: 3px double #62482d;
+  color: #302318;
+  background-color: #efe0bd;
+  background-image:
+    linear-gradient(45deg, transparent 50%, #503720 50%),
+    linear-gradient(135deg, #503720 50%, transparent 50%),
+    linear-gradient(90deg, transparent, rgb(91 62 31 / 12%));
+  background-position:
+    calc(100% - 15px) 50%,
+    calc(100% - 9px) 50%,
+    100% 0;
+  background-repeat: no-repeat;
+  background-size: 6px 6px, 6px 6px, 30px 100%;
+  box-shadow:
+    inset 0 0 0 1px #fff0cf,
+    3px 3px 0 #9d896a;
+  font-weight: 600;
+  letter-spacing: .015em;
+  cursor: pointer;
+}
+
+select:hover:not(:disabled),
+select:focus-visible {
+  border-color: #713d31;
+  background-color: #f4e5c2;
+  outline: 2px solid rgb(113 61 49 / 22%);
+  outline-offset: 1px;
+}
+
+select:disabled {
+  color: #8c806c;
+  background-color: #d8ceb9;
+  cursor: default;
+}
+
+select option {
+  color: #302318;
+  background: #f4e6c6;
+}
+
+/* Game-owned dropdowns replace native system popups where the opened menu is
+   part of the game's visible interface. */
+.game-dropdown {
+  position: relative;
+  z-index: 1;
+  min-width: 190px;
+  display: inline-block;
+}
+
+.game-dropdown.is-open {
+  z-index: 80;
+}
+
+.game-dropdown-trigger {
+  width: 100%;
+  min-height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 6px 10px 7px 12px;
+  border: 3px double #62482d;
+  background:
+    linear-gradient(90deg, transparent, rgb(91 62 31 / 10%)),
+    #efe0bd;
+  box-shadow: inset 0 0 0 1px #fff0cf, 3px 3px 0 #9d896a;
+  text-align: left;
+}
+
+.game-dropdown-trigger:hover:not(:disabled),
+.game-dropdown-trigger:active:not(:disabled) {
+  transform: none;
+}
+
+.game-dropdown.is-open .game-dropdown-trigger {
+  border-color: #713d31;
+  background: #f4e5c2;
+  box-shadow: inset 0 0 0 1px #fff0cf, 3px 3px 0 #806747;
+}
+
+.game-dropdown-caret {
+  color: #725333;
+  font-size: 9px;
+  transform: rotate(45deg);
+  transition: transform 100ms ease;
+}
+
+.game-dropdown.is-open .game-dropdown-caret {
+  transform: rotate(135deg);
+}
+
+.game-dropdown-menu {
+  position: absolute;
+  z-index: 90;
+  top: calc(100% + 5px);
+  left: 0;
+  min-width: 100%;
+  padding: 5px;
+  border: 3px double #4f3825;
+  background:
+    repeating-linear-gradient(0deg, transparent 0 29px, rgb(99 70 36 / 7%) 30px),
+    #f3e5c5;
+  box-shadow: 5px 6px 0 rgb(67 46 27 / 24%);
+}
+
+.game-dropdown-option {
+  width: 100%;
+  min-height: 34px;
+  display: grid;
+  grid-template-columns: 17px 1fr;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 10px 6px 6px;
+  border: 0;
+  border-bottom: 1px solid rgb(105 77 45 / 22%);
+  background: transparent;
+  box-shadow: none;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.game-dropdown-option:last-child {
+  border-bottom: 0;
+}
+
+.game-dropdown-option:hover:not(:disabled),
+.game-dropdown-option:focus-visible {
+  transform: none;
+  border-color: rgb(105 77 45 / 22%);
+  background: #e2d0a7;
+  box-shadow: inset 3px 0 0 var(--page-accent);
+}
+
+.game-dropdown-option.is-selected {
+  color: #fff8df;
+  background: var(--page-accent);
+  box-shadow: inset 0 0 0 1px rgb(255 244 210 / 35%);
+}
+
+.game-dropdown-option.is-selected:hover,
+.game-dropdown-option.is-selected:focus-visible {
+  color: #fff8df;
+  background: var(--page-accent);
+  box-shadow: inset 3px 0 0 #f0d59d;
+}
+
+.game-dropdown-mark {
+  color: currentColor;
+  font-size: 9px;
+}
+
+.strategy-game-dropdown {
+  width: 220px;
+}
+
+.zone-game-dropdown {
+  width: 210px;
+  min-width: 210px;
+}
+
+.adventure-strategy-picker,
+.adventure-zone-picker,
+.adventure-control-picker {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.map-dice-pair > .map-die-face {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 17px;
+  height: 17px;
+  border: 1px solid #38203f;
+  background: #eee1c5;
+  color: #38203f;
+  font: 700 10px/1 serif;
+  box-shadow: 1px 1px 0 #896d69;
+}
+
+.map-die-pips {
+  position: absolute;
+  inset: 1px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(3, 1fr);
+}
+
+.map-die-pips > .die-pip {
+  width: 3px;
+  height: 3px;
+  min-width: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: #38203f;
+  box-shadow: none;
+}
+
+.adventure-tile,
+.adventure-tile:hover:not(:disabled),
+.adventure-tile:active:not(:disabled) {
+  transform: none;
+  box-shadow: none;
+}
+
+/* Activity screens use small, material-specific frames without competing with
+   the board art itself. */
+.activity-screen-frame {
+  position: relative;
+  width: fit-content;
+  max-width: 100%;
+  padding: 5px;
+  isolation: isolate;
+}
+
+.activity-screen-frame::before,
+.activity-screen-frame::after {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  content: "";
+}
+
+.battle-screen-frame {
+  overflow: hidden;
+  border: 3px double #5f392d;
+  background: #a56a4d;
+  box-shadow:
+    inset 0 0 0 1px #d2a075,
+    5px 6px 0 rgb(54 31 23 / 22%);
+}
+
+.battle-screen-frame::before {
+  inset: 2px;
+  border: 1px solid rgb(255 218 166 / 42%);
+  box-shadow: inset 0 0 0 2px rgb(75 34 27 / 18%);
+}
+
+.battle-screen-frame::after {
+  inset: 5px;
+  border: 1px solid rgb(59 27 23 / 45%);
+}
+
+.adventure-screen-frame {
+  overflow: hidden;
+  border: 3px double #344b35;
+  background:
+    repeating-linear-gradient(90deg, transparent 0 18px, rgb(214 226 167 / 13%) 19px 20px),
+    #60764b;
+  box-shadow:
+    inset 0 0 0 1px #a8b77b,
+    5px 6px 0 rgb(42 57 37 / 20%);
+}
+
+.adventure-screen-frame::before {
+  inset: 2px;
+  border: 1px solid rgb(226 232 187 / 38%);
+  box-shadow: inset 0 0 0 2px rgb(38 63 43 / 20%);
+}
+
+.adventure-screen-frame::after {
+  inset: 5px;
+  border: 1px solid rgb(30 53 35 / 55%);
+}
+
+.mining-screen-frame {
+  overflow: hidden;
+  padding: 6px;
+  border: 3px double #352d39;
+  background:
+    linear-gradient(135deg, transparent 0 42%, rgb(179 145 190 / 17%) 43% 47%, transparent 48%),
+    #625567;
+  box-shadow:
+    inset 0 0 0 1px #9c899f,
+    6px 7px 0 rgb(42 33 45 / 24%);
+}
+
+.mining-screen-frame::before {
+  inset: 2px;
+  border: 1px solid rgb(225 203 222 / 31%);
+}
+
+.mining-screen-frame::after {
+  inset: 6px;
+  border: 1px solid rgb(33 26 37 / 66%);
+}
+
+.activity-screen-frame > .adventure-board,
+.activity-screen-frame > .mining-board,
+.battle-screen-frame > .battle-board {
+  max-width: 100%;
+}
+
+.mining-screen-frame .mining-board {
+  border: 0;
+  box-shadow: none;
+}
+
+/* Keep the in-run controls compact and prevent dropdown internals from being
+   treated as full flex columns. */
+.adventure-controls {
+  width: min(100%, 520px);
+  min-width: 0;
+  box-sizing: border-box;
+  display: grid;
+  gap: 12px;
+  padding: 13px;
+  font-size: 16px;
+}
+
+.adventure-controls span {
+  flex: initial;
+}
+
+.adventure-control-toolbar {
+  display: flex;
+  min-width: 0;
+  max-width: 100%;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 12px;
+}
+
+.adventure-auto-button {
+  align-self: end;
+  white-space: nowrap;
+}
+
+.adventure-control-picker,
+.adventure-zone-picker,
+.adventure-route-picker {
+  display: grid;
+  min-width: 145px;
+  flex: 1 1 155px;
+  align-items: start;
+  gap: 4px;
+}
+
+.adventure-control-picker > span,
+.adventure-zone-picker > span,
+.adventure-route-picker > span {
+  color: #5c472e;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: .045em;
+  text-transform: uppercase;
+}
+
+.adventure-controls .strategy-game-dropdown,
+.adventure-controls .zone-game-dropdown,
+.adventure-controls .route-game-dropdown {
+  width: 100%;
+  min-width: 0;
+}
+
+.adventure-controls .game-dropdown-trigger > span:first-child {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.adventure-control-options {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 16px;
+  padding: 10px 2px;
+  border-top: 1px solid rgb(102 75 44 / 25%);
+  border-bottom: 1px solid rgb(102 75 44 / 25%);
+}
+
+.adventure-control-options .plain-option {
+  min-width: 0;
+  margin: 0;
+}
+
+.adventure-restart-option {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  display: grid;
+  grid-template-columns: 30px minmax(0, 1fr);
+  align-items: center;
+  gap: 11px;
+  margin: 0;
+  padding: 10px 12px;
+  border: 3px double #765a36;
+  background:
+    linear-gradient(90deg, rgb(119 73 35 / 9%), transparent 34%),
+    #f4e7c2;
+  box-shadow: 4px 4px 0 rgb(74 50 27 / 16%);
+  color: #392819;
+  cursor: pointer;
+}
+
+.adventure-restart-option:hover {
+  background:
+    linear-gradient(90deg, rgb(119 73 35 / 15%), transparent 38%),
+    #f7ebca;
+}
+
+.adventure-restart-option.is-enabled {
+  border-color: #456b50;
+  background:
+    linear-gradient(90deg, rgb(62 105 69 / 18%), transparent 42%),
+    #f3e8c7;
+}
+
+.adventure-restart-option > input {
+  appearance: auto;
+  width: 26px;
+  height: 26px;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  accent-color: var(--page-accent);
+  cursor: pointer;
+}
+
+.adventure-restart-option > input::after {
+  content: none;
+}
+
+.adventure-restart-copy {
+  display: grid;
+  gap: 1px;
+}
+
+.adventure-restart-copy strong {
+  font-size: 17px;
+}
+
+.adventure-restart-copy small {
+  color: #69543a;
+  font-size: 13px;
+  line-height: 1.25;
+}
+
+.adventure-advanced-options {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  border: 1px solid rgb(102 75 44 / 42%);
+  background: rgb(244 230 190 / 34%);
+  box-shadow: 3px 3px 0 rgb(91 68 39 / 11%);
+}
+
+.adventure-setup-view .adventure-advanced-options {
+  margin: 12px 0;
+}
+
+.adventure-advanced-options > summary {
+  padding: 8px 11px;
+  color: #4c3823;
+  cursor: pointer;
+  font-weight: 700;
+  letter-spacing: .035em;
+}
+
+.adventure-advanced-options[open] > summary {
+  border-bottom: 1px solid rgb(102 75 44 / 28%);
+}
+
+.adventure-advanced-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 9px 16px;
+  padding: 11px;
+}
+
+.adventure-advanced-list .plain-option {
+  margin: 0;
+}
+
+.adventure-control-footer {
+  min-width: 0;
+  max-width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.adventure-control-footer > span {
+  min-width: 0;
+  flex: 1 1 220px;
+}
+
+.adventure-control-footer > button {
+  max-width: 100%;
+  white-space: normal;
+}
+
+@media (max-width: 760px) {
+  .adventure-control-toolbar,
+  .adventure-control-options,
+  .adventure-advanced-list {
+    grid-template-columns: 1fr;
+  }
+
+  .adventure-control-toolbar .adventure-auto-button,
+  .adventure-control-toolbar .game-dropdown {
+    width: 100%;
+  }
+}

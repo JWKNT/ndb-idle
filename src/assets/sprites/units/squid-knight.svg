@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Inksteel helm and breastplate over a visible cephalopod face. -->
+  <path fill="#22375f" d="M5 0h6v1h2v5h-1v2H4V7H3V2h2z"/>
+  <path fill="#5d73c8" d="M5 1h6v1h1v3H4V2h1z"/>
+  <path fill="#91a3ee" d="M6 1h3v1H6zM4 3h2v1H4z"/>
+  <rect x="3" y="5" width="10" height="2" fill="#172641"/>
+  <path fill="#8b50bf" d="M4 7h8v2h-2v1H6V9H4z"/>
+  <rect x="5" y="6" width="2" height="2" fill="#d8d5ff"/>
+  <rect x="9" y="6" width="2" height="2" fill="#d8d5ff"/>
+  <rect x="6" y="6" width="1" height="1" fill="#17152c"/>
+  <rect x="9" y="6" width="1" height="1" fill="#17152c"/>
+  <rect x="7" y="8" width="2" height="1" fill="#45d8d0"/>
+
+  <!-- Plate body, shield, blade, and curling tentacle feet. -->
+  <path fill="#2e3c68" d="M5 9h6v1h1v4H4v-4h1z"/>
+  <rect x="6" y="9" width="4" height="4" fill="#667bc6"/>
+  <rect x="7" y="10" width="2" height="3" fill="#a8b5e4"/>
+  <rect x="7" y="11" width="2" height="1" fill="#45d8d0"/>
+  <path fill="#6f3c9b" d="M1 8h4v1h1v5H5v1H2v-1H1z"/>
+  <rect x="2" y="9" width="3" height="4" fill="#a35bcc"/>
+  <rect x="3" y="10" width="2" height="2" fill="#55d9d4"/>
+  <rect x="13" y="4" width="2" height="10" fill="#9eb6c6"/>
+  <rect x="14" y="4" width="1" height="9" fill="#e7f5fa"/>
+  <rect x="12" y="8" width="4" height="2" fill="#56d6d0"/>
+  <rect x="13" y="10" width="2" height="4" fill="#604089"/>
+  <path fill="#9a56c4" d="M4 13h3v2H6v1H2v-2h2zm5 0h3v1h2v2h-4v-1H9z"/>
+  <rect x="4" y="14" width="2" height="1" fill="#d27add"/>
+  <rect x="10" y="14" width="2" height="1" fill="#d27add"/>
+</svg>

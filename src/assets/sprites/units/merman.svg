@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Fin-crowned face with gills and a scaled tidecaller torso. -->
+  <path fill="#174f63" d="M5 0h6v1h2v6h-2v2H5V8H3V2h2z"/>
+  <rect x="6" y="0" width="1" height="2" fill="#6edcc1"/>
+  <rect x="8" y="0" width="1" height="2" fill="#91efd0"/>
+  <rect x="10" y="0" width="1" height="2" fill="#55c9b4"/>
+  <path fill="#3cbea8" d="M5 2h6v5h-1v2H6V7H5z"/>
+  <rect x="3" y="3" width="2" height="3" fill="#62d7bd"/>
+  <rect x="11" y="3" width="2" height="3" fill="#62d7bd"/>
+  <rect x="2" y="4" width="2" height="1" fill="#91efd0"/>
+  <rect x="12" y="4" width="2" height="1" fill="#91efd0"/>
+  <rect x="6" y="3" width="1" height="2" fill="#d9fff1"/>
+  <rect x="9" y="3" width="1" height="2" fill="#d9fff1"/>
+  <rect x="6" y="3" width="1" height="1" fill="#173641"/>
+  <rect x="9" y="3" width="1" height="1" fill="#173641"/>
+  <rect x="7" y="6" width="2" height="1" fill="#176576"/>
+  <path fill="#24879a" d="M5 9h6v1h1v3H4v-3h1z"/>
+  <rect x="6" y="9" width="4" height="3" fill="#45c5ad"/>
+  <rect x="7" y="9" width="1" height="1" fill="#a4f3d4"/>
+  <rect x="9" y="10" width="1" height="1" fill="#a4f3d4"/>
+
+  <!-- Coiled fish tail and the golden throne-room trident. -->
+  <path fill="#176678" d="M5 12h6v1h2v2h-2v1H8v-2H6v2H2v-3h3z"/>
+  <rect x="6" y="12" width="5" height="1" fill="#3ab6ab"/>
+  <rect x="9" y="13" width="3" height="1" fill="#55d7c2"/>
+  <rect x="2" y="13" width="3" height="2" fill="#2b9a9a"/>
+  <rect x="3" y="15" width="3" height="1" fill="#55d7c2"/>
+  <path fill="#d8aa32" d="M10 0h1v3h2V0h1v3h1V0h1v5h-2v11h-2V5h-2z"/>
+  <rect x="13" y="4" width="1" height="11" fill="#ffe06a"/>
+  <rect x="10" y="3" width="6" height="1" fill="#f0c64e"/>
+</svg>

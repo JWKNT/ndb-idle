@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <title>NDB Idle pause button</title>
+  <path fill="#707070" d="M10 6h46v2h4v4h2v44h-2v4h-4v2H10v-2H6v-4H4V12h2V8h4z"/>
+  <path fill="#1f1f1f" d="M8 2h46v2h4v4h2v44h-2v4h-4v2H8v-2H4v-4H2V8h2V4h4z"/>
+  <path fill="#bdbdbd" d="M9 5h44v2h3v3h1v40h-1v3h-3v2H9v-2H6v-3H5V10h1V7h3z"/>
+  <path fill="#ededed" d="M9 7h44v3H9zM7 10h3v39H7z"/>
+  <path fill="#525252" d="M10 10h35v3H10zm0 5h22v2H10zm38-5h5v5h-5z"/>
+  <path fill="#777" d="M11 23h43v29H11z"/>
+  <path fill="#1f1f1f" d="M8 19h44v2h3v28h-3v2H8v-2H6V21h2z"/>
+  <path fill="#d94b3d" d="M9 22h5v26H9z"/>
+  <path fill="#ffdc42" d="M14 22h38v26H14z"/>
+  <path fill="#fff18a" d="M15 23h36v3H15z"/>
+  <path fill="#1f1f1f" d="M23 28h8v16h-8zm14 0h8v16h-8z"/>
+  <path fill="#8f7617" d="M15 45h36v3H15z"/>
+</svg>

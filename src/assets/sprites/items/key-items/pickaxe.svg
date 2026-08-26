@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Broad, two-sided mining head with tapered points. -->
+  <path fill="#252d31" d="M5 1h6v1h2v1h2v3h-3V5h-2v2H7V5H5v1H1V3h2V2h2z"/>
+  <path fill="#9aa7ab" d="M5 2h6v1h2v1h1v1h-2V4h-2v1H7V4H5v1H3V4h1V3h1z"/>
+  <path fill="#d3dcde" d="M5 2h5v1H5zM3 3h3v1H3z"/>
+  <!-- Long diagonal haft keeps the silhouette distinct from an axe. -->
+  <path fill="#493222" d="M7 6h3v3h1v3h1v3H9v-3H8V9H7z"/>
+  <path fill="#9a6640" d="M8 7h1v2h1v3h1v2h-1v-3H9V8H8z"/>
+  <path fill="#d09a60" d="M8 7h1v1H8z"/>
+</svg>

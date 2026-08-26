@@ -1,0 +1,364 @@
+.party-view {
+  padding: 22px;
+  overflow: auto;
+}
+.party-view > section {
+  margin-bottom: 22px;
+}
+
+.party-member {
+  max-width: 900px;
+  padding: 12px;
+  border: 1px solid #aaa;
+}
+
+.party-member-list,
+.healing-list,
+.quest-list {
+  display: grid;
+  gap: 12px;
+}
+
+.member-heading {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.member-heading h2 {
+  margin: 0;
+}
+
+.member-equipment {
+  margin-top: 12px;
+}
+
+.member-equipment > summary {
+  width: fit-content;
+  padding: 7px 12px;
+  border: 2px solid var(--line-strong);
+  background: #ece4d5;
+  box-shadow: 3px 3px 0 #aa987d;
+  cursor: pointer;
+  font-weight: 800;
+  list-style-position: inside;
+}
+
+.member-equipment[open] > summary {
+  margin-bottom: 12px;
+}
+
+.equipped-item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.equipped-item-label .pixel-sprite {
+  width: 34px;
+  height: 34px;
+  padding: 2px;
+  border: 1px solid #c6ae80;
+  background: #f5e8c8;
+}
+
+.party-inventory {
+  max-width: 1100px;
+  padding-top: 18px;
+  border-top: 1px solid #aaa;
+}
+
+.inventory-key-items {
+  margin-bottom: 18px;
+}
+
+.inventory-key-items h3,
+.inventory-capacity-line h3 {
+  margin: 0 0 8px;
+}
+
+.inventory-capacity-line {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  max-width: 1100px;
+  margin-bottom: 8px;
+}
+
+.key-item-grid {
+  padding-bottom: 13px;
+  border-bottom: 1px dashed #9b8567;
+}
+
+.inventory-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, 84px);
+  gap: 12px;
+  align-items: start;
+}
+
+.inventory-slot {
+  position: relative;
+  z-index: 1;
+  width: 84px;
+  height: 84px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 5px;
+  border: 2px solid #777;
+  background: #f5f5f5;
+  cursor: help;
+}
+
+.inventory-slot:hover,
+.inventory-slot:focus,
+.inventory-slot:focus-within {
+  z-index: 30;
+  outline: 2px solid #2463c5;
+  outline-offset: 1px;
+}
+
+.inventory-slot-gear {
+  border-color: #526f9e;
+}
+
+.inventory-slot-material {
+  border-color: #8b6741;
+}
+
+.inventory-slot-fish {
+  border-color: #39899c;
+}
+
+.inventory-slot-key {
+  border-color: #c49918;
+}
+
+.inventory-slot-potion {
+  border-color: #8b4bb3;
+}
+
+.inventory-slot-supply {
+  border-color: #d59a1f;
+}
+
+.inventory-slot-empty {
+  border-style: dashed;
+  background: rgb(120 95 60 / 5%);
+  box-shadow: none;
+  color: rgb(70 50 30 / 35%);
+  cursor: default;
+  font-size: 25px;
+}
+
+.inventory-slot-empty:hover,
+.inventory-slot-empty:focus,
+.inventory-slot-empty:focus-within {
+  z-index: 1;
+  outline: none;
+}
+
+.active-potion-list {
+  margin-bottom: 14px;
+}
+
+.active-potion-list h3,
+.active-potion-list ul {
+  margin: 5px 0;
+}
+
+.bulk-sell-actions {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+}
+
+.inventory-slot > .pixel-sprite {
+  width: 48px;
+  height: 48px;
+}
+
+.inventory-slot-name {
+  width: 100%;
+  overflow: hidden;
+  font-size: 10px;
+  line-height: 12px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.inventory-quantity {
+  position: absolute;
+  top: 3px;
+  right: 4px;
+  min-width: 18px;
+  padding: 1px 3px;
+  border: 1px solid #555;
+  background: #fff;
+  font-size: 10px;
+  text-align: center;
+}
+
+.inventory-tooltip {
+  position: absolute;
+  z-index: 40;
+  bottom: 100%;
+  left: -2px;
+  width: min(285px, calc(100vw - 50px));
+  display: none;
+  padding: 10px;
+  border: 1px solid #555;
+  background: #fff;
+  box-shadow: 3px 3px 8px rgb(0 0 0 / 30%);
+  color: #111;
+  font-size: 12px;
+  text-align: left;
+}
+
+.inventory-slot:hover .inventory-tooltip,
+.inventory-slot:focus .inventory-tooltip,
+.inventory-slot:focus-within .inventory-tooltip {
+  display: block;
+}
+
+.inventory-tooltip h3 {
+  margin: 0 0 6px;
+  font-size: 14px;
+}
+
+.inventory-tooltip p {
+  margin: 5px 0;
+}
+
+.inventory-tooltip-actions {
+  display: flex;
+  gap: 5px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.inventory-tooltip-actions button {
+  padding: 4px 6px;
+  font-size: 11px;
+}
+
+.quest-card {
+  max-width: 720px;
+  padding: 14px;
+  border: 1px solid #aaa;
+}
+
+.quest-card.is-active {
+  border: 2px solid #8a1111;
+  background: #fff5f5;
+}
+
+.shop-item-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.shop-item-label > .pixel-sprite {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+}
+
+.storage-upgrade-card {
+  margin-bottom: 12px;
+}
+
+.storage-upgrade-card p {
+  margin: 6px 0;
+}
+
+.equipment-table,
+.inventory-table {
+  width: 100%;
+  max-width: 1100px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.equipment-table th,
+.equipment-table td,
+.inventory-table th,
+.inventory-table td {
+  padding: 8px;
+  border: 1px solid #aaa;
+}
+
+.equipment-table thead th,
+.inventory-table thead th {
+  background: #eee;
+}
+
+.training-view > section {
+  margin-bottom: 22px;
+}
+
+.active-training {
+  max-width: 700px;
+  padding: 12px;
+  border: 1px solid #aaa;
+}
+
+.active-training progress {
+  width: 100%;
+}
+
+.training-table {
+  width: 100%;
+  max-width: 1050px;
+  border-collapse: collapse;
+  text-align: left;
+}
+
+.training-table th,
+.training-table td {
+  padding: 9px;
+  border: 1px solid #aaa;
+}
+
+.training-table thead th {
+  background: #eee;
+}
+
+.training-table tbody th {
+  width: 290px;
+}
+
+.training-table small {
+  display: block;
+  margin-top: 3px;
+  color: #666;
+  font-weight: normal;
+}
+
+.app-footer {
+  display: flex;
+  justify-content: space-between;
+  padding: 6px 18px;
+  border-top: 1px solid #ccc;
+  color: #666;
+  background: #fafafa;
+  font-size: 11px;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 38px;
+  transform: translateX(-50%);
+  padding: 9px 14px;
+  border: 1px solid #555;
+  background: #fff;
+  box-shadow: 2px 2px 5px #aaa;
+  font-size: 13px;
+}

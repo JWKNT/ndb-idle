@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="320" height="320" viewBox="0 0 64 64" shape-rendering="crispEdges">
+  <title>The NDB Number Engine, an extremely important machine</title>
+  <path fill="#777" d="M8 8h50v4h4v44h-4v4H8v-4H4V12h4z"/>
+  <path fill="#202020" d="M6 4h50v4h4v44h-4v4H6v-4H2V8h4z"/>
+  <path fill="#c5c5c5" d="M8 7h46v3h3v40h-3v3H8v-3H5V10h3z"/>
+  <path fill="#ededed" d="M8 8h46v4H8zM6 11h4v38H6z"/>
+  <path fill="#505050" d="M11 15h42v8H11z"/>
+  <path fill="#d94b3d" d="M11 26h6v22h-6z"/>
+  <path fill="#ffda3d" d="M17 26h36v22H17z"/>
+  <!-- N -->
+  <path fill="#202020" d="M20 30h3v14h-3zm8 0h3v14h-3zm-5 2h2v3h-2zm2 3h2v3h-2zm2 3h2v3h-2z"/>
+  <!-- D -->
+  <path fill="#202020" d="M34 30h3v14h-3zm3 0h5v3h-5zm0 11h5v3h-5zm5-8h3v8h-3z"/>
+  <!-- B, promoted above the machine because it demanded billing -->
+  <path fill="#202020" d="M15 14h3v9h-3zm3 0h4v2h-4zm0 3h4v2h-4zm0 4h4v2h-4zm4-5h2v2h-2zm0 3h2v2h-2z"/>
+  <path fill="#8f7617" d="M18 45h34v3H18z"/>
+  <path fill="#202020" d="M13 53h38v3H13z"/>
+  <path fill="#ffda3d" d="M27 16h4v4h-4zm7 0h4v4h-4zm7 0h4v4h-4z"/>
+</svg>

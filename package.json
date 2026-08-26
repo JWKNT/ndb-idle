@@ -1,0 +1,68 @@
+{
+  "name": "ndb-idle",
+  "version": "0.1.0",
+  "private": true,
+  "description": "A prestige tactical economic fishing mining grave-disturbance experience",
+  "homepage": "https://jwknt.github.io/ndb-idle/",
+  "main": "electron/main.cjs",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:desktop": "concurrently -k \"vite --host 127.0.0.1\" \"wait-on tcp:5173 && cross-env VITE_DEV_SERVER_URL=http://127.0.0.1:5173 electron .\"",
+    "build": "tsc -b && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "package": "npm run build && electron-builder",
+    "package:dir": "npm run build && electron-builder --dir"
+  },
+  "dependencies": {
+    "@fontsource/eb-garamond": "^5.3.0",
+    "break_eternity.js": "^2.1.3",
+    "react": "^19.2.6",
+    "react-dom": "^19.2.6"
+  },
+  "devDependencies": {
+    "@types/node": "^22.19.19",
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.2",
+    "concurrently": "^9.2.0",
+    "cross-env": "^10.0.0",
+    "electron": "^43.4.1",
+    "electron-builder": "^26.0.12",
+    "typescript": "^5.9.3",
+    "vite": "^8.0.13",
+    "vitest": "^3.2.4",
+    "wait-on": "^8.0.4"
+  },
+  "build": {
+    "appId": "com.ndb.ndbidle",
+    "productName": "NDB Idle",
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "build/app-icon.png",
+      "package.json"
+    ],
+    "mac": {
+      "icon": "build/app-icon.icns",
+      "category": "public.app-category.games",
+      "target": [
+        "dmg",
+        "zip"
+      ]
+    },
+    "win": {
+      "icon": "build/app-icon.png",
+      "target": "nsis"
+    },
+    "linux": {
+      "icon": "build/app-icon.png",
+      "category": "Game",
+      "target": "AppImage"
+    }
+  }
+}

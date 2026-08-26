@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="112" height="80" viewBox="0 0 112 80" shape-rendering="crispEdges">
+  <rect width="112" height="80" fill="#4d4d62"/>
+  <path fill="#7f7d91" d="M0 0h32v12H0zm40 0h32v12H40zm80 0h32v12H80zM0 16h20v14H0zm28 16h24v12H28zm56-16h28v14H84zM0 52h24v14H0zm88 0h24v14H88z"/>
+  <path fill="#aaa7b5" d="M3 3h24v4H3zm42 2h22v4H45zm40-2h22v4H85zM3 55h16v4H3zm92 0h14v4H95z"/>
+
+  <!-- Deep arch and double timber doors. -->
+  <path fill="#24212d" d="M12 80V30l8-14 12-10h48l12 10 8 14v50z"/>
+  <path fill="#59362d" d="M20 80V32l7-11 10-7h38l10 7 7 11v48z"/>
+  <path fill="#805039" d="M24 80V34l7-10 9-6h13v62zm35 0V18h13l9 6 7 10v46z"/>
+  <path fill="#a96d42" d="M29 36h19v14H29zm0 22h19v17H29zm35-22h19v14H64zm0 22h19v17H64z"/>
+  <path fill="#3a2730" d="M52 17h8v63h-8zM20 49h72v7H20z"/>
+  <path fill="#c28a4d" d="M32 39h13v3H32zm35 0h13v3H67zM32 61h13v3H32zm35 0h13v3H67z"/>
+
+  <!-- An intentionally oversized lock visible before the player reaches it. -->
+  <path fill="#2e2630" d="M46 45V34l5-6h10l5 6v11h6v21H40V45zm7 0h6V35l-2-2h-2l-2 2z"/>
+  <rect x="44" y="48" width="24" height="15" fill="#d8ad45"/>
+  <rect x="48" y="51" width="16" height="9" fill="#f0d16a"/>
+  <path fill="#49352f" d="M54 52h4v4h2v5h-8v-5h2z"/>
+</svg>

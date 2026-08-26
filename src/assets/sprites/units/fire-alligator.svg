@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="32" height="16" viewBox="0 0 32 16" shape-rendering="crispEdges">
+  <!-- Broad, low silhouette: tapered tail, armored back, heavy jaws, and four feet. -->
+  <path fill="#241218" d="M0 7h3V6h3V5h2V3h3V2h4v1h4V2h4v1h6v2h2v2h1v6h-3v2h-7v1h-5v-2h-5v2H7v-2H3v-2H0z"/>
+
+  <!-- Tail and volcanic hide. -->
+  <path fill="#7f211d" d="M1 8h4V7h4v4H6v1H3v-1H1z"/>
+  <rect x="7" y="5" width="15" height="8" fill="#a92d21"/>
+  <rect x="9" y="4" width="12" height="3" fill="#c94322"/>
+  <rect x="9" y="8" width="12" height="4" fill="#db4c22"/>
+  <path fill="#f06a24" d="M10 6h4v2h5V6h3v5h-4v2h-8z"/>
+
+  <!-- Oversized crocodilian head and long toothy muzzle. -->
+  <path fill="#a92d21" d="M19 4h9v2h3v6h-3v2h-9z"/>
+  <path fill="#e05a24" d="M20 4h7v2h3v3H20z"/>
+  <path fill="#6f1b1b" d="M20 9h11v3h-2v2h-9z"/>
+  <path fill="#f1b54c" d="M21 10h9v2h-2v1h-7z"/>
+  <path fill="#fff0bd" d="M22 10h2v1h-2zm4 0h2v1h-2zm3 2h1v1h-1zm-6 0h1v1h-1z"/>
+
+  <!-- Raised eyes make the face read immediately as an alligator. -->
+  <rect x="21" y="3" width="4" height="3" fill="#ffb52b"/>
+  <rect x="26" y="3" width="3" height="3" fill="#ffb52b"/>
+  <rect x="22" y="4" width="2" height="2" fill="#211318"/>
+  <rect x="27" y="4" width="1" height="2" fill="#211318"/>
+  <rect x="30" y="7" width="2" height="2" fill="#211318"/>
+
+  <!-- Jagged obsidian scutes and glowing magma seams. -->
+  <path fill="#4b1720" d="M8 3h3V1h2v3h3V1h2v3h3V1h2v4H8z"/>
+  <path fill="#ffb62e" d="M11 6h2v2h-1v2h-2V8h1zm5-1h2v2h1v2h-2v2h-2V8h1z"/>
+  <rect x="5" y="8" width="2" height="2" fill="#ff8a25"/>
+
+  <!-- Thick planted legs. -->
+  <path fill="#57191c" d="M7 12h6v2h-1v2H7zm10 0h6v2h-1v2h-5z"/>
+  <rect x="8" y="14" width="5" height="2" fill="#311419"/>
+  <rect x="18" y="14" width="5" height="2" fill="#311419"/>
+</svg>

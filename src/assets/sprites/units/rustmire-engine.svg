@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- A hulking pressure-engine silhouette, half corroded machine and half living mire. -->
+  <path fill="#10141a" d="M4 0h3v1h2V0h3v2h2v2h1v2h1v6h-2v2h-3v2H8v-2H6v2H3v-2H1v-2H0V6h1V3h3z"/>
+  <path fill="#343943" d="M4 1h2v3H3V2h1zm6 0h2v1h1v2h-3zM1 5h3v6H1zm11-1h3v7h-3z"/>
+  <path fill="#9b542d" d="M2 5h2v5H2zm10 0h2v5h-2zM5 1h6v2H5z"/>
+  <path fill="#e28b3c" d="M3 6h1v3H3zm9 0h1v3h-1zM6 1h4v1H6z"/>
+  <path fill="#3c2851" d="M4 3h8v2h1v6h-2v3H9v-2H7v2H5v-3H3V5h1z"/>
+  <path fill="#6d3f82" d="M5 4h6v1h2v4h-2v3H9v-2H7v2H5v-2H3V6h2z"/>
+  <path fill="#a45bbb" d="M5 5h6v1h1v2H4V6h1zm-1 4h3v2H5v-1H4zm6 0h2v2h-3v-1h1z"/>
+  <!-- Three furnace eyes make the face feel less human and more predatory. -->
+  <path fill="#d8f5d5" d="M4 6h2v2H4zm4-1h2v2H8zm2 1h2v2h-2z"/>
+  <path fill="#7cff45" d="M5 7h1V6H5zm4-1h1V5H9zm2 1h1V6h-1z"/>
+  <path fill="#151820" d="M5 6h1v1H5zm4-1h1v1H9zm2 1h1v1h-1z"/>
+  <!-- A toothed intake beneath the eyes. -->
+  <path fill="#161923" d="M5 9h6v2H5z"/>
+  <path fill="#e3efe5" d="M6 9h1v1h1v1H7v-1H6zm2 0h1v1h1v-1h1v1h-1v1H9v-1H8z"/>
+  <!-- Teal coolant sacs and dangling ooze pistons. -->
+  <path fill="#39c8bd" d="M1 10h3v2H2v1H1zm11-1h3v3h-1v1h-2zM5 12h2v3H4v-2h1zm4 0h2v2h1v1H9z"/>
+  <path fill="#177f83" d="M2 10h2v1H2zm11 0h2v1h-2zM5 13h2v1H5zm4 0h2v1H9z"/>
+  <path fill="#c36d35" d="M0 7h1v3H0zm15-1h1v4h-1zM3 13h2v2H2v-1h1zm8 0h2v1h1v1h-3z"/>
+  <path fill="#f1aa4b" d="M0 8h1v1H0zm15-1h1v2h-1zM3 14h2v1H3zm8 0h2v1h-2z"/>
+</svg>

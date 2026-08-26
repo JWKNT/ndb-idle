@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Immobile shield heart: a spined iron cage around a violent brine core. -->
+  <path fill="#0e151a" d="M5 0h6v2h2v2h2v3h1v5h-2v2h-3v2H5v-2H2v-2H0V7h1V4h2V2h2z"/>
+  <path fill="#46545a" d="M5 1h6v2h2v2h1v7h-2v2H4v-2H2V5h2V3h1z"/>
+  <path fill="#9b4c2c" d="M5 2h6v2h2v7h-2v2H5v-2H3V5h2z"/>
+  <path fill="#dc7b35" d="M6 3h4v1h2v6h-2v2H6v-2H4V6h2z"/>
+  <path fill="#1a2a31" d="M6 4h4v2h2v4h-2v2H6v-2H4V6h2z"/>
+  <path fill="#267b7c" d="M6 5h4v1h1v4H9v1H6v-1H5V7h1z"/>
+  <path fill="#55e0d0" d="M7 5h2v2h2v2H9v2H7V9H5V7h2z"/>
+  <path fill="#e2fff4" d="M7 7h2v2H7z"/>
+  <path fill="#192229" d="M0 7h3v4H1v2H0zm13-2h3v5h-1v3h-2zM6 0h4v3H6zM6 13h4v3H6z"/>
+  <path fill="#95a4a6" d="M0 8h2v1H0zm14-2h2v2h-2zM7 0h2v2H7zm0 14h2v2H7z"/>
+  <path fill="#f2a143" d="M0 10h2v1H0zm14-1h2v1h-2zM3 3h2v1H3zm8-1h2v1h-2zM7 14h2v1H7z"/>
+</svg>

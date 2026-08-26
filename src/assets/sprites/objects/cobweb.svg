@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Sparse radial strands and stepped arcs form a readable corner web. -->
+  <path fill="#777d84" d="M0 0h2v2H0zm2 2h1v1H2zm1 1h1v1H3zm1 1h1v1H4zm1 1h1v1H5zm1 1h1v1H6zm1 1h1v1H7zm1 1h1v1H8zm1 1h1v1H9zm1 1h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zm1 1h1v1h-1zM2 0h2v1H2zm2 1h4v1H4zm4 1h4v1H8zm4 1h4v1h-4zM0 2h1v2H0zm1 2h1v4H1zm1 4h1v4H2zm1 4h1v4H3z"/>
+  <path fill="#c7ccd0" d="M4 1h1v1H4zM3 2h1v1H3zM2 3h1v1H2zM1 4h1v1H1zM8 2h1v1H8zM7 3h1v1H7zM6 4h1v1H6zM5 5h1v1H5zM4 6h1v1H4zM3 7h1v1H3zM2 8h1v1H2zM14 4h1v1h-1zM13 5h1v1h-1zM12 6h1v1h-1zM11 7h1v1h-1zM10 8h1v1h-1zM9 9h1v1H9zM8 10h1v1H8zM7 11h1v1H7zM6 12h1v1H6zM5 13h1v1H5zM4 14h1v1H4z"/>
+  <path fill="#f4f1e9" d="M1 1h1v1H1zm3 0h1v1H4zm4 1h1v1H8zM2 3h1v1H2zm3 2h1v1H5zm4 4h1v1H9zm4-4h1v1h-1z"/>
+</svg>

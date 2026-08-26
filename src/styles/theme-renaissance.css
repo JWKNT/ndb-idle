@@ -1,0 +1,445 @@
+/* Renaissance workshop skin: legible old-style type, parchment, walnut, and worn metal. */
+:root {
+  font-family: "EB Garamond", Garamond, Georgia, serif;
+  color: #2b2118;
+  background: #c9b995;
+  --app-bg: #c9b995;
+  --surface: #f2e3c2;
+  --surface-raised: #faefd5;
+  --surface-muted: #dfcfaa;
+  --ink: #2b2118;
+  --muted: #675846;
+  --line: #ae9362;
+  --line-strong: #59422b;
+  --accent: #536247;
+  --accent-dark: #35432f;
+  --accent-soft: #d5d8bd;
+  font-size: 17px;
+}
+body {
+  line-height: 1.26;
+  background: #c9b995;
+}
+
+h1,
+h2,
+h3,
+legend,
+summary,
+th,
+strong {
+  text-wrap: balance;
+}
+
+h1 {
+  font-size: 29px;
+  line-height: 1;
+  letter-spacing: .025em;
+}
+
+h2 {
+  font-size: 20px;
+  line-height: 1.05;
+  letter-spacing: .018em;
+}
+
+h3 {
+  letter-spacing: .015em;
+}
+
+button,
+input,
+select,
+table {
+  font-family: inherit;
+}
+
+button {
+  min-height: 35px;
+  padding: 6px 12px 7px;
+  border: 1px solid #5a432c;
+  border-radius: 0;
+  color: #2b2118;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 30%), transparent 45%),
+    #ded0ae;
+  box-shadow:
+    inset 0 0 0 1px #f5e8c9,
+    3px 3px 0 #89734f;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: .025em;
+}
+
+button:hover:not(:disabled) {
+  border-color: #5f342c;
+  color: #421d18;
+  background:
+    linear-gradient(180deg, rgb(255 255 255 / 28%), transparent 45%),
+    #e5d5ad;
+  box-shadow: inset 0 0 0 1px #fff0cf, 4px 4px 0 #806747;
+}
+
+button:disabled {
+  border-color: #978a72;
+  color: #8f8069;
+  background: #d8ceb9;
+}
+
+input,
+select {
+  min-height: 34px;
+  padding: 5px 8px;
+  border: 1px solid #665039;
+  border-radius: 0;
+  background: #fff5dd;
+  box-shadow: inset 2px 2px 0 rgb(94 66 38 / 10%);
+  font-size: 16px;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  min-height: auto;
+  accent-color: var(--page-accent);
+  box-shadow: none;
+}
+
+fieldset {
+  border-color: var(--line-strong) !important;
+  background: rgb(255 249 230 / 28%);
+}
+
+legend {
+  padding: 0 6px;
+  color: #4a3523;
+  font-weight: 600;
+}
+
+.party-view {
+  --page-accent: #5d6543;
+  --page-tint: #ddd7b8;
+}
+
+.battle-view {
+  --page-accent: #7a3e33;
+  --page-tint: #e2c8b3;
+}
+
+.adventure-view,
+.adventure-setup-view {
+  --page-accent: #41604b;
+  --page-tint: #cdd8bf;
+}
+
+.shop-view {
+  --page-accent: #946b2f;
+  --page-tint: #e2ce9d;
+}
+
+.training-view {
+  --page-accent: #4e5877;
+  --page-tint: #cbc9d3;
+}
+
+.fishing-view {
+  --page-accent: #3e6970;
+  --page-tint: #c2d5d0;
+}
+
+.mining-view {
+  --page-accent: #68516d;
+  --page-tint: #d1c4d0;
+}
+
+.bestiary-view {
+  --page-accent: #704b32;
+  --page-tint: #d8c5a8;
+}
+
+.app-shell {
+  background:
+    radial-gradient(ellipse at 18% 15%, rgb(255 247 217 / 26%), transparent 36%),
+    radial-gradient(circle, rgb(65 42 22 / 9%) 0 1px, transparent 1.3px) 9px 7px / 47px 43px,
+    repeating-linear-gradient(2deg, transparent 0 31px, rgb(91 62 31 / 4%) 32px, transparent 33px 61px),
+    #c9b995;
+}
+
+.app-header {
+  border-right: 4px double #a88343;
+  background:
+    repeating-linear-gradient(88deg, transparent 0 28px, rgb(219 180 100 / 5%) 29px 31px),
+    linear-gradient(90deg, #3b291d, #493323 72%, #372419);
+  box-shadow: 5px 0 0 rgb(66 43 23 / 24%);
+}
+
+.primary-nav {
+  gap: 7px;
+  padding-top: 9px;
+  border-top: 3px double #a88343;
+}
+
+.primary-nav button {
+  width: calc(100% - 2px);
+  min-height: 40px;
+  padding: 7px 11px 8px 15px;
+  border: 1px solid #a88755;
+  border-left: 3px double #72532f;
+  color: #332318;
+  background:
+    linear-gradient(92deg, rgb(255 248 220 / 36%), transparent 52%),
+    #dfcda6;
+  box-shadow: 2px 3px 0 #1e140e;
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: .035em;
+}
+
+.primary-nav button:nth-child(3n + 2),
+.primary-nav button:nth-child(3n) {
+  width: calc(100% - 2px);
+}
+
+.primary-nav button.is-active {
+  transform: translateX(4px);
+  border-color: #d0af68;
+  border-left-color: #ead08b;
+  color: #fff0cb;
+  background:
+    linear-gradient(90deg, rgb(241 209 134 / 12%), transparent),
+    #6b342e;
+  box-shadow: -3px 3px 0 #1d130e, inset 0 0 0 1px rgb(255 228 169 / 16%);
+}
+
+.resource-display {
+  padding-top: 12px;
+  border-top: 3px double #a88343;
+}
+
+.resource-display > span {
+  border: 1px solid #b28b48;
+  color: #3b2919;
+  background:
+    radial-gradient(circle at 82% 45%, rgb(165 110 27 / 15%) 0 8%, transparent 9%),
+    #e6cf97;
+  box-shadow: inset 0 0 0 1px #f5e3b2, 2px 3px 0 #1f150e;
+  font-size: 17px;
+}
+
+.resource-display button {
+  border-color: #a88755;
+  background: #d7c49d;
+  box-shadow: inset 0 0 0 1px #ebd8b1, 2px 3px 0 #1f150e;
+}
+
+.resource-display small {
+  color: #c6b38d;
+  font-size: 11px;
+  letter-spacing: .035em;
+}
+
+.party-view,
+.training-view,
+.simple-page,
+.battle-view,
+.adventure-view {
+  background:
+    linear-gradient(135deg, var(--page-tint), transparent 390px),
+    repeating-linear-gradient(0deg, transparent 0 41px, rgb(91 64 34 / 3%) 42px),
+    rgb(239 226 197 / 74%);
+}
+
+.page-heading {
+  position: relative;
+  min-width: 290px;
+  padding: 12px 42px 12px 17px;
+  border: 1px solid #654b30;
+  border-left: 6px double var(--page-accent);
+  border-bottom: 4px double #8a6c3d;
+  background:
+    linear-gradient(92deg, rgb(255 255 255 / 34%), transparent 58%),
+    #f3e4c4;
+  box-shadow: 5px 5px 0 rgb(72 47 25 / 18%);
+}
+
+.page-heading::after {
+  position: absolute;
+  top: 50%;
+  right: 19px;
+  width: 10px;
+  height: 10px;
+  border: 1px solid #7e5d31;
+  background: var(--page-accent);
+  box-shadow: 0 0 0 3px #ead8b2;
+  content: "";
+  transform: translateY(-50%) rotate(45deg);
+}
+
+.page-heading h1 {
+  color: #312218;
+  text-shadow: 0 1px #fff2d4;
+}
+
+.page-heading p,
+.help-text {
+  color: #655442;
+}
+
+.simple-page > section,
+.info-box,
+.quest-log,
+.party-member,
+.active-training,
+.battle-sidebar section,
+.adventure-sidebar section,
+.battle-controls,
+.adventure-controls,
+.offering-prompt,
+.mining-placeholder,
+.mining-controls,
+.mining-record-card {
+  border: 1px solid #765a37;
+  border-left: 5px double var(--page-accent);
+  background:
+    radial-gradient(circle, rgb(87 57 27 / 5%) 0 1px, transparent 1.2px) 4px 6px / 41px 37px,
+    #f4e7c8;
+  box-shadow: inset 0 0 0 1px rgb(255 246 218 / 55%), 5px 5px 0 rgb(68 43 21 / 14%);
+}
+
+.simple-page > section:nth-of-type(even),
+.party-member:nth-child(even),
+.battle-sidebar section:nth-child(even),
+.adventure-sidebar section:nth-child(even) {
+  margin-left: 3px;
+}
+
+.quest-card {
+  border: 1px solid #765a37;
+  border-left: 5px double var(--page-accent);
+  background: #f8ebcd;
+  box-shadow: inset 0 0 0 1px #fff3d9, 3px 3px 0 rgb(67 44 24 / 13%);
+}
+
+.quest-log > summary {
+  color: #48321f;
+  font-size: 20px;
+  letter-spacing: .02em;
+}
+
+.quest-log-entry {
+  border-top-color: #c5aa75;
+}
+
+.equipment-table,
+.inventory-table,
+.training-table {
+  border: 3px double #62492f;
+  background: #f8ebce;
+  box-shadow: 4px 4px 0 rgb(63 40 20 / 15%);
+}
+
+.equipment-table th,
+.equipment-table td,
+.inventory-table th,
+.inventory-table td,
+.training-table th,
+.training-table td {
+  border-color: #b69a67;
+}
+
+.equipment-table thead th,
+.inventory-table thead th,
+.training-table thead th {
+  color: #f9e9c4;
+  background:
+    repeating-linear-gradient(92deg, transparent 0 35px, rgb(255 229 170 / 6%) 36px 37px),
+    #4d563d;
+  text-shadow: 0 1px #1c2418;
+}
+
+.equipment-table tbody tr:nth-child(even),
+.inventory-table tbody tr:nth-child(even),
+.training-table tbody tr:nth-child(even) {
+  background: #e9d9b7;
+}
+
+.inventory-slot,
+.inventory-tooltip,
+.bestiary-tooltip {
+  border: 3px double #654a2e;
+  background: #f6e7c6;
+  box-shadow: 4px 4px 0 rgb(64 40 20 / 18%);
+}
+
+.dungeon-map,
+.dungeon-map-viewport {
+  background:
+    radial-gradient(circle, rgb(77 50 25 / 5%) 0 1px, transparent 1.2px) 5px 4px / 35px 31px,
+    #eadcbd;
+}
+
+.dungeon-map-viewport {
+  border: 3px double #6b5033;
+}
+
+.dungeon-map-room {
+  border-color: #786447;
+  background: #f7ebd1;
+}
+
+.dungeon-map-room.is-current {
+  border-color: var(--page-accent);
+  background: var(--accent-soft);
+}
+
+.save-select-view {
+  background:
+    radial-gradient(ellipse at 50% 25%, rgb(255 243 205 / 45%), transparent 46%),
+    radial-gradient(circle, rgb(61 40 20 / 8%) 0 1px, transparent 1.4px) 6px 9px / 46px 41px,
+    #bbaa85;
+}
+
+.save-select-panel {
+  padding: 27px;
+  border: 4px double #5b4228;
+  background: #f0dfba;
+  box-shadow: 9px 10px 0 rgb(65 40 18 / 25%);
+}
+
+.save-select-panel > header {
+  padding-bottom: 11px;
+  border-bottom: 4px double #a47e42;
+}
+
+.save-slot {
+  border: 1px solid #6a4e2f;
+  border-left: 6px double var(--accent);
+  background: #f7e9c9;
+  box-shadow: inset 0 0 0 1px #fff3d8, 4px 4px 0 rgb(68 43 21 / 16%);
+}
+
+.shopkeeper-stall,
+.fishing-scene,
+.bestiary-portrait {
+  border-color: #65492c !important;
+  box-shadow: 4px 4px 0 rgb(58 36 18 / 22%) !important;
+}
+
+.blacksmith-shop-popover,
+.reward-popup {
+  border: 4px double #5a3e27;
+  background: #f7e6bd;
+  box-shadow: 8px 9px 0 rgb(48 29 14 / 28%);
+}
+
+.app-footer {
+  border-top: 3px double #715332;
+  color: #62503c;
+  background: #d2c099;
+}
+
+.toast {
+  border: 3px double #5b4027;
+  background: #f8e9c8;
+  box-shadow: 5px 5px 0 rgb(53 32 16 / 23%);
+  font-size: 16px;
+}

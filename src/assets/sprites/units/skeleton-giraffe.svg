@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- Tall neck, ossicones, narrow ribs, and stilt-like legs. -->
+  <rect x="10" y="0" width="1" height="2" fill="#bcb8ad"/>
+  <rect x="13" y="0" width="1" height="2" fill="#bcb8ad"/>
+  <rect x="9" y="1" width="6" height="4" fill="#bcb8ad"/>
+  <rect x="12" y="3" width="4" height="2" fill="#bcb8ad"/>
+  <rect x="10" y="1" width="5" height="3" fill="#eee9dc"/>
+  <rect x="12" y="3" width="3" height="2" fill="#d8d4c8"/>
+  <rect x="11" y="2" width="1" height="1" fill="#242424"/>
+  <rect x="14" y="4" width="1" height="1" fill="#5f5b55"/>
+  <rect x="8" y="4" width="3" height="7" fill="#bcb8ad"/>
+  <rect x="9" y="4" width="2" height="7" fill="#d8d4c8"/>
+  <rect x="10" y="5" width="1" height="1" fill="#f0eadc"/>
+  <rect x="9" y="7" width="1" height="1" fill="#f0eadc"/>
+  <rect x="2" y="8" width="8" height="5" fill="#bcb8ad"/>
+  <rect x="1" y="9" width="3" height="2" fill="#bcb8ad"/>
+  <rect x="3" y="8" width="6" height="2" fill="#eee9dc"/>
+  <rect x="4" y="10" width="5" height="2" fill="#5f5b55"/>
+  <rect x="5" y="10" width="1" height="2" fill="#eee9dc"/>
+  <rect x="7" y="10" width="1" height="2" fill="#eee9dc"/>
+  <rect x="3" y="12" width="3" height="4" fill="#bcb8ad"/>
+  <rect x="7" y="12" width="3" height="4" fill="#bcb8ad"/>
+  <rect x="4" y="12" width="1" height="3" fill="#eee9dc"/>
+  <rect x="8" y="12" width="1" height="3" fill="#eee9dc"/>
+  <rect x="3" y="15" width="3" height="1" fill="#77736c"/>
+  <rect x="7" y="15" width="3" height="1" fill="#77736c"/>
+</svg>

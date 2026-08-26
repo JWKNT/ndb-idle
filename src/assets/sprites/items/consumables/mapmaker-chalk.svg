@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" shape-rendering="crispEdges">
+  <!-- A marked survey map makes the pale chalk read as a cartographer's tool. -->
+  <path fill="#2b2030" d="M2 2h11v9H9v2H2z"/>
+  <path fill="#d9c58e" d="M3 3h9v7H8v2H3z"/>
+  <path fill="#f4e7bd" d="M4 4h3v2h4v3H8v2H4z"/>
+  <path fill="#5e866e" d="M4 7h2V5h1v3h3v1H6v2H5V9H4z"/>
+  <path fill="#8e7046" d="M9 4h2v1H9zM4 4h2v1H4z"/>
+  <!-- Chunky blue-white chalk stick with a square broken tip. -->
+  <path fill="#2b2030" d="M7 12h2v-2h2V8h3v3h-2v2h-2v2H7z"/>
+  <path fill="#f8f1d4" d="M8 12h2v-2h2V9h1v2h-2v2H9v1H8z"/>
+  <path fill="#79c7c0" d="M8 13h2v1H8z"/>
+  <path fill="#eef9ea" d="M12 8h2v2h-1V9h-1z"/>
+  <path fill="#79c7c0" d="M12 14h1v1h-1zM14 12h1v1h-1z"/>
+</svg>
