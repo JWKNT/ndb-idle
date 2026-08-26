@@ -2,7 +2,7 @@
 
 An idle tactics game built with React, TypeScript, Vite, and Electron. The same game runs as a web app during development and packages as a native desktop application.
 
-[Play NDB Idle in your browser](https://jwknt.github.io/ndb-idle/)
+[Play NDB Idle in your browser](https://jehlp.net/ndb-idle/)
 
 ## Current progression
 
