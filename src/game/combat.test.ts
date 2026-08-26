@@ -415,7 +415,9 @@ describe("combat", () => {
     worm.position = { x: 3, y: 3 };
     chief.position = { x: 7, y: 3 };
     expect(worm.attackRange).toBe(4);
+    expect(worm.attackPattern).toBe("eight-way");
     expect(isInAttackRange(worm, { x: 7, y: 3 })).toBe(true);
+    expect(isInAttackRange(worm, { x: 6, y: 6 })).toBe(true);
     expect(isInAttackRange(worm, { x: 8, y: 3 })).toBe(false);
     const before = chief.hp;
     const result = performAction(
@@ -528,7 +530,7 @@ describe("combat", () => {
     expect(attacked.state.lastAttack?.attackName).toBe("Abyssal Orb");
   });
 
-  it("only lets Trident throws damage Tentacles and blocks shots through the Squid", () => {
+  it("lets ordinary attacks damage Tentacles while the Trident remains the stronger ranged option", () => {
     const battle = deployedBattle(createBattle(8, [
       { ...knightParty()[0], weaponThrowUnlocked: true, hasTrident: true },
       { id: "worm", training: { ...EMPTY_TRAINING }, weaponThrowUnlocked: true },
@@ -551,7 +553,7 @@ describe("combat", () => {
     );
     expect(acidBlocked.ok).toBe(true);
     if (!acidBlocked.ok) return;
-    expect(acidBlocked.state.units.find((unit) => unit.id === westTentacle.id)?.hp.eq(westTentacle.hp)).toBe(true);
+    expect(acidBlocked.state.units.find((unit) => unit.id === westTentacle.id)?.hp.lt(westTentacle.hp)).toBe(true);
 
     knight.position = { x: 9, y: 6 };
     expect(isInWeaponThrowRange(knight, eastTentacle.position, battle)).toBe(false);
@@ -678,6 +680,42 @@ describe("combat", () => {
     expect(result.units.find((unit) => unit.isRaidBoss)?.hp.eq(0)).toBe(true);
   });
 
+  it("lets a prepared party clear Battle 8 without treating the Trident as a hard requirement", () => {
+    const veteran: TrainingLevels = {
+      hp: 60,
+      stamina: 0,
+      attack: 60,
+      defense: 60,
+      spAttack: 60,
+      spDefense: 60,
+      speed: 60,
+      luck: 0,
+    };
+    const result = runAuto(createBattle(8, [
+      { id: "knight", training: veteran },
+      { id: "worm", training: veteran },
+    ]));
+    expect(result.status).toBe("won");
+    expect(result.units.find((unit) => unit.isRaidBoss)?.hp.eq(0)).toBe(true);
+  });
+
+  it("keeps Battle 8 auto moving or attacking after the Tentacles are gone", () => {
+    const battle = deployedBattle(createBattle(8, [
+      { id: "knight", training: { ...EMPTY_TRAINING }, weaponThrowUnlocked: true, hasTrident: true },
+      { id: "worm", training: { ...EMPTY_TRAINING } },
+    ]));
+    for (const enemy of battle.units.filter((unit) => unit.team === "enemy" && !unit.isRaidBoss)) {
+      enemy.hp = new Decimal(0);
+    }
+    const knight = battle.units.find((unit) => unit.definitionId === "knight")!;
+    const worm = battle.units.find((unit) => unit.definitionId === "worm")!;
+    knight.position = { x: 9, y: 6 };
+    worm.position = { x: 9, y: 5 };
+
+    expect(suggestedAction({ ...battle, activeUnitId: knight.id })?.type).not.toBe("wait");
+    expect(suggestedAction({ ...battle, activeUnitId: worm.id })?.type).not.toBe("wait");
+  });
+
   it("keeps the Battle 9 Ooze vulnerable while its Guardians are alive", () => {
     const battle = deployedBattle(createBattle(9, knightParty()));
     const knight = battle.units.find((unit) => unit.definitionId === "knight")!;
@@ -731,7 +769,7 @@ describe("combat", () => {
     if (!defeated.ok) return;
     const weakenedOoze = defeated.state.units.find((unit) => unit.id === ooze.id)!;
     expect(weakenedOoze.weakeningStacks).toBe(1);
-    expect(maxHp(defeated.state, weakenedOoze).eq(maximumBefore.mul(0.86).round())).toBe(true);
+    expect(maxHp(defeated.state, weakenedOoze).eq(maximumBefore.mul(0.8).round())).toBe(true);
     expect(effectiveStat(defeated.state, weakenedOoze, "defense").lt(defenseBefore)).toBe(true);
     expect(effectiveStat(defeated.state, weakenedOoze, "speed").lt(speedBefore)).toBe(true);
     expect(weakenedOoze.hp.eq(maxHp(defeated.state, weakenedOoze))).toBe(true);
@@ -1061,7 +1099,7 @@ describe("combat", () => {
     expect(blocked.state.log[0]).toMatch(/sealed cage/i);
   });
 
-  it("has ranged enemies retreat when a target closes to melee distance", () => {
+  it("keeps a ranged boss fighting instead of endlessly retreating from melee", () => {
     const battle = deployedBattle(createBattle(7, knightParty()));
     const knight = battle.units.find((unit) => unit.definitionId === "knight")!;
     const tamer = battle.units.find((unit) => unit.definitionId === "beast-tamer")!;
@@ -1069,10 +1107,7 @@ describe("combat", () => {
     tamer.position = { x: 3, y: 2 };
     tamer.summonCooldown = 2;
     const action = suggestedAction({ ...battle, activeUnitId: tamer.id });
-    expect(action?.type).toBe("move");
-    if (!action || action.type !== "move") return;
-    expect(Math.abs(action.destination.x - knight.position.x) + Math.abs(action.destination.y - knight.position.y))
-      .toBeGreaterThan(1);
+    expect(action?.type).toBe("attack");
   });
 
   it("hits the three forward tiles with the Alligator's Wide Snap", () => {

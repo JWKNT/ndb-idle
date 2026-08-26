@@ -935,7 +935,7 @@ export function suggestedAction(state: BattleState): CombatAction | null {
     if (destination) return { type: "teleport", destination };
   }
 
-  if (actor.team === "enemy" && actor.attackRange > 1 && actor.canMove) {
+  if (actor.team === "enemy" && !actor.isRaidBoss && actor.attackRange > 1 && actor.canMove) {
     const retreat = rangedRetreatStep(state, actor, targets);
     if (retreat) return { type: "move", destination: retreat };
   }
@@ -1008,6 +1008,12 @@ export function suggestedAction(state: BattleState): CombatAction | null {
   }
 
   if (!actor.canMove) return { type: "wait" };
+  if (actor.team === "player" && actor.weaponThrowUnlocked && actor.hasTrident) {
+    for (const target of viableStandardTargets) {
+      const step = firstPathStepToWeaponThrow(state, actor, target);
+      if (step) return { type: "move", destination: step };
+    }
+  }
   for (const target of viableStandardTargets) {
     const step = firstPathStepToAttack(state, actor, target);
     if (step) return { type: "move", destination: step };

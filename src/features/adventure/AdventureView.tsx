@@ -238,7 +238,7 @@ export function AdventureView({
               />
               {selectedDungeon === "great-tower" && (
                 <p className="adventure-dungeon-notice">
-                  The Tower Key opened this path. Great Tower expeditions are coming in Chapter II.
+                  The Tower Key opened this path. Great Tower expeditions are not yet available.
                 </p>
               )}
             </div>
@@ -359,20 +359,6 @@ export function AdventureView({
       <div>
         <header className="page-heading">
           <h1>Adventure</h1>
-          <div className="adventure-party-health">
-            {(adventureSession?.order ?? [memberId]).flatMap((id) => {
-              if (adventureSession && !adventureSession.explorers[id]) return [];
-              const member = getPartyMember(progression, id);
-              const maximum = memberMaxHp(progression, id);
-              return [(
-                <span key={id}>
-                  <strong>{getPlayer(id).name}</strong> {formatWholeAmount(member.hp)}/{formatWholeAmount(maximum)} HP
-                  {" · "}{formatWholeAmount(member.stamina)}/{formatWholeAmount(memberMaxStamina(progression, id))} Stamina
-                </span>
-              )];
-            })}
-            <span><strong>Carried gold</strong> {formatWholeAmount(adventureSession?.carriedGold ?? progression.gold.mul(0))}</span>
-          </div>
         </header>
 
         {adventureSession && adventureSession.order.length > 1 && (
@@ -833,6 +819,23 @@ export function AdventureView({
           onActivateHammerQuest={onActivateHammerQuest}
         />
         <DungeonMap adventure={adventure} />
+        <section className="adventure-party-status" aria-label="Adventuring party status">
+          <h2>Party</h2>
+          <div className="adventure-party-health">
+            {(adventureSession?.order ?? [memberId]).flatMap((id) => {
+              if (adventureSession && !adventureSession.explorers[id]) return [];
+              const member = getPartyMember(progression, id);
+              const maximum = memberMaxHp(progression, id);
+              return [(
+                <span key={id}>
+                  <strong>{getPlayer(id).name}</strong> {formatWholeAmount(member.hp)}/{formatWholeAmount(maximum)} HP
+                  {" · "}{formatWholeAmount(member.stamina)}/{formatWholeAmount(memberMaxStamina(progression, id))} Stamina
+                </span>
+              )];
+            })}
+            <span><strong>Carried gold</strong> {formatWholeAmount(adventureSession?.carriedGold ?? progression.gold.mul(0))}</span>
+          </div>
+        </section>
         <section>
           <h2>Adventure log</h2>
           <ul>

@@ -12,6 +12,7 @@ import diceTrigger from "@/assets/sprites/objects/dice-trigger.svg";
 import summonCage from "@/assets/sprites/objects/summon-cage.svg";
 import teleport from "@/assets/sprites/objects/teleport.svg";
 import waterThrone from "@/assets/sprites/objects/water-throne.svg";
+import waterOffering from "@/assets/sprites/objects/water-offering.svg";
 import woodenDoorOpen from "@/assets/sprites/objects/wooden-door-open.svg";
 import woodenDoor from "@/assets/sprites/objects/wooden-door.svg";
 import clayBoulder from "@/assets/sprites/objects/clay-boulder.svg";
@@ -122,6 +123,7 @@ export const objectSprites = {
   summonCage,
   teleport,
   waterThrone,
+  waterOffering,
   woodenDoor,
   woodenDoorOpen,
   clayBoulder,

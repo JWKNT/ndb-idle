@@ -6,13 +6,13 @@ export const squidKnight: UnitDefinition = {
   name: "Squid Knight",
   attackName: "Inksteel Blade",
   stats: {
-    hp: new Decimal(175),
+    hp: new Decimal(220),
     stamina: new Decimal(28),
-    attack: new Decimal(29),
-    defense: new Decimal(18),
+    attack: new Decimal(32),
+    defense: new Decimal(22),
     spAttack: new Decimal(8),
-    spDefense: new Decimal(16),
-    speed: new Decimal(21),
+    spDefense: new Decimal(20),
+    speed: new Decimal(23),
     luck: new Decimal(0),
   },
 };

@@ -1,5 +1,6 @@
 import Decimal from "break_eternity.js";
 import { physicalDamage } from "@/game/combat";
+import { formatWholeAmount } from "@/game/numbers";
 import type { HorizontalFacing, Position, Stats } from "@/game/types";
 import { createMiningEnemy } from "./enemies";
 import { createMiningRoom, MAX_MINING_ROOM, type MiningRandom } from "./generation";
@@ -289,7 +290,7 @@ function mineSelectedRock(
     next.playerPosition = { ...rock.position };
     if (rock.content === "gold") {
       goldGained = rock.goldAmount ?? ZERO;
-      next.log = [`Mined ${goldGained.toString()} gold! Fully stamped coins come out in a neat pile. Somewhere, an economist begins screaming and cannot explain why.`, ...next.log].slice(0, 8);
+      next.log = [`Mined ${formatWholeAmount(goldGained)} gold.`, ...next.log].slice(0, 8);
     } else if (rock.content === "key") {
       next.hasKey = true;
       next.log = ["Found the room key inside a rock. Somebody locked the door, swallowed the key, became sediment, and waited. Respect the commitment.", ...next.log].slice(0, 8);

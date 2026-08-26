@@ -28,7 +28,33 @@ export interface AdventureSession {
   /** Routes every surviving explorer back to the sub-dungeon's entry portal. */
   returnToDungeonPortal?: boolean;
   carriedGold: Decimal;
+  /** Gold collected by each explorer, used for member-specific exit penalties. */
+  carriedGoldByMember?: Partial<Record<PlayerId, Decimal>>;
   diceCurse?: AdventureDiceCurse | null;
+}
+
+export function penalizeAdventureGold(
+  session: AdventureSession,
+  memberId: PlayerId,
+  penaltyRate: number,
+): { session: AdventureSession; lost: Decimal } {
+  const attributed = session.carriedGoldByMember?.[memberId]
+    ?? (session.order.filter((id) => session.explorers[id]).length === 1
+      ? session.carriedGold
+      : new Decimal(0));
+  const rate = Math.max(0, Math.min(1, penaltyRate));
+  const lost = attributed.mul(rate).floor();
+  return {
+    lost,
+    session: {
+      ...session,
+      carriedGold: Decimal.max(0, session.carriedGold.sub(lost)),
+      carriedGoldByMember: {
+        ...session.carriedGoldByMember,
+        [memberId]: Decimal.max(0, attributed.sub(lost)),
+      },
+    },
+  };
 }
 
 /**
@@ -50,6 +76,8 @@ export function cachePortalDungeonSession(
   };
   return {
     ...parent,
+    carriedGold: child.carriedGold,
+    carriedGoldByMember: child.carriedGoldByMember,
     portalSessions: {
       ...parent.portalSessions,
       [portalType]: snapshot,

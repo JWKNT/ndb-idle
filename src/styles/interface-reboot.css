@@ -2062,6 +2062,105 @@ progress::-moz-progress-bar { background: var(--page-accent); }
 }
 
 @media (max-width: 720px) {
+  body {
+    min-width: 0;
+  }
+
+  .app-shell {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr);
+    width: 100%;
+    min-width: 0;
+  }
+
+  .app-header {
+    position: sticky;
+    top: 0;
+    grid-column: 1;
+    grid-row: 1;
+    width: 100%;
+    height: auto;
+    min-height: 0;
+    gap: 7px;
+    padding: 7px;
+    overflow: visible;
+    border-right: 0;
+    border-bottom: 3px solid #222;
+    box-shadow: 0 3px 0 #777;
+  }
+
+  .primary-nav {
+    flex-direction: row;
+    gap: 4px;
+    padding: 0 0 3px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .primary-nav button,
+  .primary-nav button:nth-child(3n + 2),
+  .primary-nav button:nth-child(3n),
+  .primary-nav button.is-active,
+  .primary-nav button.is-active:hover:not(:disabled),
+  .primary-nav button.is-active:active:not(:disabled) {
+    width: auto;
+    min-width: max-content;
+    min-height: 36px;
+    margin: 0;
+    padding: 6px 9px;
+    border-left-width: 4px;
+    white-space: nowrap;
+  }
+
+  .resource-display {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 4px;
+    margin-top: 0;
+    padding-top: 6px;
+  }
+
+  .resource-display > span,
+  .resource-display button {
+    width: auto;
+    min-height: 34px;
+    padding: 6px;
+    font-size: 11px;
+    text-align: center;
+  }
+
+  .app-shell > main {
+    grid-column: 1;
+    grid-row: 2;
+    width: 100%;
+    min-width: 0;
+  }
+
+  .battle-view,
+  .adventure-view,
+  .adventure-setup-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .battle-view,
+  .adventure-view,
+  .simple-page {
+    width: 100%;
+    min-width: 0;
+    padding: 10px;
+  }
+
+  .battle-sidebar,
+  .adventure-sidebar,
+  .battle-board-stage,
+  .battle-board-frame,
+  .activity-screen-frame,
+  .adventure-screen-frame {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
   .crafting-bench {
     grid-template-columns: 1fr;
   }

@@ -1,9 +1,9 @@
 import Decimal from "break_eternity.js";
 import { describe, expect, it, vi } from "vitest";
-import { createRingGear, createShamanRingGear, createSuctionCupsGear } from "./gear";
+import { createRingGear, createShamanRingGear, createSuctionCupsGear, createTridentGear } from "./gear";
 import { FISH_META, MATERIAL_META, bulkSellAmounts } from "./items";
 import { POTION_COST, POTION_DURATION_MS, POTION_LEVEL_2_COST } from "./potions";
-import { EMPTY_TRAINING } from "./types";
+import { EMPTY_TRAINING, type PlayerId } from "./types";
 import {
   activateQuest,
   advanceTimedEffects,
@@ -92,6 +92,7 @@ import {
   setRestartAdventureOnFullHp,
   startTraining,
   startFishing,
+  stopFishing,
   sellGear,
   sellFish,
   sellMaterial,
@@ -413,9 +414,9 @@ describe("progression", () => {
     expect(safe.state.gold.eq(201)).toBe(true);
 
     const forced = settleAdventureGold(state, new Decimal(101), false);
-    expect(forced.banked.eq(75.75)).toBe(true);
-    expect(forced.lost.eq(25.25)).toBe(true);
-    expect(forced.state.gold.eq(175.75)).toBe(true);
+    expect(forced.banked.eq(75)).toBe(true);
+    expect(forced.lost.eq(26)).toBe(true);
+    expect(forced.state.gold.eq(175)).toBe(true);
   });
 
   it("sets early materials and Fire Alligator Hide to their one-cast bait chances", () => {
@@ -689,13 +690,13 @@ describe("progression", () => {
     expect(nextRaidNumber(result.state)).toBe(2);
   });
 
-  it("awards and activates the marked Shopkeeper rescue quest after Battle 3", () => {
+  it("awards the marked Shopkeeper rescue quest without forcing quest routing", () => {
     let state = recordVictory(defaultProgression(), 1).state;
     state = recordVictory(state, 2).state;
     state = recordVictory(state, 3).state;
     expect(state.purchasedQuestIds).toContain("rescue-shopkeeper");
     expect(state.activeQuestId).toBe("rescue-shopkeeper");
-    expect(state.adventureStrategy).toBe("quest");
+    expect(state.adventureStrategy).toBe("none");
     expect(recordVictory(state, 3).state.purchasedQuestIds.filter((id) => id === "rescue-shopkeeper"))
       .toHaveLength(1);
   });
@@ -822,6 +823,9 @@ describe("progression", () => {
 
   it("stores the selected expedition members, strategy, and automatic restart setting", () => {
     let state = rescuedWormState();
+    for (let battle = 5; battle <= 8; battle += 1) {
+      state = recordVictory(state, battle).state;
+    }
     state = setAdventureMemberSelected(state, "worm", true);
     state = setAdventureStrategy(state, "split");
     state = setAdventureIgnoreGold(state, true);
@@ -830,6 +834,13 @@ describe("progression", () => {
     expect(state.adventureStrategy).toBe("split");
     expect(state.adventureIgnoreGold).toBe(true);
     expect(state.restartAdventureOnFullHp).toBe(true);
+  });
+
+  it("unlocks Ignore gold alongside the post-Battle-8 area strategy controls", () => {
+    const early = setAdventureIgnoreGold(clearedThrough(7), true);
+    const unlocked = setAdventureIgnoreGold(clearedThrough(8), true);
+    expect(early.adventureIgnoreGold).toBe(false);
+    expect(unlocked.adventureIgnoreGold).toBe(true);
   });
 
   it("reveals and configures advanced auto pauses only as special rooms are discovered", () => {
@@ -857,22 +868,28 @@ describe("progression", () => {
 
   it("unlocks Adventure strategies only when their mechanics are available", () => {
     const newGame = defaultProgression();
-    expect(availableAdventureStrategies(newGame)).toEqual([]);
-    expect(effectiveAdventureStrategy(newGame)).toBe("together");
+    expect(availableAdventureStrategies(newGame)).toEqual(["none"]);
+    expect(effectiveAdventureStrategy(newGame)).toBe("none");
     expect(setAdventureStrategy(newGame, "split")).toBe(newGame);
 
     const questState = purchaseQuest({ ...clearedThrough(4), gold: new Decimal(500) }, "rescue-me").state;
-    expect(availableAdventureStrategies(questState)).toEqual(["quest"]);
-    expect(effectiveAdventureStrategy(questState)).toBe("quest");
+    expect(availableAdventureStrategies(questState)).toEqual(["none", "quest"]);
+    expect(effectiveAdventureStrategy(questState)).toBe("none");
     expect(setAdventureStrategy(questState, "together")).toBe(questState);
 
     const recruited = completeQuest(questState, "rescue-me");
-    expect(availableAdventureStrategies(recruited)).toEqual(["together", "split"]);
-    expect(effectiveAdventureStrategy(recruited)).toBe("together");
+    expect(availableAdventureStrategies(recruited)).toEqual(["none"]);
+    expect(effectiveAdventureStrategy(recruited)).toBe("none");
 
-    const throughFive = recordVictory(recruited, 5).state;
+    const grouped = {
+      ...recruited,
+      selectedAdventureMembers: ["knight", "worm"] as PlayerId[],
+    };
+    expect(availableAdventureStrategies(grouped)).toEqual(["none", "together", "split"]);
+
+    const throughFive = recordVictory(grouped, 5).state;
     const laterQuest = purchaseQuest({ ...throughFive, gold: new Decimal(1_000) }, "retrieve-lost-item").state;
-    expect(availableAdventureStrategies(laterQuest)).toEqual(["quest", "together", "split"]);
+    expect(availableAdventureStrategies(laterQuest)).toEqual(["none", "quest", "together", "split"]);
   });
 
   it("offers only previously reached zones for zone-targeted exploration", () => {
@@ -1085,6 +1102,19 @@ describe("progression", () => {
     expect(state.fishingAssignment).toBeNull();
   });
 
+  it("gives a Trident holder a twenty-percent chance to conserve fishing bait", () => {
+    const trident = createTridentGear();
+    let state = addMaterial(addMaterial({ ...defaultProgression(), fishingRod: true }, "rat-pelt"), "rat-pelt");
+    state = addGear(state, trident);
+    state = equipGear(state, "knight", trident.id).state;
+
+    state = startFishing(state, "knight", "rat-pelt", "manual", () => 0.19).state;
+    expect(state.materials["rat-pelt"]).toBe(2);
+    state = stopFishing(state);
+    state = startFishing(state, "knight", "rat-pelt", "manual", () => 0.2).state;
+    expect(state.materials["rat-pelt"]).toBe(1);
+  });
+
   it("equips and moves a single gear item between party members, and requires unequipping before sale", () => {
     let state = rescuedWormState();
     const item = createRingGear("helmet", 1, "party-gear");
@@ -1191,7 +1221,7 @@ describe("progression", () => {
       const loaded = loadProgression(1);
       expect(loaded.purchasedQuestIds).toContain("rescue-shopkeeper");
       expect(loaded.activeQuestId).toBe("rescue-shopkeeper");
-      expect(loaded.adventureStrategy).toBe("quest");
+      expect(loaded.adventureStrategy).toBe("none");
     } finally {
       vi.unstubAllGlobals();
     }
@@ -1248,7 +1278,7 @@ describe("progression", () => {
     }
   });
 
-  it("positions Save Slot 3 after the Squid and Miner progression but before Battle 9", () => {
+  it("never injects developer resources, party members, or gear into Save Slot 3", () => {
     const values = new Map<string, string>();
     vi.stubGlobal("localStorage", {
       getItem: (key: string) => values.get(key) ?? null,
@@ -1321,10 +1351,12 @@ describe("progression", () => {
       expect(replay.victories).toBe(8);
       expect(replay.party.knight?.training).toEqual(originalKnightTraining);
       expect(replay.party.worm?.training).toEqual(originalWormTraining);
-      expect(Object.values(replay.party.miner?.training ?? {})).toEqual(Array(8).fill(30));
-      expect(replay.miningUnlocked).toBe(true);
-      expect(replay.completedQuestIds).toContain("find-miner");
-      expect(replay.materials["rotten-tentacle"]).toBeGreaterThanOrEqual(1);
+      expect(replay.party.miner).toBeUndefined();
+      expect(replay.miningUnlocked).toBe(false);
+      expect(replay.completedQuestIds).not.toContain("find-miner");
+      expect(replay.materials["rotten-tentacle"]).toBe(0);
+      expect(replay.gold.eq(battleEightState.gold)).toBe(true);
+      expect(replay.inventory.some((item) => item.definitionId === "trident")).toBe(false);
       expect(replay.inventory.some((item) => item.definitionId === "suction-cups")).toBe(false);
       expect(replay.defeatedEnemyIds).toContain("rat");
       expect(replay.defeatedEnemyIds).toContain("goblin-chief");
@@ -1340,7 +1372,7 @@ describe("progression", () => {
     }
   });
 
-  it("rewinds the current Save Slot 3 to immediately before Battle 10 without changing its build", () => {
+  it("preserves completed battles and builds when an old Save Slot 3 is migrated", () => {
     const values = new Map<string, string>();
     vi.stubGlobal("localStorage", {
       getItem: (key: string) => values.get(key) ?? null,
@@ -1377,16 +1409,16 @@ describe("progression", () => {
       const replay = loadProgression(3);
       expect(replay.gold.eq(142_451)).toBe(true);
       expect(replay.party.knight?.training).toEqual(customTraining);
-      expect(replay.completedRaids).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
-      expect(replay.victories).toBe(9);
-      expect(replay.highestUnlockedLevel).toBe(10);
-      expect(replay.selectedLevel).toBe(10);
+      expect(replay.completedRaids).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+      expect(replay.victories).toBe(10);
+      expect(replay.highestUnlockedLevel).toBe(11);
+      expect(replay.selectedLevel).toBe(11);
       expect(replay.materials.clay).toBe(352);
       expect(replay.materials["rusty-metal"]).toBe(31);
-      expect(replay.materials["rusty-gear"]).toBe(0);
-      expect(replay.defeatedEnemyIds).not.toContain("barnacle-drone");
+      expect(replay.materials["rusty-gear"]).toBe(1);
+      expect(replay.defeatedEnemyIds).toContain("barnacle-drone");
       expect(replay.defeatedEnemyIds).not.toContain("brine-dynamo");
-      expect(replay.defeatedEnemyIds).not.toContain("rustmire-engine");
+      expect(replay.defeatedEnemyIds).toContain("rustmire-engine");
     } finally {
       vi.unstubAllGlobals();
     }
@@ -1487,7 +1519,7 @@ describe("progression", () => {
     expect(state.defeatedEnemyIds).not.toContain("brine-dynamo");
   });
 
-  it("repairs the overshot Battle 8 test preset to level 30 without touching other allocations", () => {
+  it("preserves custom training when an old Save Slot 3 is migrated", () => {
     const values = new Map<string, string>();
     vi.stubGlobal("localStorage", {
       getItem: (key: string) => values.get(key) ?? null,
@@ -1507,9 +1539,6 @@ describe("progression", () => {
         speed: 12,
         luck: 12,
       };
-      const levelThirtyTraining = Object.fromEntries(
-        Object.keys(EMPTY_TRAINING).map((stat) => [stat, 30]),
-      );
       let state = rescuedWormState();
       for (let battle = 5; battle <= 7; battle += 1) {
         state = recordVictory(state, battle).state;
@@ -1526,8 +1555,8 @@ describe("progression", () => {
       values.set(key, JSON.stringify({ ...stored, version: 26 }));
 
       const repaired = loadProgression(3);
-      expect(repaired.party.knight?.training).toEqual(levelThirtyTraining);
-      expect(repaired.party.worm?.training).toEqual(levelThirtyTraining);
+      expect(repaired.party.knight?.training).toEqual(overshotTraining);
+      expect(repaired.party.worm?.training).toEqual(overshotTraining);
     } finally {
       vi.unstubAllGlobals();
     }

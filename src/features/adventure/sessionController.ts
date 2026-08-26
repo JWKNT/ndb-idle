@@ -201,6 +201,7 @@ export function updateAdventureSession(
     portalSessions: session.portalSessions,
     returnToDungeonPortal: session.returnToDungeonPortal ?? false,
     carriedGold: session.carriedGold,
+    carriedGoldByMember: session.carriedGoldByMember,
     diceCurse: session.diceCurse ?? null,
     focusedMemberId: explorers[session.focusedMemberId]
       ? session.focusedMemberId
@@ -313,6 +314,7 @@ function createPortalSession(
     returnSession,
     returnToDungeonPortal: false,
     carriedGold,
+    carriedGoldByMember: returnSession?.carriedGoldByMember,
     diceCurse,
   };
 }

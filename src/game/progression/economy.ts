@@ -16,7 +16,7 @@ import type { PlayerId, StatKey } from "@/game/types";
 import type { ProgressionState } from "./types";
 
 export function addGold(state: ProgressionState, gold: Decimal): ProgressionState {
-  return { ...state, gold: state.gold.add(gold) };
+  return { ...state, gold: state.gold.add(gold).floor() };
 }
 
 export function purchaseEscapeRope(
@@ -63,7 +63,7 @@ export function settleAdventureGold(
   keepAll: boolean,
 ): { state: ProgressionState; banked: Decimal; lost: Decimal } {
   const collected = Decimal.max(0, collectedGold);
-  const banked = keepAll ? collected : collected.mul(0.75);
+  const banked = (keepAll ? collected : collected.mul(0.75)).floor();
   return {
     state: addGold(state, banked),
     banked,

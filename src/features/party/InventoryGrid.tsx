@@ -148,7 +148,7 @@ export function InventoryGrid({ progression, onConsumePotion, onEquip, onFeedFis
           )}
           {progression.towerKeyOwned && (
             <InventoryCard
-              description="A stupidly huge Key for the stupidly huge Tower. Insert Key, turn Key, release whatever Chapter 2 was hiding."
+              description="A stupidly huge Key for the stupidly huge Tower. Insert Key, turn Key, release whatever management was hiding."
               name="Tower Key"
               sprite={KEY_ITEM_SPRITES.towerKey}
               type="key"

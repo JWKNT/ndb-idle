@@ -78,6 +78,7 @@ import {
   cachePortalDungeonSession,
   createAdventureDiceCurse,
   diceCursedAdventureStats,
+  penalizeAdventureGold,
   type AdventureSession,
 } from "./adventure/session";
 import { spinLotteryWheel } from "./adventure/lottery";
@@ -1080,10 +1081,10 @@ describe("adventure generation", () => {
     });
   });
 
-  it("keeps every Forgeling variant below the Fire Alligator's overall threat", () => {
+  it("makes every Forgeling variant a substantial late-game threat", () => {
     for (const enemy of [forgeling, chainForgeling, bellowsForgeling, hammerForgeling]) {
-      expect(enemy.stats.hp.lt(fireAlligator.stats.hp)).toBe(true);
-      expect(Decimal.max(enemy.stats.attack, enemy.stats.spAttack).lt(fireAlligator.stats.spAttack)).toBe(true);
+      expect(enemy.stats.hp.gte(350)).toBe(true);
+      expect(Decimal.max(enemy.stats.attack, enemy.stats.spAttack).gte(50)).toBe(true);
     }
   });
 
@@ -2801,6 +2802,25 @@ describe("adventure generation", () => {
     expect(snapshot?.returnSession).toBeNull();
     expect(snapshot?.returnToDungeonPortal).toBe(false);
     expect(snapshot?.routeTargetRoomKey).toBeNull();
+  });
+
+  it("penalizes only the defeated or exhausted explorer's attributed gold", () => {
+    const earth = startAdventure(knight.stats, () => 0.5);
+    const session: AdventureSession = {
+      explorers: { knight: earth, worm: earth },
+      order: ["knight", "worm"],
+      focusedMemberId: "knight",
+      carriedGold: new Decimal(152),
+      carriedGoldByMember: { knight: new Decimal(101), worm: new Decimal(51) },
+    };
+    const death = penalizeAdventureGold(session, "knight", 0.3);
+    expect(death.lost.eq(30)).toBe(true);
+    expect(death.session.carriedGold.eq(122)).toBe(true);
+    expect(death.session.carriedGoldByMember?.worm?.eq(51)).toBe(true);
+
+    const exhaustion = penalizeAdventureGold(death.session, "worm", 0.2);
+    expect(exhaustion.lost.eq(10)).toBe(true);
+    expect(exhaustion.session.carriedGold.eq(112)).toBe(true);
   });
 
   it("waits on a Water return platform until every living explorer has arrived", () => {

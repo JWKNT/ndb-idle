@@ -7,6 +7,7 @@ export function startFishing(
   memberId: PlayerId,
   baitId: MaterialId,
   mode: "manual" | "auto" = "manual",
+  random: () => number = Math.random,
 ): { state: ProgressionState; error?: string } {
   if (!state.fishingRod) return { state, error: "Recover the Fishing Rod first." };
   if (!state.party[memberId]) return { state, error: "That member is not in the party." };
@@ -16,16 +17,24 @@ export function startFishing(
   }
   if (state.materials[baitId] <= 0) return { state, error: "That bait is not in inventory." };
   const reusable = Boolean(MATERIAL_META[baitId].reusableBait);
+  const conserveBait = !reusable && memberHasTrident(state, memberId) && random() < 0.2;
   return {
     state: {
       ...state,
-      materials: reusable
+      materials: reusable || conserveBait
         ? state.materials
         : { ...state.materials, [baitId]: state.materials[baitId] - 1 },
       selectedAdventureMembers: state.selectedAdventureMembers.filter((id) => id !== memberId),
       fishingAssignment: { memberId, baitId, mode, progressSeconds: 0 },
     },
   };
+}
+
+function memberHasTrident(state: ProgressionState, memberId: PlayerId): boolean {
+  const weaponId = state.equipment[memberId]?.sword;
+  return Boolean(weaponId && state.inventory.some(
+    (item) => item.id === weaponId && item.definitionId === "trident",
+  ));
 }
 
 export function stopFishing(state: ProgressionState): ProgressionState {

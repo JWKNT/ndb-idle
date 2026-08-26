@@ -404,6 +404,44 @@
     grid-template-columns: minmax(410px, 1fr) 150px;
   }
 }
+
+@media (max-width: 720px) {
+  .mining-setup-layout,
+  .mining-active-view {
+    width: 100%;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .mining-active-view {
+    padding: 10px;
+    overflow: hidden auto;
+  }
+
+  .mining-work-area,
+  .mining-screen-frame,
+  .mining-board {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  .mining-heading,
+  .mining-controls,
+  .mining-member-line {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mining-sidebar {
+    position: static;
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .mining-record-card {
+    width: 100%;
+  }
+}
 .new-marker {
   display: inline-block;
   margin-left: 5px;

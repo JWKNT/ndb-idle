@@ -3,5 +3,5 @@ import type { UnitDefinition } from "@/game/types";
 
 export const chainForgeling: UnitDefinition = {
   id: "chain-forgeling", name: "Chain Forgeling", attackName: "Chain Hook", attackRange: 3,
-  stats: { hp: new Decimal(280), stamina: new Decimal(70), attack: new Decimal(42), defense: new Decimal(34), spAttack: new Decimal(20), spDefense: new Decimal(34), speed: new Decimal(32), luck: new Decimal(0) },
+  stats: { hp: new Decimal(380), stamina: new Decimal(80), attack: new Decimal(52), defense: new Decimal(43), spAttack: new Decimal(26), spDefense: new Decimal(43), speed: new Decimal(35), luck: new Decimal(0) },
 };

@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { FISH_SPRITES } from "@/content/inventory-sprites";
 import type { SpriteName } from "@/content/sprites";
 import type { AdventureState, DungeonRoom, ExitDirection } from "@/game/adventure/types";
 import type { Position } from "@/game/types";
@@ -106,9 +105,9 @@ export function DungeonMap({ adventure }: { adventure: AdventureState }) {
                   />
                 ))}
                 {room.kind === "dice" ? (
-                  <span aria-label={room.diceRolled ? `Dice rolled ${room.diceValues?.[0]} and ${room.diceValues?.[1]}` : "Unrolled dice"} className="map-dice-pair">
+                  <span aria-label={room.diceRolling ? "Dice rolling" : room.diceRolled ? `Dice rolled ${room.diceValues?.[0]} and ${room.diceValues?.[1]}` : "Unrolled dice"} className="map-dice-pair">
                     {([0, 1] as const).map((dieIndex) => {
-                      const value = room.diceRolled ? room.diceValues?.[dieIndex] : undefined;
+                      const value = room.diceRolled && !room.diceRolling ? room.diceValues?.[dieIndex] : undefined;
                       return (
                         <i className="map-die-face" key={dieIndex}>
                           {value ? <DiePips className="map-die-pips" value={value} /> : "?"}
@@ -173,7 +172,7 @@ function roomMarker(
   if (room.kind === "regen") return { label: "Spring", sprite: "hotSpring" };
   if (room.kind === "rescue" || room.kind === "portal") return { label: "Quest", sprite: "questScroll" };
   if (room.kind === "lostItem") return { label: "Lost item", sprite: "fishingRod" };
-  if (room.kind === "offering") return { label: "Offering", sprite: FISH_SPRITES.hp };
+  if (room.kind === "offering") return { label: "Offering", sprite: "waterOffering" };
   if (room.kind === "mermanThrone") return { label: "Throne", sprite: "gearTrident" };
   if (room.kind === "shopkeeper") return { label: "Shopkeeper", sprite: "shopkeeper" };
   if (room.kind === "waterPortal") return { label: "Water portal", sprite: "teleport" };

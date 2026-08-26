@@ -38,6 +38,7 @@ flowchart TD
   B4A --> B4
   B4 --> Rescue[Rescue Me quest: 500 gold]
   Rescue --> Worm[Worm joins]
+  B4 --> Smith[Blacksmith rooms]
   B4 --> B5[Clear Battle 5]
   B5 --> RodQuest[Retrieve Lost Item: 1,000 gold]
   RodQuest --> Rod[Fishing Rod + Fishing]
@@ -48,11 +49,8 @@ flowchart TD
   B6 --> Ring[Shaman's Ring]
   B6 --> B7[Clear Battle 7]
   B7 --> Bestiary[Bestiary + rare creatures + Charles]
-  B7 --> B8A[Battle 8 clear gate]
-  Trident --> B8[Clear Battle 8]
-  B8A --> B8
+  B7 --> B8[Clear Battle 8]
   B8 --> Tentacle[Rotten Tentacle]
-  B8 --> Smith[Blacksmith rooms]
   B8 --> B9[Clear Battle 9]
   B9 --> Cups[Suction Cups]
   B9 --> TowerDoor[Find sealed Tower door; finish expedition]
@@ -75,13 +73,14 @@ flowchart TD
   Boatmaster -.-> B11Gate
 ```
 
-The two deliberately non-linear clear gates are:
+The deliberately non-linear clear gate is:
 
 1. Battle 4 becomes available after Battle 3, but the Skele-King remains
    invulnerable until a deployed member has the Shop's Undead Gem equipped.
-2. Battle 8 becomes available after Battle 7, but its Tentacles only take damage
-   from Tidecaller Throw. The Fishing and Water Dungeon branch therefore must
-   converge before Battle 8 can be cleared.
+
+Battle 8 has no Trident hard gate. Tidecaller Throw is a powerful ranged option,
+while Worm's Acid Shot and ordinary attacks can also damage its Tentacles. The
+Water branch is therefore optional rather than a hidden key.
 
 ## Full authored unlock tree
 
@@ -97,6 +96,7 @@ New save
         ├── Adventure navigation and activity
         │   ├── Immediate procedural rooms and systems
         │   │   ├── Gold, enemies, traps, springs, treasure, and equipment
+        │   │   ├── `None` auto strategy for ordinary exploration and combat
         │   │   └── Lost Potionmaster may appear in earth ring 4
         │   └── First Adventure HP death
         │       └── Training navigation and gold training
@@ -121,6 +121,21 @@ New save
                             ├── Clear gate: deploy an equipped Undead Gem
                             └── Clear Battle 4 — Skele-King
                                 ├── Lottery rooms enabled
+                                ├── Blacksmith rooms enabled in earth ring 3
+                                │   ├── Repeatable healing potion
+                                │   │   └── Cost: 50 Clay
+                                │   └── Retrieve Hammer branch
+                                │       ├── Cost: 20 Clay
+                                │       ├── Same-expedition Hammer Vault
+                                │       └── Return Hammer
+                                │           └── Buy Pickaxe
+                                │               ├── 2,000 gold
+                                │               ├── 20 Clay
+                                │               └── 10 Driftwood
+                                │                   └── Find Miner quest
+                                │                       └── Give Pickaxe to Miner
+                                │                           ├── Miner joins Party
+                                │                           └── Mining navigation/activity
                                 ├── Rescue Me Shop quest for 500 gold
                                 │   └── Marked earth ring-2 cage room
                                 │       └── Defeat seven Spiders and talk to Worm
@@ -154,7 +169,8 @@ New save
                                         │                   ├── Offer four matching fish
                                         │                   └── Defeat three Mermen
                                         │                       ├── Tidecaller Trident
-                                        │                       └── Weapon Throw learned
+                                        │                       ├── Weapon Throw learned
+                                        │                       └── Holder conserves fishing bait 20% of the time
                                         └── Battle 6 available
                                             └── Clear Battle 6 — Goblin Shaman
                                                 ├── Shaman's Ring
@@ -170,29 +186,13 @@ New save
                                                         │       ├── Three Level 1 Mystery Potions
                                                         │       └── Charles room retires
                                                         └── Battle 8 available
-                                                            ├── Clear gate: Tidecaller Throw
                                                             └── Clear Battle 8 — Abyssal Squid
                                                                 ├── Rotten Tentacle
                                                                 │   └── Reusable Fishing bait
                                                                 │       ├── Driftwood chance
                                                                 │       └── Seaweed chance
                                                                 ├── Ring-target Adventure strategy
-                                                                ├── Blacksmith rooms in earth ring 3
-                                                                │   ├── Repeatable healing potion
-                                                                │   │   └── Cost: 50 Clay
-                                                                │   ├── Retrieve Hammer branch
-                                                                │   │   ├── Cost: 20 Clay
-                                                                │   │   ├── Same-expedition Hammer Vault
-                                                                │   │   └── Return Hammer
-                                                                │   │       └── Buy Pickaxe
-                                                                │   │           ├── 2,000 gold
-                                                                │   │           ├── 20 Clay
-                                                                │   │           └── 10 Driftwood
-                                                                │   │               └── Find Miner quest
-                                                                │   │                   └── Give Pickaxe to Miner
-                                                                │   │                       ├── Miner joins Party
-                                                                │   │                       └── Mining navigation/activity
-                                                                │   └── Blueprint/Crafting branch after Battle 9
+                                                                ├── Ignore-gold auto option
                                                                 └── Battle 9 available
                                                                     └── Clear Battle 9 — Abyssal Ooze
                                                                         ├── Suction Cups
@@ -259,11 +259,11 @@ numbers and reward must be rebalanced when those paths are implemented.
 | Cartographer | Clear Battle 5 | Visit three survey marks | One consumable Mapmaker's Chalk |
 | Fishing | Clear Battle 5, buy `Retrieve Lost Item` | 1,000 gold; reach Rodney | Fishing Rod, Fishing, Water revisits |
 | Angler | Fishing Rod | 10 Rat Pelt, 8 Ant Chitin, 4 Ink Sac, one requested fish | Tackle Box and favored-family selection |
-| Tidecaller | Fishing Rod and a later Water visit | Four requested fish; Merman fight | Trident and Weapon Throw; required for Battle 8 |
+| Tidecaller | Fishing Rod and a later Water visit | Four requested fish; Merman fight | Trident, Weapon Throw, and 20% bait conservation while equipped |
 | Charles | Clear Battle 7 | 10 Eye of Frog, 10 Mutated Rat Tail, 10 Fire Ant Chitin | Three Level 1 Mystery Potions |
 | Lost Potionmaster | Reach earth ring 4 | 50 Rat Pelt, 50 Ant Chitin, 25 Ink Sac, 25 Fire Alligator Hide | Four random Level 2 Potions and 100 Magic Bait |
-| Blacksmith healing | Clear Battle 8 and find Blacksmith | 50 Clay per purchase | Repeatable 200-HP Adventure consumable |
-| Mining | Clear Battle 8; Hammer and Pickaxe branches | 20 Clay for Hammer quest; then 2,000 gold, 20 Clay, 10 Driftwood | Miner and Mining |
+| Blacksmith healing | Clear Battle 4 and find Blacksmith | 50 Clay per purchase | Repeatable 200-HP Adventure consumable |
+| Mining | Clear Battle 4; Hammer and Pickaxe branches | 20 Clay for Hammer quest; then 2,000 gold, 20 Clay, 10 Driftwood | Miner and Mining |
 | Dice | Clear Battle 9 | Enter and roll | Repeatable dice rooms |
 | Forge | Clear Battle 9; find Tower door; buy `Enter Tower` | 100,000 gold; clear three arenas | Blueprints, Rusty Metal source, recurring Forge portals |
 | Crafting | Deliver Forge Blueprints | 200,000 gold, 20 Rusty Metal, 100 Clay, 5 Seaweed | Crafting navigation/activity |

@@ -19,7 +19,7 @@ import {
   type GearItem,
   type GearSlot,
 } from "./gear";
-import { formatAmount } from "./numbers";
+import { formatAmount, formatWholeAmount } from "./numbers";
 import { MAX_MINING_ROOM } from "./mining/generation";
 import {
   FISH_META,
@@ -207,30 +207,10 @@ export {
 const LEGACY_SAVE_KEY = "idle-game-prototype-save-v2";
 const SAVE_SLOT_KEY_PREFIX = "idle-game-prototype-save-v2-slot-";
 const SAVE_SLOT_MIGRATION_KEY = "idle-game-prototype-save-slots-migrated-v1";
-const SAVE_VERSION = 47;
+const SAVE_VERSION = 48;
 const HEALING_RATE_PER_SECOND = 0.08;
 const STAMINA_RECOVERY_RATE_PER_SECOND = 0.2;
 const PLAYER_ORDER: PlayerId[] = ["knight", "worm", "miner"];
-const BATTLE_EIGHT_TEST_TRAINING: TrainingLevels = {
-  hp: 30,
-  stamina: 30,
-  attack: 30,
-  defense: 30,
-  spAttack: 30,
-  spDefense: 30,
-  speed: 30,
-  luck: 30,
-};
-const OVERSHOT_BATTLE_EIGHT_TEST_TRAINING: TrainingLevels = {
-  hp: 45,
-  stamina: 20,
-  attack: 45,
-  defense: 45,
-  spAttack: 45,
-  spDefense: 45,
-  speed: 12,
-  luck: 12,
-};
 
 interface StoredMemberProgress {
   hp: string;
@@ -346,7 +326,7 @@ export function defaultProgression(): ProgressionState {
     completedQuestIds: [],
     battleAutoMode: false,
     adventureAutoMode: false,
-    adventureStrategy: "together",
+    adventureStrategy: "none",
     targetAdventureRing: 3,
     adventureIgnoreGold: false,
     selectedAdventureMembers: ["knight"],
@@ -415,7 +395,7 @@ export function loadProgression(slot: SaveSlot = 1): ProgressionState {
     const raw = localStorage.getItem(saveSlotKey(slot));
     if (!raw) return defaultProgression();
     const parsed = JSON.parse(raw) as LegacyStoredProgression;
-    const stored = migrateStoredProgression(parsed, slot);
+    const stored = migrateStoredProgression(parsed);
     if (stored !== parsed) localStorage.setItem(saveSlotKey(slot), JSON.stringify(stored));
     const highest = Math.min(levels.length, Math.max(1, Math.floor(stored.highestUnlockedLevel ?? 1)));
     const inventory = sanitizeInventory(stored.inventory);
@@ -473,14 +453,17 @@ export function loadProgression(slot: SaveSlot = 1): ProgressionState {
         ? [...purchasedWithShopkeeperQuest, "find-miner" as const]
         : purchasedWithShopkeeperQuest;
     const savedAdventureStrategy = sanitizeAdventureStrategy(stored.adventureStrategy);
-    const partyStrategiesUnlocked = PLAYER_ORDER.filter((id) => Boolean(party[id])).length > 1;
+    const selectedAdventureMembers = sanitizeAdventureMembers(stored.selectedAdventureMembers, party);
+    const partyStrategiesUnlocked = selectedAdventureMembers.length > 1;
     const adventureStrategy = (
+      savedAdventureStrategy === "none"
+      ||
       (savedAdventureStrategy === "quest" && activeQuestId)
       || ((savedAdventureStrategy === "together" || savedAdventureStrategy === "split") && partyStrategiesUnlocked)
       || (savedAdventureStrategy === "ring" && completedRaids.includes(8))
     )
       ? savedAdventureStrategy
-      : activeQuestId ? "quest" : "together";
+      : "none";
     const adventureUnlocked = typeof stored.adventureUnlocked === "boolean"
       ? stored.adventureUnlocked
       : completedRaids.includes(1);
@@ -508,7 +491,7 @@ export function loadProgression(slot: SaveSlot = 1): ProgressionState {
       || stored.craftingUnlocked
     );
     return ensureInventoryCapacity({
-      gold: new Decimal(stored.gold ?? 24),
+      gold: new Decimal(stored.gold ?? 0).floor(),
       timePlayedMs: sanitizeTimePlayed(stored.timePlayedMs),
       party,
       inventory,
@@ -526,8 +509,8 @@ export function loadProgression(slot: SaveSlot = 1): ProgressionState {
       adventureAutoMode: Boolean(stored.adventureAutoMode),
       adventureStrategy,
       targetAdventureRing: Math.max(1, validLevel(stored.targetAdventureRing) || 3),
-      adventureIgnoreGold: Boolean(stored.adventureIgnoreGold),
-      selectedAdventureMembers: sanitizeAdventureMembers(stored.selectedAdventureMembers, party),
+      adventureIgnoreGold: completedRaids.includes(8) && Boolean(stored.adventureIgnoreGold),
+      selectedAdventureMembers,
       restartAdventureOnFullHp: Boolean(stored.restartAdventureOnFullHp),
       materials,
       fish: sanitizeFishCounts(stored.fish),
@@ -716,7 +699,7 @@ export function saveSlotSummaries(): SaveSlotSummary[] {
     if (!raw) return emptySaveSlotSummary(slot);
     try {
       const parsed = JSON.parse(raw) as LegacyStoredProgression;
-      const stored = migrateStoredProgression(parsed, slot);
+      const stored = migrateStoredProgression(parsed);
       if (stored !== parsed) localStorage.setItem(saveSlotKey(slot), JSON.stringify(stored));
       const completedBattles = new Set(
         Array.isArray(stored.completedRaids)
@@ -731,7 +714,7 @@ export function saveSlotSummaries(): SaveSlotSummary[] {
         occupied: true,
         battle: levels.find((level) => !completedBattles.has(level.number))?.number ?? null,
         timePlayedMs: sanitizeTimePlayed(stored.timePlayedMs),
-        gold: formatAmount(new Decimal(stored.gold ?? 24)),
+        gold: formatWholeAmount(new Decimal(stored.gold ?? 0)),
         partyMembers,
         raidsCleared: Array.isArray(stored.completedRaids)
           ? new Set(stored.completedRaids.filter((raid) => Number.isInteger(raid) && raid > 0)).size
@@ -757,142 +740,10 @@ function saveSlotKey(slot: SaveSlot): string {
 
 function migrateStoredProgression(
   stored: LegacyStoredProgression,
-  slot: SaveSlot,
 ): LegacyStoredProgression {
   const storedVersion = validLevel(stored.version);
-  const forceBattleEightReplay = slot === 3 && storedVersion < 37;
-  const needsBattleEightTestSetup = slot === 3
-    && Array.isArray(stored.completedRaids)
-    && stored.completedRaids.includes(7)
-    && !stored.completedRaids.includes(8)
-    && (
-      !stored.party?.worm
-      || !Array.isArray(stored.inventory)
-      || !stored.inventory.some((item) => item?.definitionId === "trident")
-    );
-  if (storedVersion >= SAVE_VERSION && !needsBattleEightTestSetup) return stored;
+  if (storedVersion >= SAVE_VERSION) return stored;
   let migrated = stored;
-  if (slot === 3 && storedVersion < 22) {
-    const replayEnemyIds = new Set([
-      "goblin-bandit",
-      "goblin-shaman",
-      "goblin-shaman-decoy",
-      "goblin-archer",
-      "beast-tamer",
-      "fire-ant",
-      "alligator",
-      "dragonfly",
-      "bee",
-    ]);
-    migrated = {
-      ...migrated,
-      highestUnlockedLevel: 6,
-      selectedLevel: 6,
-      completedRaids: [1, 2, 3, 4, 5],
-      victories: 5,
-      defeatedEnemyIds: Array.isArray(migrated.defeatedEnemyIds)
-        ? migrated.defeatedEnemyIds.filter((id) => !replayEnemyIds.has(id))
-        : migrated.defeatedEnemyIds,
-    };
-  }
-  if (slot === 3 && (storedVersion < 26 || needsBattleEightTestSetup || forceBattleEightReplay)) {
-    const battleEightEnemies = new Set([
-      "abyssal-squid",
-      "squid-tentacle",
-      "squid-knight",
-      "abyssal-ooze",
-      "ooze-guardian",
-    ]);
-    const legacyMaterials = migrated.materials && typeof migrated.materials === "object"
-      ? migrated.materials as Record<string, number>
-      : {};
-    const trident = createTridentGear();
-    const migratedInventory = Array.isArray(migrated.inventory)
-      ? migrated.inventory.filter((item) => item?.definitionId !== "suction-cups")
-      : [];
-    const inventoryWithTrident = migratedInventory.some((item) =>
-      item?.id === trident.id || item?.definitionId === "trident"
-    ) ? migratedInventory : [...migratedInventory, trident];
-    const preparedMember = (id: PlayerId) => {
-      const existing = migrated.party?.[id];
-      const existingTraining = existing?.training
-        ?? (id === "knight" ? migrated.training : undefined);
-      return {
-        ...existing,
-        hp: "1e9",
-        stamina: "1e9",
-        staminaActions: 0,
-        // Resetting the test slot to Battle 8 must not redistribute training
-        // the player already purchased. The veteran preset is only a fallback
-        // for a member absent from an older save.
-        training: existingTraining ? { ...existingTraining } : { ...BATTLE_EIGHT_TEST_TRAINING },
-        fishBonuses: existing?.fishBonuses
-          ? { ...existing.fishBonuses }
-          : { ...EMPTY_TRAINING },
-      };
-    };
-    const rawEquipment = migrated.equipment && typeof migrated.equipment === "object"
-      ? migrated.equipment as Partial<Record<PlayerId, Equipment>>
-      : {};
-    migrated = {
-      ...migrated,
-      gold: "50000",
-      party: {
-        knight: preparedMember("knight"),
-        worm: preparedMember("worm"),
-      },
-      inventory: inventoryWithTrident,
-      equipment: {
-        ...rawEquipment,
-        knight: { ...EMPTY_EQUIPMENT, ...(rawEquipment.knight ?? {}), sword: trident.id },
-        worm: { ...EMPTY_EQUIPMENT, ...(rawEquipment.worm ?? {}) },
-      },
-      highestUnlockedLevel: 8,
-      selectedLevel: 8,
-      completedRaids: [1, 2, 3, 4, 5, 6, 7],
-      victories: 7,
-      materials: { ...emptyMaterialCounts(), ...legacyMaterials, "rotten-tentacle": 0 },
-      purchasedQuestIds: ["rescue-me", "retrieve-lost-item"],
-      activeQuestId: null,
-      completedQuestIds: ["rescue-me", "retrieve-lost-item"],
-      selectedAdventureMembers: ["knight", "worm"],
-      fishingRod: true,
-      waterDungeonVisits: Math.max(2, validLevel(migrated.waterDungeonVisits)),
-      waterShrineSolved: true,
-      tridentTrialCompleted: true,
-      weaponThrowUnlocked: true,
-      adventureUnlocked: true,
-      partyTrainingUnlocked: true,
-      shopUnlocked: true,
-      defeatedEnemyIds: Array.isArray(migrated.defeatedEnemyIds)
-        ? migrated.defeatedEnemyIds.filter((id) => !battleEightEnemies.has(id))
-        : migrated.defeatedEnemyIds,
-      blacksmithUnlocked: false,
-      hammerQuestPurchased: false,
-      hammerQuestAttemptActive: false,
-      hammerQuestFailed: false,
-      hammerRecovered: false,
-      hammerReturned: false,
-      healingPotions: 0,
-      pickaxeOwned: false,
-      miningUnlocked: false,
-    };
-  }
-  const isBattleEightTestSave = slot === 3
-    && Array.isArray(migrated.completedRaids)
-    && migrated.completedRaids.includes(7)
-    && !migrated.completedRaids.includes(8);
-  if (storedVersion < 27 && isBattleEightTestSave && migrated.party) {
-    const repairedParty = { ...migrated.party };
-    let repairedTraining = false;
-    for (const id of PLAYER_ORDER) {
-      const member = repairedParty[id];
-      if (!member || !trainingMatches(member.training, OVERSHOT_BATTLE_EIGHT_TEST_TRAINING)) continue;
-      repairedParty[id] = { ...member, training: { ...BATTLE_EIGHT_TEST_TRAINING } };
-      repairedTraining = true;
-    }
-    if (repairedTraining) migrated = { ...migrated, party: repairedParty };
-  }
   if (
     storedVersion < 33
     && Array.isArray(migrated.completedRaids)
@@ -905,117 +756,12 @@ function migrateStoredProgression(
       selectedLevel: 9,
     };
   }
-  if (slot === 3 && storedVersion < 38) {
-    const suctionCups = createSuctionCupsGear();
-    const migratedInventory = Array.isArray(migrated.inventory)
-      ? migrated.inventory.filter((item) =>
-          item?.id !== suctionCups.id && item?.definitionId !== "suction-cups"
-        )
-      : [];
-    const existingParty = migrated.party && typeof migrated.party === "object"
-      ? migrated.party
-      : {};
-    const miner = existingParty.miner ?? {
-      hp: "1e9",
-      stamina: "1e9",
-      staminaActions: 0,
-      training: { ...BATTLE_EIGHT_TEST_TRAINING },
-      fishBonuses: { ...EMPTY_TRAINING },
-    };
-    const rawEquipment = migrated.equipment && typeof migrated.equipment === "object"
-      ? migrated.equipment as Partial<Record<PlayerId, Equipment>>
-      : {};
-    const stripBattleNineReward = (equipment: Equipment | undefined): Equipment => {
-      const next = { ...EMPTY_EQUIPMENT, ...(equipment ?? {}) };
-      for (const slotName of GEAR_SLOTS) {
-        if (next[slotName] === suctionCups.id) next[slotName] = null;
-      }
-      return next;
-    };
-    const completedQuestIds = sanitizeQuestIds(migrated.completedQuestIds)
-      .filter((questId) => questId !== "enter-tower");
-    const purchasedQuestIds = sanitizeQuestIds(migrated.purchasedQuestIds)
-      .filter((questId) => questId !== "enter-tower");
-    const materials = {
-      ...emptyMaterialCounts(),
-      ...(migrated.materials && typeof migrated.materials === "object" ? migrated.materials : {}),
-      "rotten-tentacle": Math.max(
-        1,
-        validLevel(migrated.materials?.["rotten-tentacle"]),
-      ),
-      "rusty-metal": 0,
-    };
-    migrated = {
-      ...migrated,
-      party: { ...existingParty, miner },
-      inventory: migratedInventory,
-      equipment: {
-        knight: stripBattleNineReward(rawEquipment.knight),
-        worm: stripBattleNineReward(rawEquipment.worm),
-        miner: stripBattleNineReward(rawEquipment.miner),
-      },
-      highestUnlockedLevel: 9,
-      selectedLevel: 9,
-      completedRaids: [1, 2, 3, 4, 5, 6, 7, 8],
-      victories: 8,
-      materials,
-      purchasedQuestIds: [...new Set<QuestId>([...purchasedQuestIds, "rescue-me", "retrieve-lost-item", "find-miner"])],
-      activeQuestId: migrated.activeQuestId === "enter-tower" ? null : migrated.activeQuestId,
-      completedQuestIds: [...new Set<QuestId>([...completedQuestIds, "rescue-me", "retrieve-lost-item", "find-miner"])],
-      defeatedEnemyIds: Array.isArray(migrated.defeatedEnemyIds)
-        ? migrated.defeatedEnemyIds.filter((id) => id !== "abyssal-ooze" && id !== "ooze-guardian")
-        : migrated.defeatedEnemyIds,
-      selectedAdventureMembers: ["knight", "worm", "miner"],
-      highestAdventureRingVisited: Math.max(3, validLevel(migrated.highestAdventureRingVisited)),
-      blacksmithUnlocked: true,
-      hammerQuestPurchased: true,
-      hammerQuestAttemptActive: false,
-      hammerQuestFailed: false,
-      hammerRecovered: false,
-      hammerReturned: true,
-      pickaxeOwned: true,
-      miningUnlocked: true,
-      highestMiningRoomReached: Math.max(1, validLevel(migrated.highestMiningRoomReached)),
-      towerDoorDiscovered: false,
-      forgeBlueprintsRecovered: false,
-      forgeBlueprintsDelivered: false,
-      craftingUnlocked: false,
-      seenShopUnlocks: Array.isArray(migrated.seenShopUnlocks)
-        ? migrated.seenShopUnlocks.filter((key) => key !== "potions:level-2" && key !== "quest:enter-tower")
-        : [],
-    };
-  }
   // Version 38 introduced explicit special-room discovery flags. Saves that
   // had already reached the Tower had necessarily progressed through the old
   // Potionmaster-era content, but could have been persisted with a false flag
   // before the room visit itself was tracked.
   if (storedVersion < 39 && Boolean(migrated.towerDoorDiscovered)) {
     migrated = { ...migrated, potionmasterDiscovered: true };
-  }
-  // Rewind the late-game test slot once so Battle 10 can be validated again
-  // without disturbing its current character builds, inventory, or world progress.
-  if (
-    slot === 3
-    && storedVersion < 40
-    && Array.isArray(migrated.completedRaids)
-    && migrated.completedRaids.includes(10)
-  ) {
-    const battleTenEnemyIds = new Set(["barnacle-drone", "brine-dynamo", "rustmire-engine"]);
-    migrated = {
-      ...migrated,
-      highestUnlockedLevel: 10,
-      selectedLevel: 10,
-      completedRaids: migrated.completedRaids.filter((level) => level !== 10),
-      victories: Math.max(0, validLevel(migrated.victories) - 1),
-      materials: {
-        ...sanitizeMaterialCounts(migrated.materials),
-        "rusty-gear": 0,
-      },
-      towerKeyOwned: false,
-      defeatedEnemyIds: Array.isArray(migrated.defeatedEnemyIds)
-        ? migrated.defeatedEnemyIds.filter((id) => !battleTenEnemyIds.has(id))
-        : migrated.defeatedEnemyIds,
-    };
   }
   // Rusty Gear briefly existed as a key-item flag during version 41. Restore
   // that earned Battle 10 reward to the material inventory so it can be placed
@@ -1084,14 +830,6 @@ function migrateStoredProgression(
     materials: shouldRestoreRustyGear ? { ...materials, "rusty-gear": 1 } : materials,
     inventory: needsSuctionCups ? [...inventoryWithShamanRing, suctionCups] : inventoryWithShamanRing,
   };
-}
-
-function trainingMatches(
-  value: Partial<TrainingLevels> | undefined,
-  expected: TrainingLevels,
-): boolean {
-  return (Object.keys(expected) as Array<keyof TrainingLevels>)
-    .every((stat) => validLevel(value?.[stat]) === expected[stat]);
 }
 
 function migrateLegacySave(): void {
@@ -1186,13 +924,18 @@ export function advanceProgression(
     if (bait.reusableBait) {
       activeBait = true;
     } else if (assignment.mode === "auto" && materials[assignment.baitId] > 0) {
-      materials = {
-        ...materials,
-        [assignment.baitId]: materials[assignment.baitId] - 1,
-      };
+      const conserveBait = memberHasTrident(state, assignment.memberId) && random() < 0.2;
+      if (!conserveBait) {
+        materials = {
+          ...materials,
+          [assignment.baitId]: materials[assignment.baitId] - 1,
+        };
+      }
     } else {
       activeBait = false;
-      fishingLogEntries.push(`Out of ${bait.name}.`);
+      if (materials[assignment.baitId] <= 0) {
+        fishingLogEntries.push(`Out of ${bait.name}.`);
+      }
     }
   }
   return {
@@ -1214,6 +957,13 @@ export function advanceProgression(
   };
 }
 
+function memberHasTrident(state: ProgressionState, memberId: PlayerId): boolean {
+  const weaponId = state.equipment[memberId]?.sword;
+  return Boolean(weaponId && state.inventory.some(
+    (item) => item.id === weaponId && item.definitionId === "trident",
+  ));
+}
+
 export function partyMemberIds(state: ProgressionState): PlayerId[] {
   return PLAYER_ORDER.filter((id) => Boolean(state.party[id]));
 }
@@ -1226,9 +976,11 @@ export function availableAdventureStrategies(
   state: ProgressionState,
   runQuestActive = false,
 ): AdventureStrategy[] {
-  const strategies: AdventureStrategy[] = [];
+  const strategies: AdventureStrategy[] = ["none"];
   if (state.activeQuestId || state.hammerQuestAttemptActive || runQuestActive) strategies.push("quest");
-  if (partyMemberIds(state).length > 1) strategies.push("together", "split");
+  if (state.selectedAdventureMembers.filter((id) => Boolean(state.party[id])).length > 1) {
+    strategies.push("together", "split");
+  }
   if (state.completedRaids.includes(8)) strategies.push("ring");
   return strategies;
 }
@@ -1240,7 +992,7 @@ export function effectiveAdventureStrategy(
   const available = availableAdventureStrategies(state, runQuestActive);
   return available.includes(state.adventureStrategy)
     ? state.adventureStrategy
-    : available[0] ?? "together";
+    : "none";
 }
 
 export function setAdventureStrategy(
@@ -1366,6 +1118,7 @@ export function setAdventureIgnoreGold(
   state: ProgressionState,
   enabled: boolean,
 ): ProgressionState {
+  if (enabled && !state.completedRaids.includes(8)) return state;
   return { ...state, adventureIgnoreGold: enabled };
 }
 
@@ -1742,7 +1495,7 @@ export function recordVictory(
       ...rewardState,
       purchasedQuestIds: [...rewardState.purchasedQuestIds, "rescue-shopkeeper"],
       activeQuestId: rewardState.activeQuestId ?? "rescue-shopkeeper",
-      adventureStrategy: rewardState.activeQuestId ? rewardState.adventureStrategy : "quest",
+      adventureStrategy: rewardState.adventureStrategy,
     };
   }
   const rewardDiscarded = false;
@@ -1860,7 +1613,7 @@ export function completeQuest(state: ProgressionState, questId: QuestId): Progre
     waterDungeonVisits: questId === "retrieve-lost-item"
       ? Math.max(1, state.waterDungeonVisits)
       : state.waterDungeonVisits,
-    adventureStrategy: state.adventureStrategy === "quest" ? "together" : state.adventureStrategy,
+    adventureStrategy: state.adventureStrategy === "quest" ? "none" : state.adventureStrategy,
     completedQuestIds: state.completedQuestIds.includes(questId)
       ? state.completedQuestIds
       : [...state.completedQuestIds, questId],
@@ -2105,9 +1858,9 @@ function validActionProgress(value: unknown): number {
 }
 
 function sanitizeAdventureStrategy(value: unknown): AdventureStrategy {
-  return value === "quest" || value === "split" || value === "together" || value === "ring"
+  return value === "none" || value === "quest" || value === "split" || value === "together" || value === "ring"
     ? value
-    : "together";
+    : "none";
 }
 
 function sanitizePortalTypes(value: unknown): PortalType[] {

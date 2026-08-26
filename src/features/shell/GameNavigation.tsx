@@ -1,12 +1,12 @@
 import {
   adventureTabUnlocked,
   fishingTabUnlocked,
-  formatDecimal,
   hasNewShopContent,
   shopTabUnlocked,
   trainingTabUnlocked,
   type ProgressionState,
 } from "@/game/progression";
+import { formatWholeAmount } from "@/game/numbers";
 
 export type GameView =
   | "adventure"
@@ -21,7 +21,6 @@ export type GameView =
 
 interface GameNavigationProps {
   progression: ProgressionState;
-  savePulse: boolean;
   view: GameView;
   onNavigate: (view: GameView) => void;
   onOpenHelp: () => void;
@@ -30,7 +29,6 @@ interface GameNavigationProps {
 
 export function GameNavigation({
   progression,
-  savePulse,
   view,
   onNavigate,
   onOpenHelp,
@@ -68,10 +66,9 @@ export function GameNavigation({
         {progression.craftingUnlocked && item("crafting", "Crafting")}
       </nav>
       <div className="resource-display">
-        <span>Gold: {formatDecimal(progression.gold)}</span>
+        <span>Gold: {formatWholeAmount(progression.gold)}</span>
         <button type="button" onClick={onOpenHelp}>Help</button>
         <button type="button" onClick={onSaveAndQuit}>Save &amp; quit to title</button>
-        <small>{savePulse ? "Saving..." : "Saved locally"}</small>
       </div>
     </header>
   );

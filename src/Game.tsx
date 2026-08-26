@@ -36,6 +36,7 @@ import {
   suggestAdventureMove,
   type AdventureState,
 } from "./game/adventure";
+import { penalizeAdventureGold } from "./game/adventure/session";
 import {
   activeUnit,
   battleReservedPlayerIds,
@@ -155,6 +156,7 @@ import { FISH_META, MATERIAL_META, type MaterialId } from "./game/items";
 import { POTION_META, mysteryPotionEffectDescription, type PotionId } from "./game/potions";
 import { ESCAPE_ROPE_LEVELS, type EscapeRopeLevel } from "./game/escape-ropes";
 import { craftItem, type CraftingGrid } from "./game/crafting";
+import { formatWholeAmount } from "./game/numbers";
 import {
   cachePortalDungeonSession,
   type AdventureSession,
@@ -225,7 +227,6 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
   } | null>(null);
   const conversationActiveRef = useRef(false);
   const conversationContinuationRef = useRef<(() => void) | null>(null);
-  const [savePulse, setSavePulse] = useState(false);
   const [helpOpen, setHelpOpen] = useState(false);
   const rewardedRef = useRef(false);
 
@@ -707,7 +708,14 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       const carriedGold = session.carriedGold.add(result.goldGained);
       const sessionWithGold = carriedGold.eq(session.carriedGold)
         ? session
-        : { ...session, carriedGold };
+        : {
+            ...session,
+            carriedGold,
+            carriedGoldByMember: {
+              ...session.carriedGoldByMember,
+              [explorerId]: (session.carriedGoldByMember?.[explorerId] ?? new Decimal(0)).add(result.goldGained),
+            },
+          };
       if (result.state.dungeonTheme !== "water") {
         nextProgress = recordAdventureRingVisit(
           nextProgress,
@@ -800,7 +808,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
           const settlement = settleAdventureGold(settledProgress, carriedGold, true);
           commitProgression(settlement.state);
           commitAdventureSession(null);
-          const banked = settlement.banked.gt(0) ? ` Banked ${formatDecimal(settlement.banked)} carried gold. You even kept most of it!` : "";
+          const banked = settlement.banked.gt(0) ? ` Banked ${formatWholeAmount(settlement.banked)} carried gold. You even kept most of it!` : "";
           showToast((completedQuestId === "rescue-me"
             ? "Rescue Me complete! Worm joined the party. You have a Worm now!"
             : completedQuestId === "retrieve-lost-item"
@@ -824,38 +832,40 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       } else if (result.died) {
         const unlockedTraining = !nextProgress.partyTrainingUnlocked;
         nextProgress = recordAdventureDeath(nextProgress);
-        const nextSession = updateAdventureSession(sessionWithGold, explorerId, null);
+        const penalty = penalizeAdventureGold(sessionWithGold, explorerId, 0.3);
+        const nextSession = updateAdventureSession(penalty.session, explorerId, null);
         const lostHammerAttempt = currentAdventure.questTarget?.questId === "retrieve-hammer"
           || Boolean(currentAdventure.hammerRecovered);
         if (!nextSession) {
           const failedHammer = nextProgress.hammerQuestAttemptActive && !nextProgress.hammerReturned;
           nextProgress = failHammerQuestAttempt(nextProgress);
-          const settlement = settleAdventureGold(nextProgress, carriedGold, false);
+          const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
           commitProgression(settlement.state);
           commitAdventureSession(null);
-          showToast(`${memberName} died! Banked ${formatDecimal(settlement.banked)} gold and dropped ${formatDecimal(settlement.lost)} somewhere near the corpse.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} died! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
         } else {
           if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
           commitProgression(nextProgress);
           commitAdventureSession(nextSession);
-          showToast(`${memberName} died, respawned with 10% HP, and left. The others still have the Gold. Try not to leave anyone else dead.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} died and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
         }
       } else if (result.exhausted) {
-        const nextSession = updateAdventureSession(sessionWithGold, explorerId, null);
+        const penalty = penalizeAdventureGold(sessionWithGold, explorerId, 0.2);
+        const nextSession = updateAdventureSession(penalty.session, explorerId, null);
         const lostHammerAttempt = currentAdventure.questTarget?.questId === "retrieve-hammer"
           || Boolean(currentAdventure.hammerRecovered);
         if (!nextSession) {
           const failedHammer = nextProgress.hammerQuestAttemptActive && !nextProgress.hammerReturned;
           nextProgress = failHammerQuestAttempt(nextProgress);
-          const settlement = settleAdventureGold(nextProgress, carriedGold, false);
+          const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
           commitProgression(settlement.state);
           commitAdventureSession(null);
-          showToast(`${memberName} ran out of stamina! Banked ${formatDecimal(settlement.banked)} gold and dropped ${formatDecimal(settlement.lost)} while crawling home.${failedHammer ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} ran out of stamina! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${failedHammer ? " Retrieve Hammer failed." : ""}`);
         } else {
           if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
           commitProgression(nextProgress);
           commitAdventureSession(nextSession);
-          showToast(`${memberName} ran out of stamina and left. The explorers who can still walk kept the Gold.${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
+          showToast(`${memberName} ran out of stamina and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
         }
       } else {
         commitProgression(nextProgress);
@@ -1079,38 +1089,40 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     if (result.died) {
       const unlockedTraining = !nextProgress.partyTrainingUnlocked;
       nextProgress = recordAdventureDeath(nextProgress);
-      const nextSession = updateAdventureSession(session, explorerId, null);
+      const penalty = penalizeAdventureGold(session, explorerId, 0.3);
+      const nextSession = updateAdventureSession(penalty.session, explorerId, null);
       const lostHammerAttempt = currentAdventure.questTarget?.questId === "retrieve-hammer"
         || Boolean(currentAdventure.hammerRecovered);
       if (!nextSession) {
         const failedHammer = nextProgress.hammerQuestAttemptActive && !nextProgress.hammerReturned;
         nextProgress = failHammerQuestAttempt(nextProgress);
-        const settlement = settleAdventureGold(nextProgress, session.carriedGold, false);
+        const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
         commitProgression(settlement.state);
         commitAdventureSession(null);
-        showToast(`${memberName} died! Banked ${formatDecimal(settlement.banked)} gold and dropped ${formatDecimal(settlement.lost)} somewhere near the corpse.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} died! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${failedHammer ? " Retrieve Hammer failed." : ""}`);
       } else {
         if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
         commitProgression(nextProgress);
         commitAdventureSession(nextSession);
-        showToast(`${memberName} died, respawned with 10% HP, and left. The less-dead explorers kept the Gold.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} died and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${unlockedTraining ? " Training unlocked! Dying builds character." : ""}${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
       }
     } else if (result.exhausted) {
-      const nextSession = updateAdventureSession(session, explorerId, null);
+      const penalty = penalizeAdventureGold(session, explorerId, 0.2);
+      const nextSession = updateAdventureSession(penalty.session, explorerId, null);
       const lostHammerAttempt = currentAdventure.questTarget?.questId === "retrieve-hammer"
         || Boolean(currentAdventure.hammerRecovered);
       if (!nextSession) {
         const failedHammer = nextProgress.hammerQuestAttemptActive && !nextProgress.hammerReturned;
         nextProgress = failHammerQuestAttempt(nextProgress);
-        const settlement = settleAdventureGold(nextProgress, session.carriedGold, false);
+        const settlement = settleAdventureGold(nextProgress, penalty.session.carriedGold, true);
         commitProgression(settlement.state);
         commitAdventureSession(null);
-        showToast(`${memberName} ran out of stamina! Banked ${formatDecimal(settlement.banked)} gold and dropped ${formatDecimal(settlement.lost)} while crawling home.${failedHammer ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} ran out of stamina! Lost ${formatWholeAmount(penalty.lost)} of their gold and banked ${formatWholeAmount(settlement.banked)}.${failedHammer ? " Retrieve Hammer failed." : ""}`);
       } else {
         if (lostHammerAttempt) nextProgress = failHammerQuestAttempt(nextProgress);
         commitProgression(nextProgress);
         commitAdventureSession(nextSession);
-        showToast(`${memberName} ran out of stamina and left. The explorers who still have working legs kept the Gold.${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
+        showToast(`${memberName} ran out of stamina and lost ${formatWholeAmount(penalty.lost)} of their gold. The other explorers kept theirs.${lostHammerAttempt ? " Retrieve Hammer failed." : ""}`);
       }
     } else {
       commitProgression(nextProgress);
@@ -1410,7 +1422,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     const result = feedFish(progressionRef.current, memberId, stat);
     if (result.error) return showToast(result.error);
     commitProgression(result.state);
-    showToast(`${getPlayer(memberId).name} ate the fish and permanently gained 1 ${STAT_META[stat].label}! Swallow the bones too.`);
+    showToast(`${getPlayer(memberId).name} ate the fish and permanently gained 3 ${STAT_META[stat].label}! Swallow the bones too.`);
   }, [commitProgression, showToast]);
 
   const handleStartFishing = useCallback((memberId: PlayerId, baitId: MaterialId, mode: "manual" | "auto") => {
@@ -1614,7 +1626,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       current.activeQuestId === "rescue-shopkeeper" && !current.shopUnlocked,
       current.completedRaids,
       {
-        blacksmithRoomEnabled: current.completedRaids.includes(8),
+        blacksmithRoomEnabled: current.completedRaids.includes(4),
         hammerQuestPurchased: current.hammerQuestPurchased,
         hammerRecovered: current.hammerRecovered,
         potionmasterRoomEnabled: !current.potionmasterQuestCompleted,
@@ -1646,6 +1658,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       routeTargetRoomKey: null,
       forgeRallyRoomKey: null,
       carriedGold: new Decimal(0),
+      carriedGoldByMember: {},
     });
   }, [commitAdventureSession, showToast]);
 
@@ -1670,7 +1683,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
     );
     commitProgression(settlement.state);
     commitAdventureSession(null);
-    showToast(`Level ${requiredLevel} Escape Rope used! Banked ${formatDecimal(settlement.banked)} carried gold and climbed away very bravely.${failedHammer ? " Retrieve Hammer failed." : ""}`);
+    showToast(`Level ${requiredLevel} Escape Rope used! Banked ${formatWholeAmount(settlement.banked)} carried gold and climbed away very bravely.${failedHammer ? " Retrieve Hammer failed." : ""}`);
   }, [commitAdventureSession, commitProgression, showToast]);
 
   useEffect(() => {
@@ -1734,8 +1747,6 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
   useEffect(() => {
     const save = () => {
       saveProgression(recordPlayTime(), saveSlot);
-      setSavePulse(true);
-      window.setTimeout(() => setSavePulse(false), 450);
     };
     const timer = window.setInterval(save, 2_000);
     window.addEventListener("beforeunload", save);
@@ -1987,7 +1998,14 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
 
   useEffect(() => {
     if (adventureSession || !progression.restartAdventureOnFullHp) return;
-    const ids = progression.selectedAdventureMembers.filter((id) => progression.party[id]);
+    const unavailable = new Set([
+      ...battleReservedPlayerIds(battleRef.current),
+      ...miningMemberIds(miningStateRef.current, pendingMiningRestartMemberIdRef.current),
+      ...(progression.fishingAssignment ? [progression.fishingAssignment.memberId] : []),
+    ]);
+    const ids = progression.selectedAdventureMembers.filter((id) =>
+      progression.party[id] && !unavailable.has(id)
+    );
     if (ids.length === 0) return;
     const ready = ids.every((id) => {
       const member = getPartyMember(progression, id);
@@ -2121,7 +2139,6 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         onOpenHelp={() => setHelpOpen(true)}
         onSaveAndQuit={saveAndQuitToTitle}
         progression={progression}
-        savePulse={savePulse}
         view={view}
       />
 

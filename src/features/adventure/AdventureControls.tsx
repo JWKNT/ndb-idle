@@ -10,9 +10,10 @@ import type {
 import { type GameDropdownOption } from "@/features/shared/GameDropdown";
 
 const STRATEGY_LABELS: Record<AdventureStrategy, { compact: string; detailed: string }> = {
+  none: { compact: "None", detailed: "None" },
   quest: { compact: "Quest", detailed: "Aim for active quest" },
-  together: { compact: "Together", detailed: "Party sticks together" },
-  split: { compact: "Split", detailed: "Party splits apart" },
+  together: { compact: "Stay together", detailed: "Stay together" },
+  split: { compact: "Split apart", detailed: "Split apart" },
   ring: { compact: "Explore area", detailed: "Explore area" },
 };
 
@@ -117,14 +118,16 @@ export function AdvancedAdventureOptions({
     <details className="adventure-advanced-options">
       <summary>Advanced</summary>
       <div className="adventure-advanced-list">
-        <label className="plain-option">
-          <input
-            checked={progression.adventureIgnoreGold}
-            onChange={(event) => onToggleIgnoreGold(event.target.checked)}
-            type="checkbox"
-          />
-          Ignore gold on auto
-        </label>
+        {progression.completedRaids.includes(8) && (
+          <label className="plain-option">
+            <input
+              checked={progression.adventureIgnoreGold}
+              onChange={(event) => onToggleIgnoreGold(event.target.checked)}
+              type="checkbox"
+            />
+            Ignore gold on auto
+          </label>
+        )}
         {showWaterPortal && (
           <label className="plain-option">
             <input

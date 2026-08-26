@@ -60,7 +60,7 @@ The Battle 7 Bestiary is opened from Adventure. It persists enemy species defeat
 
 After Battle 7, rare Frogs appear across the first two Adventure zones, alongside Mutant Rats in zone 1 and Fire Ants in zone 2. Their Eye of Frog, Mutated Rat Tail, and Fire Ant Chitin drops feed a one-time exchange with Charles in zone 2: 10 of each yields three Level 1 Mystery Potions. Each bottle rolls three distinct Level 1 potion effects, grants two at full strength, applies the third in reverse at half strength, and gives a non-stacking 5% chance to dodge direct enemy attacks for 30 minutes.
 
-The Battle 8 Squid is stationary, fills a 3×3 blue-water area, and fires anywhere with clear line of sight. It remains invulnerable while any of its four Tentacles lives. Tentacles only take damage from Tidecaller Trident throws; the Squid can be hit by either Trident throws or Worm's Acid Shot once the shield is down. The Squid's footprint blocks a Trident line to a Tentacle behind it, so auto repositions around the wooden routes. An equipped Trident uses Attack for its one-tile thrust and Sp. Attack for throws.
+The Battle 8 Squid is stationary, fills a 3×3 blue-water area, and fires anywhere with clear line of sight. It remains invulnerable while any of its four Tentacles lives. Tentacles take damage normally; Tidecaller Trident throws are the strongest ranged option, while Worm's straight-or-diagonal Acid Shot provides a non-Trident route through the arena. The Squid's footprint blocks a Trident line to a Tentacle behind it, so auto repositions around the wooden routes. An equipped Trident uses Attack for its one-tile thrust and Sp. Attack for throws.
 
 ## Adventure rules
 

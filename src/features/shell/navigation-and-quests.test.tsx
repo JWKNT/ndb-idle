@@ -12,7 +12,6 @@ describe("navigation and quest ordering", () => {
         onOpenHelp={() => undefined}
         onSaveAndQuit={() => undefined}
         progression={defaultProgression()}
-        savePulse={false}
         view="party"
       />,
     );

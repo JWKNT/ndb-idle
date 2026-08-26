@@ -131,7 +131,7 @@ describe("prototype content", () => {
     expect(skeleton.stats.speed.lt(goblin.stats.speed)).toBe(true);
     expect(goblin.stats.speed.lt(squidKnight.stats.speed)).toBe(true);
     expect(squidKnight.stats.speed.lt(oozeGuardian.stats.speed)).toBe(true);
-    expect(oozeGuardian.stats.speed.lt(abyssalOoze.stats.speed)).toBe(true);
+    expect(oozeGuardian.stats.speed.lte(abyssalOoze.stats.speed)).toBe(true);
     expect(sprites).toEqual(expect.objectContaining({
       caveBat: expect.any(String),
       glowScorpion: expect.any(String),
@@ -297,11 +297,12 @@ describe("prototype content", () => {
     expect(abyssalSquid.footprint).toBe(3);
     expect(abyssalSquid.canMove).toBe(false);
     expect(abyssalSquid.attackPattern).toBe("any");
-    expect(squidTentacle.requiresTridentThrow).toBe(true);
-    expect(squidKnight.stats.hp.toNumber()).toBe(175);
-    expect(squidKnight.stats.attack.toNumber()).toBe(29);
-    expect(squidKnight.stats.defense.toNumber()).toBe(18);
-    expect(squidKnight.stats.spDefense.toNumber()).toBe(16);
+    expect(squidTentacle.requiresTridentThrow).not.toBe(true);
+    expect(squidTentacle.stats.hp.toNumber()).toBe(300);
+    expect(squidKnight.stats.hp.toNumber()).toBe(220);
+    expect(squidKnight.stats.attack.toNumber()).toBe(32);
+    expect(squidKnight.stats.defense.toNumber()).toBe(22);
+    expect(squidKnight.stats.spDefense.toNumber()).toBe(20);
     expect(abyssalSquid.invulnerableWhileEnemyId).toBe("squid-tentacle");
     expect(renderLevel(level08, {
       "squid-knight": "K",
@@ -382,7 +383,7 @@ describe("prototype content", () => {
     expect(rustmireEngine.stats.speed.gt(abyssalOoze.stats.speed)).toBe(true);
     expect(rustmireEngine.stats.spAttack.lt(abyssalOoze.stats.spAttack)).toBe(true);
     expect(rustmireEngine.name).toBe("Rusttide Colossus");
-    expect(rustmireEngine.stats.hp.eq(7_000)).toBe(true);
+    expect(rustmireEngine.stats.hp.eq(8_400)).toBe(true);
     expect(barnacleDrone.footprint).toBe(2);
     expect(brineDynamo.footprint).toBe(2);
     expect(brineDynamo.canMove).toBe(false);

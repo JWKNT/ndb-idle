@@ -9,6 +9,7 @@ import {
   trainingCost,
   type ProgressionState,
 } from "@/game/progression";
+import { formatWholeAmount } from "@/game/numbers";
 import { STAT_KEYS, STAT_META, type PlayerId, type StatKey } from "@/game/types";
 
 interface TrainingViewProps {
@@ -27,7 +28,7 @@ export function TrainingView({ progression, onTrain, onReturnToBattle }: Trainin
     <main className="training-view">
       <header className="page-heading">
         <h1>Training</h1>
-        <p>Victories: {progression.victories} · Available gold: {formatDecimal(progression.gold)}</p>
+        <p>Victories: {progression.victories} · Available gold: {formatWholeAmount(progression.gold)}</p>
       </header>
 
       <section className="member-selector" aria-label="Training member">
@@ -58,10 +59,10 @@ export function TrainingView({ progression, onTrain, onReturnToBattle }: Trainin
                 <tr key={stat}>
                   <td>
                     <button disabled={progression.gold.lt(cost)} onClick={() => onTrain(memberId, stat)} type="button">
-                      Buy {STAT_META[stat].label} for {formatDecimal(cost)} Gold
+                      Buy {STAT_META[stat].label} for {formatWholeAmount(cost)} Gold
                     </button>
                   </td>
-                  <td>Level {level} (×{multiplier.lt(1_000) ? multiplier.toFixed(3) : formatDecimal(multiplier)})</td>
+                  <td>Level {level + 1} (×{multiplier.lt(1_000) ? multiplier.toFixed(3) : formatDecimal(multiplier)})</td>
                   <td>{formatDecimal(stats[stat])}</td>
                 </tr>
               );

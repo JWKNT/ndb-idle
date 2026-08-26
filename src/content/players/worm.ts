@@ -6,6 +6,7 @@ export const worm: UnitDefinition = {
   name: "Worm",
   attackRange: 4,
   attackType: "special",
+  attackPattern: "eight-way",
   attackName: "Acid Shot",
   stats: {
     hp: new Decimal(24),

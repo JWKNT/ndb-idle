@@ -9,7 +9,6 @@ import {
   type MaterialId,
 } from "@/game/items";
 import {
-  formatDecimal,
   gearSellPrice,
   inventorySlotCapacity,
   inventorySlotUpgradeCost,
@@ -19,6 +18,7 @@ import {
   UNDEAD_GEM_COST,
   type ProgressionState,
 } from "@/game/progression";
+import { formatWholeAmount } from "@/game/numbers";
 import { POTION_IDS, POTION_META, type PotionId } from "@/game/potions";
 import { STAT_META, type StatKey } from "@/game/types";
 import {
@@ -105,7 +105,7 @@ export function ShopView({
     <main className="simple-page shop-view">
       <header className="page-heading">
         <h1>Shop</h1>
-        <p>Gold: {formatDecimal(progression.gold)}</p>
+        <p>Gold: {formatWholeAmount(progression.gold)}</p>
       </header>
 
       <section className="shopkeeper-stall" aria-label="Shopkeeper counter">
@@ -160,7 +160,7 @@ export function ShopView({
             return (
               <article className={`quest-card ${active ? "is-active" : ""}`} key={quest.id}>
                 <h3><ShopItemLabel sprite="questScroll">{quest.name}</ShopItemLabel></h3>
-                <p>Cost to accept: {formatDecimal(quest.cost)} gold</p>
+                <p>Cost to accept: {formatWholeAmount(quest.cost)} gold</p>
                 <p>Status: {status}</p>
                 {!complete && !purchased && (
                   <button
@@ -265,7 +265,7 @@ export function ShopView({
             <p>
               {inventorySlotCapacity(progression)} unique slots now · +2 slots per purchase
             </p>
-            <p>Price: {formatDecimal(slotUpgradeCost)} gold</p>
+            <p>Price: {formatWholeAmount(slotUpgradeCost)} gold</p>
             <button
               disabled={progression.gold.lt(slotUpgradeCost)}
               onClick={onPurchaseInventorySlots}
@@ -280,7 +280,7 @@ export function ShopView({
             <p>
               {inventoryStackCapacity(progression)} items per stack now · +100 to every item stack per purchase
             </p>
-            <p>Price: {formatDecimal(stackUpgradeCost)} gold</p>
+            <p>Price: {formatWholeAmount(stackUpgradeCost)} gold</p>
             <button
               disabled={progression.gold.lt(stackUpgradeCost)}
               onClick={onPurchaseStackSize}
@@ -314,7 +314,7 @@ export function ShopView({
                 ))}
                 {ownedFish.map((stat) => (
                   <tr key={stat}>
-                    <th scope="row">{FISH_META[stat].name} (+1 {STAT_META[stat].label})</th>
+                    <th scope="row">{FISH_META[stat].name} (+3 {STAT_META[stat].label})</th>
                     <td>{progression.fish[stat]}</td>
                     <td>{FISH_META[stat].sellPrice} gold</td>
                     <td>
