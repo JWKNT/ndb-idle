@@ -8,19 +8,11 @@ The default interface is visual and terse. Persistent screens should show titles
 
 ## Unlock graph
 
-```text
-Battle 1 ──> Adventure + Battle 2
-Adventure death ──> Training
-Battle 2 ──> Battle 3
-Battle 3 ──> marked Lost Adventurer quest + Battle 4
-Lost Adventurer ──> Shop ──> Undead Gem
-Undead Gem + Battle 4 ──> Rescue Me + Battle 5
-Battle 5 ──> Retrieve Lost Item + Battle 6
-Battle 6 ──> Shaman's Ring + Battle 7
-Battle 7 ──> Bestiary + rare creature ingredients + Crooked Still + Battle 8
-Retrieve Lost Item ──> Fishing + Water Dungeon revisits
-Water offering trial ──> Tidecaller Trident + Weapon Throw
-```
+The canonical full branching graph lives in
+[`PROGRESSION_TREE.md`](PROGRESSION_TREE.md). Update it in the same change whenever a
+Battle, quest, NPC, activity, room gate, material dependency, convergence requirement,
+or endpoint changes. This file describes the mechanics behind those nodes without
+maintaining a second unlock tree that can drift.
 
 A navigation section is absent—not disabled—until unlocked. Battle and Party are visible on a new save, with Battle as the initial screen. New saves begin with 0 gold.
 
@@ -45,8 +37,10 @@ A navigation section is absent—not disabled—until unlocked. Battle and Party
 | 4 | Skele-King | Same; adds Skele-Brachiosaurus | Rescue Me, Battle 5 |
 | 5 | Goblin Chief | 19×11 leaf scaffold, gaps, tree-stump walls | Retrieve Lost Item, Battle 6 |
 | 6 | Goblin Shaman | 19×11 leafy ranged scaffold with scattered tree stumps, four isolated Archers, and one range-3 Shaman with half-arena teleport | Shaman's Ring, Battle 7 |
-| 7 | Beast Tamer | 13×9 leaf arena, tree stumps, central gaps | Bestiary, Frogs/Mutant Rats/Fire Ants and the Crooked Still, Battle 8 |
-| 8 | Abyssal Squid | 20×13 wood route over murky and blue water; four Squid Knights and four Tentacles | — |
+| 7 | Beast Tamer | 13×9 leaf arena, tree stumps, central gaps | Bestiary, Frogs/Mutant Rats/Fire Ants and Charles, Battle 8 |
+| 8 | Abyssal Squid | 20×13 wood route over murky and blue water; four Squid Knights and four Tentacles | Rotten Tentacle, Blacksmith rooms, ring targeting, Battle 9 |
+| 9 | Abyssal Ooze | 20×13 ooze arena with three Guardians | Suction Cups, Level 2 Potions, Dice rooms, Tower Exterior, Battle 10 |
+| 10 | Rusttide Colossus | 26×15 rusted platform with a shield Dynamo | Rusty Gear |
 
 The Skele-King takes no damage while no deployed party member has the Undead Gem equipped. Defeat without it logs that the King is invulnerable and hints that progress lies outside the Battle. The gem is a 250-gold Shop accessory.
 
@@ -56,7 +50,7 @@ The Beast Tamer uses a two-tile ranged attack and periodically drops one or two 
 
 The Battle 7 Bestiary is opened from Adventure. It persists enemy species defeated in Battles and Adventure and shows their sprites and base stats.
 
-After Battle 7, rare Frogs appear across the first two Adventure zones, alongside Mutant Rats in zone 1 and Fire Ants in zone 2. Their Eye of Frog, Mutated Rat Tail, and Fire Ant Chitin drops feed a one-time exchange with Charles at The Crooked Still in zone 2: 10 of each yields three Level 1 Mystery Potions. Each bottle rolls three distinct Level 1 potion effects, grants two at full strength, applies the third in reverse at half strength, and gives a non-stacking 5% chance to dodge direct enemy attacks for 30 minutes.
+After Battle 7, rare Frogs appear across the first two Adventure zones, alongside Mutant Rats in zone 1 and Fire Ants in zone 2. Their Eye of Frog, Mutated Rat Tail, and Fire Ant Chitin drops feed a one-time exchange with Charles in zone 2: 10 of each yields three Level 1 Mystery Potions. Each bottle rolls three distinct Level 1 potion effects, grants two at full strength, applies the third in reverse at half strength, and gives a non-stacking 5% chance to dodge direct enemy attacks for 30 minutes.
 
 The Battle 8 Squid is stationary, fills a 3×3 blue-water area, and fires anywhere with clear line of sight. It remains invulnerable while any of its four Tentacles lives. Tentacles only take damage from Tidecaller Trident throws; the Squid can be hit by either Trident throws or Worm's Acid Shot once the shield is down. The Squid's footprint blocks a Trident line to a Tentacle behind it, so auto repositions around the wooden routes. An equipped Trident uses Attack for its one-tile thrust and Sp. Attack for throws.
 

@@ -187,7 +187,7 @@ function roomMarker(
   if (room.kind === "miner") return { label: "Miner cave", sprite: "miner" };
   if (room.kind === "hammerVault") return { label: "Hammer vault", sprite: "questScroll" };
   if (room.kind === "potionmaster") return { label: "Potionmaster", sprite: "potionLuck2" };
-  if (room.kind === "oddityBrewer") return { label: "The Crooked Still", sprite: "potionMystery" };
+  if (room.kind === "oddityBrewer") return { label: "Charles", sprite: "potionMystery" };
   if (room.kind === "cartographer") return { label: "Cartographer", sprite: "mapTable" };
   if (room.kind === "angler") return { label: "Angler", sprite: "tackleBox" };
   if (room.kind === "towerExterior") return { label: "Tower", sprite: "towerDoor" };

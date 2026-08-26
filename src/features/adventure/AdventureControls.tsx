@@ -29,7 +29,7 @@ const LANDMARK_ROUTE_LABELS: Partial<Record<DungeonRoom["kind"], string>> = {
   forgePortal: "Forge portal",
   blacksmith: "Blacksmith",
   potionmaster: "Potionmaster",
-  oddityBrewer: "The Crooked Still",
+  oddityBrewer: "Charles",
   towerExterior: "Tower",
   cartographer: "Cartographer",
   angler: "Angler's Shack",
@@ -172,7 +172,7 @@ export function AdvancedAdventureOptions({
               onChange={(event) => onToggleAutoPauseRoom("oddityBrewer", event.target.checked)}
               type="checkbox"
             />
-            Turn off auto at the Crooked Still
+            Turn off auto at Charles
           </label>
         )}
         {showCartographer && (

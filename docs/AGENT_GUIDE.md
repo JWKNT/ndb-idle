@@ -6,7 +6,8 @@ have repeatedly pushed it in the wrong direction.
 
 Read this file before making broad UI, content, progression, save, art, or combat changes.
 For a detailed directory map, also see [`ARCHITECTURE.md`](ARCHITECTURE.md). For implemented
-rules, see [`GAME_DESIGN.md`](GAME_DESIGN.md).
+rules, see [`GAME_DESIGN.md`](GAME_DESIGN.md). For the complete branching unlock map, see
+[`PROGRESSION_TREE.md`](PROGRESSION_TREE.md).
 
 ## Authority and source of truth
 
@@ -26,6 +27,7 @@ Before editing:
 - Run `git status` and preserve unrelated local work.
 - Find the focused module and its tests before reading a giant facade end to end.
 - Check unlock and save-migration implications, not only the visible happy path.
+- Update `PROGRESSION_TREE.md` in the same change whenever progression branching changes.
 - Inspect an existing neighboring implementation before inventing a new convention.
 
 ## Product identity

@@ -441,7 +441,7 @@ describe("progression", () => {
     expect(result.state.potionmasterQuestCompleted).toBe(true);
   });
 
-  it("trades Battle 7 creature parts at the Crooked Still for three Mystery Potions", () => {
+  it("trades Battle 7 creature parts with Charles for three Mystery Potions", () => {
     const base = defaultProgression();
     const state = {
       ...base,

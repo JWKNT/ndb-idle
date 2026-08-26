@@ -236,9 +236,9 @@ export function OddityBrewerPopover({
 }) {
   const complete = progression.oddityBrewerCompleted;
   return (
-    <section aria-label="The Crooked Still" className="blacksmith-shop-popover potionmaster-popover">
+    <section aria-label="Charles" className="blacksmith-shop-popover potionmaster-popover">
       <header>
-        <div><h2>The Crooked Still</h2></div>
+        <div><h2>Charles</h2></div>
         <button aria-label="Close Charles" onClick={onClose} type="button">×</button>
       </header>
       <div className="potionmaster-portrait">

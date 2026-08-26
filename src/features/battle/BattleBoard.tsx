@@ -94,7 +94,11 @@ export function BattleBoard({ battle, manualEnabled, onTile, onSecondaryTile }: 
     ? battle.units.filter((unit) => unit.definitionId === "ooze-guardian" && unit.hp.gt(0))
     : [];
   const shieldConnections = battle.units.flatMap((boss) => {
-    if (boss.hp.lte(0) || !boss.invulnerableWhileEnemyId) return [];
+    if (
+      boss.hp.lte(0)
+      || !boss.invulnerableWhileEnemyId
+      || boss.invulnerableWhileEnemyId === "squid-tentacle"
+    ) return [];
     const provider = battle.units.find((unit) =>
       unit.hp.gt(0)
       && unit.team === boss.team

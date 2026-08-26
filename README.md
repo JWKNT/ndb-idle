@@ -16,7 +16,7 @@ New saves begin with **Party** and **Battle** visible. Menu sections appear only
 - Battle 5 unlocks the 1,000-gold `Retrieve Lost Item` quest.
 - Battle 6 awards Shaman's Ring, an accessory that can evade Adventure damage by teleporting its wearer.
 - Recovering the Fishing Rod unlocks Fishing.
-- Battle 7 awards the Bestiary, adds rare Frogs, Mutant Rats, and Fire Ants to the first two Adventure zones, and unlocks Charles at The Crooked Still in zone 2. Ten of each new creature drop can be exchanged once for three Level 1 Mystery Potions.
+- Battle 7 awards the Bestiary, adds rare Frogs, Mutant Rats, and Fire Ants to the first two Adventure zones, and unlocks Charles in zone 2. Ten of each new creature drop can be exchanged once for three Level 1 Mystery Potions.
 
 Battles never award gold. A first clear unlocks its explicit progression reward and advances directly to the next Battle; cleared Battles cannot be replayed.
 

@@ -168,7 +168,7 @@ import {
   type MiningResult,
   type MiningState,
 } from "./game/mining";
-import { battleRewardPopup } from "./features/battle/battleRewards";
+import { battleRewardPopups } from "./features/battle/battleRewards";
 import { battlePartySetup } from "./features/battle/playerSetup";
 import { GameNavigation, type GameView } from "./features/shell/GameNavigation";
 import {
@@ -218,7 +218,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
   const pendingMiningRestartMemberIdRef = useRef<PlayerId | null>(null);
   const [view, setView] = useState<GameView>("battle");
   const viewRef = useRef<GameView>("battle");
-  const [rewardPopup, setRewardPopup] = useState<RewardPopupContent | null>(null);
+  const [rewardPopups, setRewardPopups] = useState<RewardPopupContent[]>([]);
   const [activeConversation, setActiveConversation] = useState<{
     id: ConversationId;
     line: number;
@@ -1755,10 +1755,10 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       battle.level.reward,
     );
     commitProgression(result.state);
-    const popup = result.firstClear
-      ? battleRewardPopup(battle.level.number, Boolean(result.rewardDiscarded))
-      : null;
-    if (popup) setRewardPopup(popup);
+    const popups = result.firstClear
+      ? battleRewardPopups(battle.level.number, Boolean(result.rewardDiscarded))
+      : [];
+    if (popups.length > 0) setRewardPopups(popups);
     else showToast(
       !result.firstClear
         ? `Battle ${battle.level.number} won again! No new rewards. You already took everything that wasn't nailed down.`
@@ -2242,7 +2242,12 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         />
       )}
 
-      {rewardPopup && <RewardPopup content={rewardPopup} onClose={() => setRewardPopup(null)} />}
+      {rewardPopups[0] && (
+        <RewardPopup
+          content={rewardPopups[0]}
+          onClose={() => setRewardPopups((current) => current.slice(1))}
+        />
+      )}
       {activeConversation && (
         <ConversationBox
           beat={conversation(activeConversation.id)[activeConversation.line]}

@@ -896,7 +896,7 @@ function enterExit(
       : destinationRoom.kind === "potionmaster"
         ? "Found a Lost Potionmaster! Every bottle is purple. One is breathing. Another stopped breathing when it noticed you noticing."
       : destinationRoom.kind === "oddityBrewer"
-        ? "Found the Crooked Still. Charles is stirring something chunky with a boot. He has a cleaner boot nearby and deliberately chose this one."
+        ? "Found Charles. He is stirring something chunky with a boot. He has a cleaner boot nearby and deliberately chose this one."
       : destinationRoom.kind === "cartographer"
         ? "Found a Cartographer! His map has three holes where geography should be and a beautiful self-portrait where the key should be."
       : destinationRoom.kind === "angler"
