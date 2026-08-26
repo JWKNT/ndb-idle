@@ -94,4 +94,7 @@ src/features/shell/           Save selection and application-level overlays
 electron/                     Desktop shell
 ```
 
-See [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for dependency boundaries and where new content belongs.
+Start with [`docs/AGENT_GUIDE.md`](docs/AGENT_GUIDE.md) for the project's working rules,
+tone, visual direction, file philosophy, testing, and release process. See
+[`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for detailed dependency boundaries and where
+new content belongs.
