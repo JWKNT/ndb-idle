@@ -2553,11 +2553,10 @@ describe("adventure generation", () => {
     lostRoom.tiles[4][4] = { kind: "rodKeeper" };
     const adventure = {
       ...testAdventure(lostRoom, { x: 3, y: 4 }),
-      questTarget: {
-        questId: "retrieve-lost-item" as const,
-        position: { x: 1, y: 0 },
-        path: [{ x: 1, y: 0 }],
-      },
+      dungeonTheme: "water" as const,
+      lostItemRoomNumber: 8,
+      // Portal dungeons do not inherit the marked route from the earth dungeon.
+      questTarget: null,
     };
     const lost = moveInAdventure(
       adventure,

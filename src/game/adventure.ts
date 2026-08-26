@@ -289,7 +289,13 @@ export function moveInAdventure(
     const completedShopkeeperQuest = tile.kind === "shopkeeper"
       && next.questTarget?.questId === "rescue-shopkeeper";
     const completedFishingRodQuest = (tile.kind === "rodKeeper" || tile.kind === "lostItemChest")
-      && next.questTarget?.questId === "retrieve-lost-item";
+      && (
+        next.questTarget?.questId === "retrieve-lost-item"
+        // The marked route ends at the Water Dungeon portal. The portal dungeon
+        // deliberately has no earth-map quest target of its own; its one-time
+        // lost-item room is the authoritative marker for Rodney's interaction.
+        || (next.dungeonTheme === "water" && next.lostItemRoomNumber !== null)
+      );
     if (completedShopkeeperQuest) next.questTarget = null;
     if (completedFishingRodQuest) next.questTarget = null;
     next.log = [
