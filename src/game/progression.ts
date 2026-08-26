@@ -160,6 +160,8 @@ export {
   setRestartMiningOnFullHp,
 } from "./progression/mining";
 export {
+  CRAFTING_TABLE_COST,
+  PICKAXE_COST,
   beginHammerQuestAttempt,
   discoverBlacksmith,
   failHammerQuestAttempt,

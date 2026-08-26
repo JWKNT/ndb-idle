@@ -279,7 +279,7 @@ describe("progression", () => {
     let state = discoverBlacksmith({
       ...defaultProgression(),
       gold: new Decimal(2_000),
-      materials: { ...defaultProgression().materials, clay: 90, driftwood: 20 },
+      materials: { ...defaultProgression().materials, clay: 90, driftwood: 10 },
     });
     expect(state.shopUnlocked).toBe(true);
     state = purchaseHammerQuest(state).state;
@@ -303,7 +303,12 @@ describe("progression", () => {
     state = returnBlacksmithHammer(recoverBlacksmithHammer(state));
     expect(state.hammerQuestAttemptActive).toBe(false);
     expect(state.hammerQuestFailed).toBe(false);
-    state = { ...state, materials: { ...state.materials, clay: 20, driftwood: 20 } };
+    const shortOnDriftwood = purchasePickaxe({
+      ...state,
+      materials: { ...state.materials, clay: 20, driftwood: 9 },
+    });
+    expect(shortOnDriftwood.error).toMatch(/10 Driftwood/i);
+    state = { ...state, materials: { ...state.materials, clay: 20, driftwood: 10 } };
     state = purchasePickaxe(state).state;
     expect(state.pickaxeOwned).toBe(true);
     expect(state.purchasedQuestIds).toContain("find-miner");
@@ -366,9 +371,13 @@ describe("progression", () => {
         ...defaultProgression().materials,
         "rusty-metal": 20,
         clay: 100,
-        seaweed: 10,
+        seaweed: 5,
       },
     };
+    expect(purchaseCraftingTable({
+      ...state,
+      materials: { ...state.materials, seaweed: 4 },
+    }).error).toMatch(/5 Seaweed/i);
     const result = purchaseCraftingTable(state);
     expect(result.error).toBeUndefined();
     expect(result.state.craftingUnlocked).toBe(true);

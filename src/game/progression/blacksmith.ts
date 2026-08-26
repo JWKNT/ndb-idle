@@ -2,6 +2,19 @@ import Decimal from "break_eternity.js";
 import type { ProgressionState } from "./types";
 import { addInventoryStack } from "@/game/inventory-capacity";
 
+export const PICKAXE_COST = {
+  gold: 2_000,
+  clay: 20,
+  driftwood: 10,
+} as const;
+
+export const CRAFTING_TABLE_COST = {
+  gold: 200_000,
+  "rusty-metal": 20,
+  clay: 100,
+  seaweed: 5,
+} as const;
+
 export function discoverBlacksmith(state: ProgressionState): ProgressionState {
   return state.blacksmithUnlocked && state.shopUnlocked
     ? state
@@ -85,17 +98,19 @@ export function purchasePickaxe(
 ): { state: ProgressionState; error?: string } {
   if (!state.hammerReturned) return { state, error: "Return the Blacksmith's Hammer first." };
   if (state.pickaxeOwned) return { state, error: "The Pickaxe is already owned." };
-  if (state.gold.lt(2_000)) return { state, error: "The Blacksmith needs 2,000 gold." };
-  if (state.materials.clay < 20) return { state, error: "The Blacksmith needs 20 Clay." };
-  if (state.materials.driftwood < 20) return { state, error: "The Blacksmith needs 20 Driftwood." };
+  if (state.gold.lt(PICKAXE_COST.gold)) return { state, error: "The Blacksmith needs 2,000 gold." };
+  if (state.materials.clay < PICKAXE_COST.clay) return { state, error: "The Blacksmith needs 20 Clay." };
+  if (state.materials.driftwood < PICKAXE_COST.driftwood) {
+    return { state, error: "The Blacksmith needs 10 Driftwood." };
+  }
   return {
     state: {
       ...state,
-      gold: state.gold.sub(new Decimal(2_000)),
+      gold: state.gold.sub(new Decimal(PICKAXE_COST.gold)),
       materials: {
         ...state.materials,
-        clay: state.materials.clay - 20,
-        driftwood: state.materials.driftwood - 20,
+        clay: state.materials.clay - PICKAXE_COST.clay,
+        driftwood: state.materials.driftwood - PICKAXE_COST.driftwood,
       },
       pickaxeOwned: true,
       purchasedQuestIds: state.purchasedQuestIds.includes("find-miner")
@@ -134,19 +149,25 @@ export function purchaseCraftingTable(
 ): { state: ProgressionState; error?: string } {
   if (!state.forgeBlueprintsDelivered) return { state, error: "Bring the Blacksmith's Blueprints first." };
   if (state.craftingUnlocked) return { state, error: "The Crafting Table is already owned." };
-  if (state.gold.lt(200_000)) return { state, error: "The Blacksmith needs 200,000 gold." };
-  if (state.materials["rusty-metal"] < 20) return { state, error: "The Blacksmith needs 20 Rusty Metal." };
-  if (state.materials.clay < 100) return { state, error: "The Blacksmith needs 100 Clay." };
-  if (state.materials.seaweed < 10) return { state, error: "The Blacksmith needs 10 Seaweed." };
+  if (state.gold.lt(CRAFTING_TABLE_COST.gold)) return { state, error: "The Blacksmith needs 200,000 gold." };
+  if (state.materials["rusty-metal"] < CRAFTING_TABLE_COST["rusty-metal"]) {
+    return { state, error: "The Blacksmith needs 20 Rusty Metal." };
+  }
+  if (state.materials.clay < CRAFTING_TABLE_COST.clay) {
+    return { state, error: "The Blacksmith needs 100 Clay." };
+  }
+  if (state.materials.seaweed < CRAFTING_TABLE_COST.seaweed) {
+    return { state, error: "The Blacksmith needs 5 Seaweed." };
+  }
   return {
     state: {
       ...state,
-      gold: state.gold.sub(200_000),
+      gold: state.gold.sub(CRAFTING_TABLE_COST.gold),
       materials: {
         ...state.materials,
-        "rusty-metal": state.materials["rusty-metal"] - 20,
-        clay: state.materials.clay - 100,
-        seaweed: state.materials.seaweed - 10,
+        "rusty-metal": state.materials["rusty-metal"] - CRAFTING_TABLE_COST["rusty-metal"],
+        clay: state.materials.clay - CRAFTING_TABLE_COST.clay,
+        seaweed: state.materials.seaweed - CRAFTING_TABLE_COST.seaweed,
       },
       craftingUnlocked: true,
     },

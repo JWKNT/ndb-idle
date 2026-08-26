@@ -4,10 +4,12 @@ import { formatWholeAmount } from "@/game/numbers";
 import {
   ANGLER_MATERIAL_COST,
   anglerMaterialsReady,
+  CRAFTING_TABLE_COST,
   ODDITY_BREWER_MATERIAL_COST,
   ODDITY_BREWER_POTION_REWARD,
   oddityBrewerRequiredMaterials,
   oddityBrewerRequirementsMet,
+  PICKAXE_COST,
   potionmasterMaterialCost,
   potionmasterRequiredMaterials,
   potionmasterRequirementsMet,
@@ -77,10 +79,13 @@ export function BlacksmithShopPopover({
           <Sprite name="pickaxe" />
           <div>
             <strong>Pickaxe</strong>
-            <small>2,000 Gold · 20 Clay · 20 Driftwood</small>
+            <small>{PICKAXE_COST.gold.toLocaleString()} Gold · {PICKAXE_COST.clay} Clay · {PICKAXE_COST.driftwood} Driftwood</small>
           </div>
           <button
-            disabled={progression.pickaxeOwned || progression.gold.lt(2_000) || progression.materials.clay < 20 || progression.materials.driftwood < 20}
+            disabled={progression.pickaxeOwned
+              || progression.gold.lt(PICKAXE_COST.gold)
+              || progression.materials.clay < PICKAXE_COST.clay
+              || progression.materials.driftwood < PICKAXE_COST.driftwood}
             onClick={onPurchasePickaxe}
             type="button"
           >{progression.pickaxeOwned ? "Owned" : "Buy"}</button>
@@ -91,14 +96,14 @@ export function BlacksmithShopPopover({
           <Sprite name="craftingTable" />
           <div>
             <strong>Crafting Table</strong>
-            <small>200,000 Gold · 20 Rusty Metal · 100 Clay · 10 Seaweed</small>
+            <small>{CRAFTING_TABLE_COST.gold.toLocaleString()} Gold · {CRAFTING_TABLE_COST["rusty-metal"]} Rusty Metal · {CRAFTING_TABLE_COST.clay} Clay · {CRAFTING_TABLE_COST.seaweed} Seaweed</small>
           </div>
           <button
             disabled={progression.craftingUnlocked
-              || progression.gold.lt(200_000)
-              || progression.materials["rusty-metal"] < 20
-              || progression.materials.clay < 100
-              || progression.materials.seaweed < 10}
+              || progression.gold.lt(CRAFTING_TABLE_COST.gold)
+              || progression.materials["rusty-metal"] < CRAFTING_TABLE_COST["rusty-metal"]
+              || progression.materials.clay < CRAFTING_TABLE_COST.clay
+              || progression.materials.seaweed < CRAFTING_TABLE_COST.seaweed}
             onClick={onPurchaseCraftingTable}
             type="button"
           >{progression.craftingUnlocked ? "Owned" : "Buy"}</button>

@@ -187,7 +187,7 @@ New save
                                                                 │   │       └── Buy Pickaxe
                                                                 │   │           ├── 2,000 gold
                                                                 │   │           ├── 20 Clay
-                                                                │   │           └── 20 Driftwood
+                                                                │   │           └── 10 Driftwood
                                                                 │   │               └── Find Miner quest
                                                                 │   │                   └── Give Pickaxe to Miner
                                                                 │   │                       ├── Miner joins Party
@@ -215,7 +215,7 @@ New save
                                                                         │                                   ├── 200,000 gold
                                                                         │                                   ├── 20 Rusty Metal
                                                                         │                                   ├── 100 Clay
-                                                                        │                                   └── 10 Seaweed
+                                                                        │                                   └── 5 Seaweed
                                                                         │                                       └── Crafting navigation/activity
                                                                         └── Battle 10 available
                                                                             └── Clear Battle 10 — Rustmire Engine
@@ -263,10 +263,10 @@ numbers and reward must be rebalanced when those paths are implemented.
 | Charles | Clear Battle 7 | 10 Eye of Frog, 10 Mutated Rat Tail, 10 Fire Ant Chitin | Three Level 1 Mystery Potions |
 | Lost Potionmaster | Reach earth ring 4 | 50 Rat Pelt, 50 Ant Chitin, 25 Ink Sac, 25 Fire Alligator Hide | Four random Level 2 Potions and 100 Magic Bait |
 | Blacksmith healing | Clear Battle 8 and find Blacksmith | 50 Clay per purchase | Repeatable 200-HP Adventure consumable |
-| Mining | Clear Battle 8; Hammer and Pickaxe branches | 20 Clay for Hammer quest; then 2,000 gold, 20 Clay, 20 Driftwood | Miner and Mining |
+| Mining | Clear Battle 8; Hammer and Pickaxe branches | 20 Clay for Hammer quest; then 2,000 gold, 20 Clay, 10 Driftwood | Miner and Mining |
 | Dice | Clear Battle 9 | Enter and roll | Repeatable dice rooms |
 | Forge | Clear Battle 9; find Tower door; buy `Enter Tower` | 100,000 gold; clear three arenas | Blueprints, Rusty Metal source, recurring Forge portals |
-| Crafting | Deliver Forge Blueprints | 200,000 gold, 20 Rusty Metal, 100 Clay, 10 Seaweed | Crafting navigation/activity |
+| Crafting | Deliver Forge Blueprints | 200,000 gold, 20 Rusty Metal, 100 Clay, 5 Seaweed | Crafting navigation/activity |
 
 ## Critical material dependency paths
 
