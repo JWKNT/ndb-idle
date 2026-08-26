@@ -248,7 +248,7 @@ describe("prototype content", () => {
     expect(level07.board.height).toBe(9);
     expect(level07.enemies[0].unit).toBe(beastTamer);
     expect(beastTamer.attackRange).toBe(2);
-    expect(beastTamer.stats.speed.eq(40)).toBe(true);
+    expect(beastTamer.stats.speed.eq(34)).toBe(true);
     expect(beastTamer.summonPool).toEqual(["fire-ant", "alligator", "dragonfly", "bee"]);
     expect(beastTamer.invulnerableWhileSummons).toBe(true);
     expect(Object.values(enemies)).toEqual(expect.arrayContaining([

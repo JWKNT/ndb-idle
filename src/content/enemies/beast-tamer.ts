@@ -17,7 +17,7 @@ export const beastTamer: UnitDefinition = {
     defense: new Decimal(35),
     spAttack: new Decimal(10),
     spDefense: new Decimal(34),
-    speed: new Decimal(40),
+    speed: new Decimal(34),
     luck: new Decimal(2),
   },
 };
