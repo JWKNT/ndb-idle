@@ -20,4 +20,10 @@ describe("Battle victory popups", () => {
     expect(popup.description).toContain("Quest obtained: Lost Adventurer.");
     expect(popup.description).not.toContain("Shopkeeper");
   });
+
+  it("keeps the Battle 5 lost item secret", () => {
+    const popup = battleRewardPopup(5);
+    expect(popup.description).toBe("Quest unlocked: Retrieve Lost Item.");
+    expect(popup.description).not.toMatch(/fishing|rod/i);
+  });
 });

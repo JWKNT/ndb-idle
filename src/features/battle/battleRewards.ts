@@ -18,7 +18,7 @@ export function battleRewardPopup(level: number, rewardDiscarded = false): Rewar
   } else if (level === 4) {
     description = "Quest unlocked: Rescue Me. A horrible wet voice is screaming somewhere in the Overgrown Galleries. It sounds expensive.";
   } else if (level === 5) {
-    description = "Quest unlocked: Retrieve Lost Item. A Fishing Rod has been lost SO HARD it left this dimension.";
+    description = "Quest unlocked: Retrieve Lost Item.";
   } else if (level === 6) {
     description = rewardDiscarded
       ? "Backpack full! The Shaman's Ring hit the ground, rolled under the UI, and ceased to exist. Excellent inventory work."
