@@ -1,4 +1,4 @@
-import type { BoardDefinition, Position } from "../../game/types";
+import { defineBoard, type Position } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
 const WIDTH = 27;
@@ -24,7 +24,7 @@ const walls = [
 
 const deploymentTiles = rectangle(0, 5, 5, 5).concat(rectangle(5, 6, 1, 3));
 
-export const rustmireBoard: BoardDefinition = {
+export const rustmireBoard = defineBoard({
   id: "rustmire-board",
   name: "Flooded Foundry",
   width: WIDTH,
@@ -48,4 +48,4 @@ export const rustmireBoard: BoardDefinition = {
     { position: { x: 24, y: 7 }, kind: "rustmireValve" },
     { position: { x: 25, y: 12 }, kind: "rustmirePipeCorner" },
   ],
-};
+});

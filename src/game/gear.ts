@@ -1,13 +1,21 @@
-import type { StatKey, Stats, WeaponAbilityId } from "./types";
+import { WEAPON_ABILITY_IDS, type StatKey, type Stats, type WeaponAbilityId } from "./types";
 
 export const GEAR_SLOTS = ["helmet", "chestplate", "leggings", "boots", "sword", "accessory"] as const;
+export const MILESTONE_GEAR_IDS = ["trident", "undead-gem", "shaman-ring", "suction-cups"] as const;
 export const TRIDENT_THROW_RANGE = 3;
 const TREASURE_GEAR_SLOTS = ["helmet", "chestplate", "leggings", "boots", "sword"] as const;
 export type GearSlot = (typeof GEAR_SLOTS)[number];
+export type MilestoneGearId = (typeof MILESTONE_GEAR_IDS)[number];
+export type MilestoneGearEffect =
+  | "weapon-secondary"
+  | "bait-conservation"
+  | "undead-ward-bypass"
+  | "adventure-damage-teleport"
+  | "retaliatory-paralysis";
 
 export interface GearItem {
   id: string;
-  definitionId?: "trident" | "undead-gem" | "shaman-ring" | "suction-cups";
+  definitionId?: MilestoneGearId;
   name: string;
   slot: GearSlot;
   ring: number;
@@ -67,6 +75,54 @@ export function createSuctionCupsGear(): GearItem {
     power: 12,
     bonuses: { defense: 12, spDefense: 12 },
   };
+}
+
+/**
+ * Every one-off gear identity must declare its actual cross-system effects and
+ * construction path. Adding one cannot stop at a name and sprite.
+ */
+export const MILESTONE_GEAR_EFFECTS: Record<MilestoneGearId, readonly MilestoneGearEffect[]> = {
+  trident: ["weapon-secondary", "bait-conservation"],
+  "undead-gem": ["undead-ward-bypass"],
+  "shaman-ring": ["adventure-damage-teleport"],
+  "suction-cups": ["retaliatory-paralysis"],
+};
+
+/** Named runtime owners make bespoke cross-system behavior part of the contract. */
+export const MILESTONE_GEAR_EFFECT_OWNERS: Record<MilestoneGearEffect, string> = {
+  "weapon-secondary": "battle/playerSetup + adventure/sessionController",
+  "bait-conservation": "progression/fishing",
+  "undead-ward-bypass": "battle/playerSetup + combat",
+  "adventure-damage-teleport": "adventure/sessionController",
+  "retaliatory-paralysis": "battle/playerSetup + combat + adventure/sessionController",
+};
+
+const MILESTONE_GEAR_FACTORIES: Record<MilestoneGearId, () => GearItem> = {
+  trident: createTridentGear,
+  "undead-gem": createUndeadGemGear,
+  "shaman-ring": createShamanRingGear,
+  "suction-cups": createSuctionCupsGear,
+};
+
+export function createMilestoneGear(id: MilestoneGearId): GearItem {
+  return MILESTONE_GEAR_FACTORIES[id]();
+}
+
+export function milestoneGearIdForSavedItem(
+  definitionId: unknown,
+  itemId: unknown,
+): MilestoneGearId | null {
+  for (const id of MILESTONE_GEAR_IDS) {
+    if (definitionId === id || itemId === createMilestoneGear(id).id) return id;
+  }
+  return null;
+}
+
+export function milestoneGearHasEffect(
+  item: GearItem | null | undefined,
+  effect: MilestoneGearEffect,
+): boolean {
+  return Boolean(item?.definitionId && MILESTONE_GEAR_EFFECTS[item.definitionId].includes(effect));
 }
 
 export type Equipment = Record<GearSlot, string | null>;
@@ -260,7 +316,5 @@ export function isGearSlot(value: unknown): value is GearSlot {
 }
 
 export function isWeaponAbilityId(value: unknown): value is WeaponAbilityId {
-  return typeof value === "string" && [
-    "sweep", "heavy-slam", "burst-staff", "rapid-staff", "trident-throw",
-  ].includes(value);
+  return typeof value === "string" && WEAPON_ABILITY_IDS.includes(value as WeaponAbilityId);
 }

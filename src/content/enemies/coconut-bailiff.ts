@@ -1,8 +1,8 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
 /** Placeholder Battle 11 tuning: intentionally far beyond a Battle 10 build. */
-export const coconutBailiff: UnitDefinition = {
+export const coconutBailiff = defineUnit({
   id: "coconut-bailiff",
   name: "Coconut Bailiff",
   attackName: "Official Bonk",
@@ -18,4 +18,4 @@ export const coconutBailiff: UnitDefinition = {
     speed: new Decimal(220),
     luck: new Decimal(0),
   },
-};
+});

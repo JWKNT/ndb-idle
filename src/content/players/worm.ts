@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const worm: UnitDefinition = {
+export const worm = defineUnit({
   id: "worm",
   name: "Worm",
   attackRange: 4,
@@ -18,4 +18,4 @@ export const worm: UnitDefinition = {
     speed: new Decimal(6),
     luck: new Decimal(3),
   },
-};
+});

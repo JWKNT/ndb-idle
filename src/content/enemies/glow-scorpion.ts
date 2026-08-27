@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const glowScorpion: UnitDefinition = {
+export const glowScorpion = defineUnit({
   id: "glow-scorpion",
   name: "Glow Scorpion",
   attackName: "Lantern Sting",
@@ -15,4 +15,4 @@ export const glowScorpion: UnitDefinition = {
     speed: new Decimal(24),
     luck: new Decimal(0),
   },
-};
+});

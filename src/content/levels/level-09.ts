@@ -1,4 +1,4 @@
-import type { LevelDefinition, Position } from "../../game/types";
+import { defineLevel, type Position } from "../../game/types";
 import { oozeBoard } from "../boards/ooze-board";
 import { abyssalOoze } from "../enemies/abyssal-ooze";
 import { oozeGuardian } from "../enemies/ooze-guardian";
@@ -16,7 +16,7 @@ const standardMobPositions: Position[] = [
   { x: 17, y: 2 }, { x: 17, y: 10 },
 ];
 
-export const level09: LevelDefinition = {
+export const level09 = defineLevel({
   number: 9,
   name: "Abyssal Ooze",
   description: "Defeat the Guardians to weaken the Abyssal Ooze.",
@@ -40,4 +40,4 @@ export const level09: LevelDefinition = {
     })),
     { instanceId: "battle-boss-abyssal-ooze", unit: abyssalOoze, position: { x: 15, y: 6 } },
   ],
-};
+});

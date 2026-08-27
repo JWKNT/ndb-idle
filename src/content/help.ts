@@ -1,6 +1,7 @@
 import type { ProgressionState } from "@/game/progression";
 
-export type HelpGroupId = "basics" | "party" | "adventure" | "fishing" | "workshop" | "records";
+export const HELP_GROUP_IDS = ["basics", "party", "adventure", "fishing", "workshop", "records"] as const;
+export type HelpGroupId = (typeof HELP_GROUP_IDS)[number];
 
 export interface HelpGroup {
   id: HelpGroupId;

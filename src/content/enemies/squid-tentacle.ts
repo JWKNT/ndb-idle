@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const squidTentacle: UnitDefinition = {
+export const squidTentacle = defineUnit({
   id: "squid-tentacle",
   name: "Squid Tentacle",
   attackRange: 3,
@@ -18,4 +18,4 @@ export const squidTentacle: UnitDefinition = {
     speed: new Decimal(18),
     luck: new Decimal(0),
   },
-};
+});

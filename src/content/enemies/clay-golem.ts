@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const clayGolem: UnitDefinition = {
+export const clayGolem = defineUnit({
   id: "clay-golem",
   name: "Clay Golem",
   attackRange: 99,
@@ -20,4 +20,4 @@ export const clayGolem: UnitDefinition = {
     speed: new Decimal(4),
     luck: new Decimal(0),
   },
-};
+});

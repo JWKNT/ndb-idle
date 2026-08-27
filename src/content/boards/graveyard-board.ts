@@ -1,7 +1,7 @@
-import type { BoardDefinition, Position } from "../../game/types";
+import { defineBoard, type Position } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
-export const graveyardBoard: BoardDefinition = {
+export const graveyardBoard = defineBoard({
   id: "graveyard-board",
   name: "Mossy Graveyard",
   width: 10,
@@ -18,7 +18,7 @@ export const graveyardBoard: BoardDefinition = {
     // beyond it so the enemy side no longer feels pinched against the frame.
     { position: { x: 8, y: 3 }, kind: "graveRoyalBanner" },
   ],
-};
+});
 
 export const graveyardRandomSpawnPositions: Position[] = [
   { x: 1, y: 2 }, { x: 3, y: 2 }, { x: 5, y: 2 },

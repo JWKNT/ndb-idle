@@ -1,11 +1,11 @@
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 import { graveyardBoard, graveyardRandomSpawnPositions } from "../boards/graveyard-board";
 import { skeletonGiraffe } from "../enemies/skeleton-giraffe";
 import { skeletonHippo } from "../enemies/skeleton-hippo";
 import { skeletonPrince } from "../enemies/skeleton-prince";
 import { skeletonRhino } from "../enemies/skeleton-rhino";
 
-export const level03: LevelDefinition = {
+export const level03 = defineLevel({
   number: 3,
   name: "Skele-Prince",
   description: "Defeat the Skele-Prince and its guards.",
@@ -22,4 +22,4 @@ export const level03: LevelDefinition = {
     { instanceId: "battle-skele-rhino-1", unit: skeletonRhino, position: { x: 5, y: 2 } },
     { instanceId: "battle-boss-skele-prince", unit: skeletonPrince, position: { x: 7, y: 3 } },
   ],
-};
+});

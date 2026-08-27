@@ -1,8 +1,8 @@
 import { graveyardBoard } from "../boards/graveyard-board";
 import { undertaker } from "../enemies/undertaker";
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 
-export const level01: LevelDefinition = {
+export const level01 = defineLevel({
   number: 1,
   name: "Undertaker",
   description: "Defeat the Undertaker.",
@@ -19,4 +19,4 @@ export const level01: LevelDefinition = {
       position: { x: 7, y: 3 },
     },
   ],
-};
+});

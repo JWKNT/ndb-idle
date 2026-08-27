@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const octopus: UnitDefinition = {
+export const octopus = defineUnit({
   id: "octopus",
   name: "Octopus",
   attackRange: 2,
@@ -17,4 +17,4 @@ export const octopus: UnitDefinition = {
     speed: new Decimal(20),
     luck: new Decimal(0),
   },
-};
+});

@@ -1,10 +1,10 @@
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 import { squidBoard, squidKnightPositions, squidTentaclePositions } from "../boards/squid-board";
 import { abyssalSquid } from "../enemies/abyssal-squid";
 import { squidKnight } from "../enemies/squid-knight";
 import { squidTentacle } from "../enemies/squid-tentacle";
 
-export const level08: LevelDefinition = {
+export const level08 = defineLevel({
   number: 8,
   name: "Abyssal Squid",
   description: "Defeat the Tentacles, then defeat the Abyssal Squid.",
@@ -24,4 +24,4 @@ export const level08: LevelDefinition = {
     })),
     { instanceId: "battle-boss-abyssal-squid", unit: abyssalSquid, position: { x: 13, y: 6 } },
   ],
-};
+});

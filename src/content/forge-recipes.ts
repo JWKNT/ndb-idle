@@ -6,9 +6,10 @@ export const FORGE_EQUIPMENT_RECIPE_IDS = [
   "sword",
   "heavy-sword",
 ] as const;
+export const FORGE_RECIPE_IDS = [...FORGE_EQUIPMENT_RECIPE_IDS, "tower-key"] as const;
 
 export type ForgeEquipmentRecipeId = (typeof FORGE_EQUIPMENT_RECIPE_IDS)[number];
-export type ForgeRecipeId = ForgeEquipmentRecipeId | "tower-key";
+export type ForgeRecipeId = (typeof FORGE_RECIPE_IDS)[number];
 export type ForgeRecipeSymbol = "X" | "R" | "F" | "D" | "G";
 export type ForgeRecipePattern = readonly [string, string, string, string];
 

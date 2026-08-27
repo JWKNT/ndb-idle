@@ -3,6 +3,39 @@ import { getEnemy, goblin } from "@/content/enemies";
 import type { MaterialId } from "@/game/items";
 import type { Stats } from "@/game/types";
 import type { AdventureEnemyKind, AdventureState, DungeonRoom } from "./types";
+import { DUNGEON_THEME_BASE_ENEMIES } from "./extension-contracts";
+
+/** Every Adventure enemy makes an explicit loot decision, including none. */
+export const ADVENTURE_ENEMY_DROPS: Record<AdventureEnemyKind, MaterialId | null> = {
+  rat: "rat-pelt",
+  ant: "ant-chitin",
+  "clay-golem": "clay",
+  goblin: null,
+  "goblin-archer": null,
+  spider: null,
+  octopus: "ink-sac",
+  merman: null,
+  skeleton: null,
+  "skeleton-giraffe": null,
+  "skeleton-hippo": null,
+  "skeleton-rhino": null,
+  "skeleton-brachiosaurus": null,
+  "squid-knight": null,
+  "fire-ant": "fire-ant-chitin",
+  alligator: null,
+  dragonfly: null,
+  bee: null,
+  mummy: null,
+  "fire-alligator": "fire-alligator-hide",
+  mimic: null,
+  forgeling: "rusty-metal",
+  "chain-forgeling": "rusty-metal",
+  "bellows-forgeling": "rusty-metal",
+  "hammer-forgeling": "rusty-metal",
+  "dire-rat": "mutated-rat-tail",
+  "soldier-ant": "ant-chitin",
+  "sewer-toad": "eye-of-frog",
+};
 
 export function adventureEnemyStats(
   ring: number,
@@ -71,22 +104,11 @@ export function enemyKindForAdventure(
   state: AdventureState,
   room: DungeonRoom = state.rooms[state.currentRoomKey],
 ): AdventureEnemyKind {
-  if ((state.dungeonTheme ?? "earth") === "water") return "octopus";
-  if (state.dungeonTheme === "forge") return "forgeling";
+  const themedEnemy = DUNGEON_THEME_BASE_ENEMIES[state.dungeonTheme ?? "earth"];
+  if (themedEnemy) return themedEnemy;
   return enemyKindForRing(room.ring);
 }
 
 export function materialForAdventureEnemy(kind: AdventureEnemyKind): MaterialId | null {
-  if (kind === "dire-rat") return "mutated-rat-tail";
-  if (kind === "sewer-toad") return "eye-of-frog";
-  if (kind === "fire-ant") return "fire-ant-chitin";
-  if (kind === "rat") return "rat-pelt";
-  if (kind === "ant" || kind === "soldier-ant") return "ant-chitin";
-  if (kind === "octopus") return "ink-sac";
-  if (kind === "clay-golem") return "clay";
-  if (kind === "fire-alligator") return "fire-alligator-hide";
-  if (["forgeling", "chain-forgeling", "bellows-forgeling", "hammer-forgeling"].includes(kind)) {
-    return "rusty-metal";
-  }
-  return null;
+  return ADVENTURE_ENEMY_DROPS[kind];
 }

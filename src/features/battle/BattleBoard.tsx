@@ -15,9 +15,10 @@ import {
   unitAt,
 } from "@/game/combat";
 import { formatWholeAmount } from "@/game/numbers";
-import type { BattleState, Position } from "@/game/types";
+import type { BattleState, PlayerId, Position } from "@/game/types";
 import type { SpriteName } from "@/content/sprites";
 import { enemySprite } from "@/content/enemy-sprites";
+import { playerSprite } from "@/content/player-sprites";
 import { Sprite } from "@/features/shared/Sprite";
 import {
   AttackEffectOverlay,
@@ -346,7 +347,9 @@ export function BattleBoard({ battle, manualEnabled, onTile, onSecondaryTile }: 
                     />
                   </span>
                   <span className={`entity-frame entity-${unit.team === "player" ? "friendly" : "hostile"}`}>
-                    <Sprite name={unit.team === "player" ? unit.definitionId as "knight" | "worm" : enemySprite(unit.definitionId)} />
+                    <Sprite name={unit.team === "player"
+                      ? playerSprite(unit.definitionId as PlayerId)
+                      : enemySprite(unit.definitionId)} />
                   </span>
                   {unit.paralyzedTurns > 0 && (
                     <span aria-label={`${unit.name} is paralyzed`} className="paralysis-status">⚡</span>

@@ -294,6 +294,9 @@ function mineSelectedRock(
     } else if (rock.content === "key") {
       next.hasKey = true;
       next.log = ["Found the room key inside a rock.", ...next.log].slice(0, 8);
+    } else if (rock.content !== "empty") {
+      const unhandled: never = rock.content;
+      throw new Error(`Unhandled Mining rock content: ${unhandled}`);
     }
   }
   const exhausted = stamina.lte(0);

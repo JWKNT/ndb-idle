@@ -35,6 +35,7 @@ export const POTION_IDS = [
 export type PotionId = (typeof POTION_IDS)[number];
 export type PotionCounts = Record<PotionId, number>;
 export type ActivePotionEffects = Partial<Record<PotionId, number>>;
+export type PotionEffectKind = "stat" | "haste" | "mystery";
 
 export interface ActiveMysteryPotionEffect {
   positive: [StandardLevelOnePotionId, StandardLevelOnePotionId];
@@ -51,6 +52,7 @@ export interface PotionDefinition {
   stat: StatKey | null;
   statBonus: number;
   speedMultiplier: number;
+  effectKind: PotionEffectKind;
 }
 
 function statPotion(
@@ -69,6 +71,7 @@ function statPotion(
     stat,
     statBonus: bonus,
     speedMultiplier: 1,
+    effectKind: "stat",
   };
 }
 
@@ -82,6 +85,7 @@ function hastePotion(id: PotionId, level: 1 | 2, multiplier: number): PotionDefi
     stat: null,
     statBonus: 0,
     speedMultiplier: multiplier,
+    effectKind: "haste",
   };
 }
 
@@ -104,6 +108,7 @@ export const POTION_META: Record<PotionId, PotionDefinition> = {
     stat: null,
     statBonus: 0,
     speedMultiplier: 1,
+    effectKind: "mystery",
   },
   "haste-2": hastePotion("haste-2", 2, 1.2),
   "stat-hp-2": statPotion("stat-hp-2", "HP", "hp", 2, 100),

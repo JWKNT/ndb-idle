@@ -33,6 +33,7 @@ import { STORY_DIALOGUE } from "@/content/story-dialogue";
 import type { AdventureSession } from "@/game/adventure/session";
 import type { AdventureStrategy, PlayerId } from "@/game/types";
 import { FISH_META, FISH_STATS } from "@/game/items";
+import { milestoneGearHasEffect } from "@/game/gear";
 import type { StatKey } from "@/game/types";
 import { ESCAPE_ROPE_LEVELS, type EscapeRopeLevel } from "@/game/escape-ropes";
 import type { QuestId } from "@/content/quests";
@@ -150,7 +151,7 @@ export function AdventureView({
   const memberId = adventure?.playerId ?? progression.selectedAdventureMembers[0] ?? "knight";
   const equippedWeaponId = memberEquipment(progression, memberId).sword;
   const equippedWeapon = progression.inventory.find((item) => item.id === equippedWeaponId);
-  const hasTrident = equippedWeapon?.definitionId === "trident";
+  const hasTrident = milestoneGearHasEffect(equippedWeapon, "weapon-secondary");
   const weaponAbilityId = equippedWeapon?.weaponAbilityId;
   const cartographerQuestAvailable = Boolean(adventure?.cartographerSurveyTargets?.length);
   const strategyOptions = availableAdventureStrategies(progression, cartographerQuestAvailable);

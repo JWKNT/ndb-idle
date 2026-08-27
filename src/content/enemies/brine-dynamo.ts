@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const brineDynamo: UnitDefinition = {
+export const brineDynamo = defineUnit({
   id: "brine-dynamo",
   name: "Brine Dynamo",
   hideFromBestiary: true,
@@ -21,4 +21,4 @@ export const brineDynamo: UnitDefinition = {
     speed: new Decimal(5),
     luck: new Decimal(0),
   },
-};
+});

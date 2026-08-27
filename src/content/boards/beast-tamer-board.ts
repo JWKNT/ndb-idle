@@ -1,11 +1,11 @@
-import type { BoardDefinition, Position } from "../../game/types";
+import { defineBoard, type Position } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
 const gaps: Position[] = Array.from({ length: 3 }, (_, row) =>
   Array.from({ length: 5 }, (_, column) => ({ x: column + 4, y: row + 3 })),
 ).flat();
 
-export const beastTamerBoard: BoardDefinition = {
+export const beastTamerBoard = defineBoard({
   id: "beast-tamer-board",
   name: "Canopy Menagerie",
   width: 13,
@@ -25,4 +25,4 @@ export const beastTamerBoard: BoardDefinition = {
     { position: { x: 9, y: 4 }, kind: "goblinPatchedPlanks" },
     { position: { x: 11, y: 7 }, kind: "goblinRopeCoil" },
   ],
-};
+});

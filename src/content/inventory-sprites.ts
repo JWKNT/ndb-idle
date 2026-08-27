@@ -1,4 +1,4 @@
-import type { GearItem, GearSlot } from "../game/gear";
+import type { GearItem, GearSlot, MilestoneGearId } from "../game/gear";
 import type { MaterialId } from "../game/items";
 import type { PotionId } from "../game/potions";
 import type { EscapeRopeLevel } from "../game/escape-ropes";
@@ -14,11 +14,15 @@ export const GEAR_SPRITES: Record<GearSlot, SpriteName> = {
   accessory: "gearUndeadGem",
 };
 
+export const MILESTONE_GEAR_SPRITES: Record<MilestoneGearId, SpriteName> = {
+  trident: "gearTrident",
+  "undead-gem": "gearUndeadGem",
+  "shaman-ring": "gearShamanRing",
+  "suction-cups": "gearSuctionCups",
+};
+
 export function gearSprite(item: GearItem): SpriteName {
-  if (item.definitionId === "trident") return "gearTrident";
-  if (item.definitionId === "undead-gem") return "gearUndeadGem";
-  if (item.definitionId === "shaman-ring") return "gearShamanRing";
-  if (item.definitionId === "suction-cups") return "gearSuctionCups";
+  if (item.definitionId) return MILESTONE_GEAR_SPRITES[item.definitionId];
   if (item.slot === "accessory") return GEAR_SPRITES.accessory;
   const level = Math.min(4, Math.max(1, Math.floor(item.ring))) as 1 | 2 | 3 | 4;
   if (item.weaponAbilityId === "heavy-slam") return HEAVY_SWORD_SPRITES[level];
@@ -97,7 +101,20 @@ export const FISH_SPRITES: Record<StatKey, SpriteName> = {
   luck: "fishFortunateFlounder",
 };
 
-export const KEY_ITEM_SPRITES = {
+export const KEY_ITEM_IDS = [
+  "fishingRod",
+  "loweringRope",
+  "blacksmithHammer",
+  "pickaxe",
+  "bestiary",
+  "blacksmithBlueprints",
+  "craftingTable",
+  "towerKey",
+  "tackleBox",
+] as const;
+export type KeyItemId = (typeof KEY_ITEM_IDS)[number];
+
+export const KEY_ITEM_SPRITES: Record<KeyItemId, SpriteName> = {
   fishingRod: "fishingRod",
   loweringRope: "loweringRope",
   blacksmithHammer: "blacksmithHammer",
@@ -107,7 +124,7 @@ export const KEY_ITEM_SPRITES = {
   craftingTable: "craftingTable",
   towerKey: "towerKey",
   tackleBox: "tackleBox",
-} as const satisfies Record<string, SpriteName>;
+};
 
 export const ESCAPE_ROPE_SPRITES: Record<EscapeRopeLevel, SpriteName> = {
   1: "escapeRope1",

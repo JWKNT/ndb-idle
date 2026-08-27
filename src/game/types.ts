@@ -5,38 +5,61 @@ export const HOME_ZONE_BONUS = 1.25;
 export type Team = "player" | "enemy";
 export type Terrain = "player" | "neutral" | "enemy";
 export type BattleStatus = "deploying" | "fighting" | "won" | "lost";
-export type PlayerId = "knight" | "worm" | "miner";
-export type AdventureStrategy = "none" | "quest" | "together" | "split" | "ring";
-export type AdventureDungeonId = "starting" | "great-tower";
-export type PortalType = "water" | "forge";
-export type AdventureAutoPauseRoom = "blacksmith" | "potionmaster" | "oddityBrewer" | "cartographer" | "angler" | "towerExterior";
+export const PLAYER_IDS = ["knight", "worm", "miner"] as const;
+export type PlayerId = (typeof PLAYER_IDS)[number];
+export const ADVENTURE_STRATEGIES = ["none", "quest", "together", "split", "ring"] as const;
+export type AdventureStrategy = (typeof ADVENTURE_STRATEGIES)[number];
+export const ADVENTURE_DUNGEON_IDS = ["starting", "great-tower"] as const;
+export type AdventureDungeonId = (typeof ADVENTURE_DUNGEON_IDS)[number];
+export const PORTAL_TYPES = ["water", "forge"] as const;
+export type PortalType = (typeof PORTAL_TYPES)[number];
+export const ADVENTURE_AUTO_PAUSE_ROOMS = [
+  "blacksmith",
+  "potionmaster",
+  "oddityBrewer",
+  "cartographer",
+  "angler",
+  "towerExterior",
+] as const;
+export type AdventureAutoPauseRoom = (typeof ADVENTURE_AUTO_PAUSE_ROOMS)[number];
 export type AttackType = "physical" | "special";
 export type AttackPattern = "orthogonal" | "eight-way" | "any";
 export type AttackArea = "single" | "front-three";
-export type WeaponAbilityId = "sweep" | "heavy-slam" | "burst-staff" | "rapid-staff" | "trident-throw";
-export type AttackVisualId =
-  | "knight-slash"
-  | "worm-acid"
-  | "miner-pick"
-  | "sword-sweep"
-  | "heavy-slam"
-  | "burst-orb"
-  | "rapid-bolt"
-  | "trident-throw"
-  | "fire"
-  | "abyssal"
-  | "magic"
-  | "physical";
+export const WEAPON_ABILITY_IDS = [
+  "sweep",
+  "heavy-slam",
+  "burst-staff",
+  "rapid-staff",
+  "trident-throw",
+] as const;
+export type WeaponAbilityId = (typeof WEAPON_ABILITY_IDS)[number];
+export const ATTACK_VISUAL_IDS = [
+  "knight-slash",
+  "worm-acid",
+  "miner-pick",
+  "sword-sweep",
+  "heavy-slam",
+  "burst-orb",
+  "rapid-bolt",
+  "trident-throw",
+  "fire",
+  "abyssal",
+  "magic",
+  "physical",
+] as const;
+export type AttackVisualId = (typeof ATTACK_VISUAL_IDS)[number];
 export type HorizontalFacing = "left" | "right";
-export type StatKey =
-  | "hp"
-  | "stamina"
-  | "attack"
-  | "defense"
-  | "spAttack"
-  | "spDefense"
-  | "speed"
-  | "luck";
+export const STAT_KEYS = [
+  "hp",
+  "stamina",
+  "attack",
+  "defense",
+  "spAttack",
+  "spDefense",
+  "speed",
+  "luck",
+] as const;
+export type StatKey = (typeof STAT_KEYS)[number];
 
 export interface Position {
   x: number;
@@ -44,62 +67,64 @@ export interface Position {
 }
 
 /** Visual-only scenery. These never affect collision, targeting, or rewards. */
-export type SceneryKind =
-  | "graveCracked"
-  | "graveBonePile"
-  | "graveCandles"
-  | "graveFence"
-  | "graveRoyalBanner"
-  | "goblinPatchedPlanks"
-  | "goblinBanner"
-  | "goblinTarget"
-  | "goblinRopeCoil"
-  | "drownedKelp"
-  | "drownedCoral"
-  | "drownedMast"
-  | "drownedBarnacles"
-  | "drownedOozeSlick"
-  | "drownedPylon"
-  | "rustmirePipeStraight"
-  | "rustmirePipeCorner"
-  | "rustmirePipeJunction"
-  | "rustmireValve"
-  | "rustmireGrate"
-  | "rustmirePuddle"
-  | "rustmireLamp"
-  | "beachPalm"
-  | "beachShells"
-  | "beachDriftwood"
-  | "earthRopeAnchor"
-  | "earthSewerGrate"
-  | "earthLeakingPipe"
-  | "earthRatNest"
-  | "earthAntMound"
-  | "earthEggCluster"
-  | "earthResinPatch"
-  | "earthBurialUrn"
-  | "earthFossil"
-  | "earthPotteryShards"
-  | "earthLavaVent"
-  | "earthBasaltSpire"
-  | "earthEmberPile"
-  | "cartographerScrolls"
-  | "cartographerCompass"
-  | "cartographerTripod"
-  | "anglerBaitBarrel"
-  | "anglerFishRack"
-  | "potionHerbs"
-  | "potionBottleCrate"
-  | "gardenHedge"
-  | "gardenLeaves"
-  | "gardenLantern"
-  | "towerBanner"
-  | "miningRails"
-  | "miningMinecart"
-  | "miningTimber"
-  | "miningLantern"
-  | "miningOreVein"
-  | "miningRubble";
+export const SCENERY_KINDS = [
+  "graveCracked",
+  "graveBonePile",
+  "graveCandles",
+  "graveFence",
+  "graveRoyalBanner",
+  "goblinPatchedPlanks",
+  "goblinBanner",
+  "goblinTarget",
+  "goblinRopeCoil",
+  "drownedKelp",
+  "drownedCoral",
+  "drownedMast",
+  "drownedBarnacles",
+  "drownedOozeSlick",
+  "drownedPylon",
+  "rustmirePipeStraight",
+  "rustmirePipeCorner",
+  "rustmirePipeJunction",
+  "rustmireValve",
+  "rustmireGrate",
+  "rustmirePuddle",
+  "rustmireLamp",
+  "beachPalm",
+  "beachShells",
+  "beachDriftwood",
+  "earthRopeAnchor",
+  "earthSewerGrate",
+  "earthLeakingPipe",
+  "earthRatNest",
+  "earthAntMound",
+  "earthEggCluster",
+  "earthResinPatch",
+  "earthBurialUrn",
+  "earthFossil",
+  "earthPotteryShards",
+  "earthLavaVent",
+  "earthBasaltSpire",
+  "earthEmberPile",
+  "cartographerScrolls",
+  "cartographerCompass",
+  "cartographerTripod",
+  "anglerBaitBarrel",
+  "anglerFishRack",
+  "potionHerbs",
+  "potionBottleCrate",
+  "gardenHedge",
+  "gardenLeaves",
+  "gardenLantern",
+  "towerBanner",
+  "miningRails",
+  "miningMinecart",
+  "miningTimber",
+  "miningLantern",
+  "miningOreVein",
+  "miningRubble",
+] as const;
+export type SceneryKind = (typeof SCENERY_KINDS)[number];
 
 export interface SceneryPlacement {
   position: Position;
@@ -217,6 +242,13 @@ export interface UnitDefinition {
   stats: Stats;
 }
 
+/** Preserve a definition's literal identity while exposing its broad shape. */
+export function defineUnit<const Id extends string>(
+  definition: UnitDefinition & { id: Id },
+): UnitDefinition & { readonly id: Id } {
+  return definition;
+}
+
 export interface UnitSpawn {
   instanceId: string;
   unit: UnitDefinition;
@@ -238,6 +270,12 @@ export interface BoardDefinition {
   floorTheme?: "grass" | "planks" | "leaves" | "abyssal-metal" | "sand";
   wallTheme?: "tombstone" | "stone" | "tree-stump" | "pressure-vat";
   decorations?: SceneryPlacement[];
+}
+
+export function defineBoard<const Id extends string>(
+  definition: BoardDefinition & { id: Id },
+): BoardDefinition & { readonly id: Id } {
+  return definition;
 }
 
 export type CombatAction =
@@ -262,6 +300,12 @@ export interface LevelDefinition {
   randomSpawnInstanceIds?: string[];
 }
 
+export function defineLevel<const Number extends number>(
+  definition: LevelDefinition & { number: Number },
+): LevelDefinition & { readonly number: Number } {
+  return definition;
+}
+
 export interface BattleState {
   level: LevelDefinition;
   units: Unit[];
@@ -282,17 +326,6 @@ export interface BattleState {
   } | null;
   hazards: BattleHazard[];
 }
-
-export const STAT_KEYS: StatKey[] = [
-  "hp",
-  "stamina",
-  "attack",
-  "defense",
-  "spAttack",
-  "spDefense",
-  "speed",
-  "luck",
-];
 
 export const STAT_META: Record<
   StatKey,

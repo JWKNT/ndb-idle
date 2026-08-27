@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const gloomWisp: UnitDefinition = {
+export const gloomWisp = defineUnit({
   id: "gloom-wisp",
   name: "Gloom Wisp",
   attackName: "Cold Flame",
@@ -15,4 +15,4 @@ export const gloomWisp: UnitDefinition = {
     speed: new Decimal(28),
     luck: new Decimal(0),
   },
-};
+});

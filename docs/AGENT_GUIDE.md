@@ -269,6 +269,36 @@ Do not hide game rules in Electron-specific code.
   one-off in a view when it is clearly the first instance of a scaling mechanic.
 - Never edit `dist`, `release`, `node_modules`, build-info files, or other generated output.
 
+### Extensibility contracts
+
+Any system that can gain “another one” is a closed registry until deliberately extended.
+Do not add an enemy, party member, Battle, board, quest, material, potion, milestone item,
+weapon ability, attack visual, or activity-specific enemy by changing only the first file
+that makes it appear on screen.
+
+- Use the identity-preserving `defineUnit`, `defineBoard`, and `defineLevel` helpers for
+  authored definitions. They keep literal IDs available to exhaustive registries while
+  exposing stable broad interfaces to runtime code.
+- Register authored content in its existing index. The filesystem-discovery checks in
+  `src/content/extension-contracts.test.ts` fail when a definition file is authored but
+  omitted from its registry.
+- Model every downstream decision with a typed exhaustive `Record` or discriminated
+  contract. An intentional lack of behavior must be represented explicitly by `none`,
+  `null`, or an empty effect list; never rely on a default fallthrough.
+- Unique content still needs a contract. Milestone gear declares effect traits, Battles
+  declare first-clear effects and notices, quests declare completion effects, Adventure
+  enemies declare drops (including no drop), potions declare an effect family, and attack
+  visuals declare area/projectile presentation.
+- Derive unions from canonical `as const` ID arrays or identity-preserving registries.
+  Avoid `Record<string, ...>` and fallback sprites for a closed content set; those hide
+  omissions from TypeScript.
+- When introducing a genuinely new effect family, extend its discriminated union, add the
+  owning runtime handler, and add a focused behavioral test. The registry-wide contract
+  test is a completeness gate, not a substitute for verifying the unique behavior.
+
+If a future scalable system does not fit an existing contract, add a new exhaustive
+contract and include it in `extension-contracts.test.ts` in the same change.
+
 ## Numbers and persistence
 
 Use `break_eternity.js` `Decimal` values for scalable stats, prices, gold, damage, and other

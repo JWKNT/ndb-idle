@@ -1,5 +1,5 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
 /**
  * Battle 11 is a visible future wall, not a currently balanced encounter.
@@ -8,7 +8,7 @@ import type { UnitDefinition } from "../../game/types";
  * reference: Save 3's late-Battle-10 Knight had about 1,092 HP and 375 Attack;
  * these numbers are intentionally many progression steps beyond that build.
  */
-export const vacationEmperor: UnitDefinition = {
+export const vacationEmperor = defineUnit({
   id: "vacation-emperor",
   name: "Vacation Emperor",
   attackRange: 5,
@@ -27,4 +27,4 @@ export const vacationEmperor: UnitDefinition = {
     speed: new Decimal(400),
     luck: new Decimal(0),
   },
-};
+});

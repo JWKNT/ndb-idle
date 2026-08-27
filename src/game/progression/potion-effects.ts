@@ -44,7 +44,8 @@ export function consumePotion(
   random: () => number = Math.random,
 ): { state: ProgressionState; mysteryEffect?: ActiveMysteryPotionEffect; error?: string } {
   if ((state.potions?.[potionId] ?? 0) <= 0) return { state, error: "That potion is not in inventory." };
-  if (potionId === "mystery-1") {
+  const potion = POTION_META[potionId];
+  if (potion.effectKind === "mystery") {
     const candidates = [...STANDARD_LEVEL_ONE_POTION_IDS];
     for (let index = candidates.length - 1; index > 0; index -= 1) {
       const roll = Math.max(0, Math.min(0.999999, random()));
@@ -61,12 +62,16 @@ export function consumePotion(
         ...state,
         potions: {
           ...(state.potions ?? emptyPotionCounts()),
-          "mystery-1": (state.potions?.["mystery-1"] ?? 0) - 1,
+          [potionId]: (state.potions?.[potionId] ?? 0) - 1,
         },
         activeMysteryPotions: [...(state.activeMysteryPotions ?? []), mysteryEffect],
       },
       mysteryEffect,
     };
+  }
+  if (potion.effectKind !== "stat" && potion.effectKind !== "haste") {
+    const unhandled: never = potion.effectKind;
+    throw new Error(`Unhandled potion effect kind: ${unhandled}`);
   }
   const currentExpiry = state.activePotions?.[potionId] ?? now;
   return {

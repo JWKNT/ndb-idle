@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const skeleton: UnitDefinition = {
+export const skeleton = defineUnit({
   id: "skeleton",
   name: "Skeleton",
   isRaidBoss: true,
@@ -15,4 +15,4 @@ export const skeleton: UnitDefinition = {
     speed: new Decimal(14),
     luck: new Decimal(0),
   },
-};
+});

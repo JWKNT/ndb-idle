@@ -1,5 +1,5 @@
 import {
-  FORGE_EQUIPMENT_RECIPE_IDS,
+  FORGE_RECIPE_IDS,
   FORGE_RECIPE_PATTERNS,
   type ForgeEquipmentRecipeId,
   type ForgeRecipeId,
@@ -29,22 +29,20 @@ export interface CraftingResult {
   error?: string;
 }
 
-const RECIPE_SLOTS: Record<ForgeEquipmentRecipeId, GearSlot> = {
-  leggings: "leggings",
-  chestplate: "chestplate",
-  helmet: "helmet",
-  boots: "boots",
-  sword: "sword",
-  "heavy-sword": "sword",
-};
+type CraftedKeyItemId = "tower-key";
+type CraftingRecipeOutput =
+  | { kind: "equipment"; slot: GearSlot; name: string }
+  | { kind: "key-item"; keyItem: CraftedKeyItemId; name: string };
 
-const RECIPE_NAMES: Record<ForgeEquipmentRecipeId, string> = {
-  leggings: "Leggings",
-  chestplate: "Chestplate",
-  helmet: "Helmet",
-  boots: "Boots",
-  sword: "Sweeping Sword",
-  "heavy-sword": "Heavy Sword",
+/** A new recipe pattern is incomplete until its result behavior is declared. */
+export const CRAFTING_RECIPE_OUTPUTS: Record<ForgeRecipeId, CraftingRecipeOutput> = {
+  leggings: { kind: "equipment", slot: "leggings", name: "Leggings" },
+  chestplate: { kind: "equipment", slot: "chestplate", name: "Chestplate" },
+  helmet: { kind: "equipment", slot: "helmet", name: "Helmet" },
+  boots: { kind: "equipment", slot: "boots", name: "Boots" },
+  sword: { kind: "equipment", slot: "sword", name: "Sweeping Sword" },
+  "heavy-sword": { kind: "equipment", slot: "sword", name: "Heavy Sword" },
+  "tower-key": { kind: "key-item", keyItem: "tower-key", name: "Tower Key" },
 };
 
 type CraftingIngredientSymbol = Exclude<ForgeRecipeSymbol, "X">;
@@ -74,28 +72,20 @@ export function craftingPattern(
 export function matchCraftingRecipe(grid: readonly (MaterialId | null)[]): CraftingRecipeMatch | null {
   if (grid.length !== CRAFTING_GRID_CELLS) return null;
   for (const level of [1, 2, 3, 4] as const) {
-    for (const recipeId of FORGE_EQUIPMENT_RECIPE_IDS) {
+    for (const recipeId of FORGE_RECIPE_IDS) {
+      const output = CRAFTING_RECIPE_OUTPUTS[recipeId];
+      if (output.kind === "key-item" && level !== 4) continue;
       const ingredients = craftingPattern(recipeId, level);
       if (ingredients.every((ingredient, index) => ingredient === grid[index])) {
         return {
           recipeId,
           level,
-          name: `Level ${level} ${RECIPE_NAMES[recipeId]}`,
-          slot: RECIPE_SLOTS[recipeId],
+          name: output.kind === "equipment" ? `Level ${level} ${output.name}` : output.name,
+          slot: output.kind === "equipment" ? output.slot : null,
           ingredients,
         };
       }
     }
-  }
-  const towerKeyIngredients = craftingPattern("tower-key", 4);
-  if (towerKeyIngredients.every((ingredient, index) => ingredient === grid[index])) {
-    return {
-      recipeId: "tower-key",
-      level: 4,
-      name: "Tower Key",
-      slot: null,
-      ingredients: towerKeyIngredients,
-    };
   }
   return null;
 }
@@ -104,10 +94,19 @@ export function craftItem(state: ProgressionState, grid: readonly (MaterialId | 
   if (!state.craftingUnlocked) return { state, error: "Crafting has not been unlocked." };
   const recipe = matchCraftingRecipe(grid);
   if (!recipe) return { state, error: "That arrangement is not a known recipe." };
-  if (recipe.recipeId === "tower-key" && state.towerKeyOwned) {
-    return { state, error: "The Tower Key has already been crafted." };
+  const output = CRAFTING_RECIPE_OUTPUTS[recipe.recipeId];
+  if (output.kind === "key-item") {
+    switch (output.keyItem) {
+      case "tower-key":
+        if (state.towerKeyOwned) return { state, error: "The Tower Key has already been crafted." };
+        break;
+      default: {
+        const unhandled: never = output.keyItem;
+        throw new Error(`Unhandled crafted key item: ${unhandled}`);
+      }
+    }
   }
-  if (recipe.recipeId !== "tower-key" && !canAddUniqueInventoryItem(state)) {
+  if (output.kind === "equipment" && !canAddUniqueInventoryItem(state)) {
     return { state, error: "The inventory is full." };
   }
 
@@ -121,15 +120,23 @@ export function craftItem(state: ProgressionState, grid: readonly (MaterialId | 
   Object.entries(required).forEach(([id, quantity]) => {
     materials[id as MaterialId] -= quantity;
   });
-  if (recipe.recipeId === "tower-key") {
-    return {
-      state: { ...state, materials, towerKeyOwned: true },
-      keyItem: "tower-key",
-    };
+  if (output.kind === "key-item") {
+    switch (output.keyItem) {
+      case "tower-key":
+        return {
+          state: { ...state, materials, towerKeyOwned: true },
+          keyItem: "tower-key",
+        };
+      default: {
+        const unhandled: never = output.keyItem;
+        throw new Error(`Unhandled crafted key item: ${unhandled}`);
+      }
+    }
   }
 
-  const sourceKey = nextCraftedItemSourceKey(state, recipe.recipeId, recipe.level);
-  const baseItem = createRingGear(recipe.slot!, recipe.level, sourceKey, state.completedRaids);
+  const equipmentRecipeId = recipe.recipeId as ForgeEquipmentRecipeId;
+  const sourceKey = nextCraftedItemSourceKey(state, equipmentRecipeId, recipe.level, output.slot);
+  const baseItem = createRingGear(output.slot, recipe.level, sourceKey, state.completedRaids);
   const item: GearItem = {
     ...restoreRingGear({
       ...baseItem,
@@ -156,10 +163,11 @@ function nextCraftedItemSourceKey(
   state: ProgressionState,
   recipeId: ForgeEquipmentRecipeId,
   level: 1 | 2 | 3 | 4,
+  slot: GearSlot,
 ): string {
   const prefix = `crafted-${recipeId}-${level}-`;
   let ordinal = 1;
-  while (state.inventory.some((item) => item.id === `treasure-${prefix}${ordinal}-${RECIPE_SLOTS[recipeId]}-r${level}`)) {
+  while (state.inventory.some((item) => item.id === `treasure-${prefix}${ordinal}-${slot}-r${level}`)) {
     ordinal += 1;
   }
   return `${prefix}${ordinal}`;

@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const miner: UnitDefinition = {
+export const miner = defineUnit({
   id: "miner",
   name: "Miner",
   attackName: "Pick Swing",
@@ -16,4 +16,4 @@ export const miner: UnitDefinition = {
     speed: new Decimal(6),
     luck: new Decimal(4),
   },
-};
+});

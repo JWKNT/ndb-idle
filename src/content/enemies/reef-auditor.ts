@@ -1,8 +1,8 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
 /** Placeholder Battle 11 tuning: intentionally far beyond a Battle 10 build. */
-export const reefAuditor: UnitDefinition = {
+export const reefAuditor = defineUnit({
   id: "reef-auditor",
   name: "Reef Auditor",
   attackRange: 6,
@@ -19,4 +19,4 @@ export const reefAuditor: UnitDefinition = {
     speed: new Decimal(280),
     luck: new Decimal(0),
   },
-};
+});

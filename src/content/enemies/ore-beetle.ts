@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const oreBeetle: UnitDefinition = {
+export const oreBeetle = defineUnit({
   id: "ore-beetle",
   name: "Ore Beetle",
   attackName: "Iron Mandibles",
@@ -15,4 +15,4 @@ export const oreBeetle: UnitDefinition = {
     speed: new Decimal(18),
     luck: new Decimal(0),
   },
-};
+});

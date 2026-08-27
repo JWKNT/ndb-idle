@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const merman: UnitDefinition = {
+export const merman = defineUnit({
   id: "merman",
   name: "Merman",
   attackRange: 99,
@@ -17,4 +17,4 @@ export const merman: UnitDefinition = {
     speed: new Decimal(22),
     luck: new Decimal(0),
   },
-};
+});

@@ -1,4 +1,4 @@
-import type { BoardDefinition, Position } from "../../game/types";
+import { defineBoard, type Position } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
 const layout = [
@@ -31,7 +31,7 @@ const deploymentTiles = positionsFor("W").filter(({ x, y }) =>
   || (x >= 5 && x <= 7 && y >= 5 && y <= 7)
 );
 
-export const oozeBoard: BoardDefinition = {
+export const oozeBoard = defineBoard({
   id: "ooze-board",
   name: "Mired Causeway",
   width,
@@ -52,4 +52,4 @@ export const oozeBoard: BoardDefinition = {
     { position: { x: 15, y: 9 }, kind: "drownedPylon" },
     { position: { x: 16, y: 11 }, kind: "drownedOozeSlick" },
   ],
-};
+});

@@ -100,8 +100,10 @@ export const enemies = {
   [vacationEmperor.id]: vacationEmperor,
 };
 
+export type EnemyId = keyof typeof enemies;
+
 export function getEnemy(id: string) {
-  return enemies[id as keyof typeof enemies];
+  return enemies[id as EnemyId];
 }
 
 export { abyssalOoze, abyssalSquid, alligator, ant, barnacleDrone, basaltWyrm, beastTamer, bee, bellowsForgeling, brineDynamo, caveBat, chainForgeling, clayGolem, coconutBailiff, direRat, dragonfly, fireAlligator, fireAnt, forgeling, glowScorpion, gloomWisp, goblin, goblinChief, goblinShaman, hammerForgeling, merman, mimic, mummy, octopus, oozeGuardian, oreBeetle, rat, reefAuditor, rustmireEngine, sewerToad, soldierAnt, squidKnight, squidTentacle, skeleton, spider, undertaker, vacationEmperor, skeletonGiraffe, skeletonHippo, skeletonPrince, skeletonRhino, skeletonBrachiosaurus, skeletonKing, goblinArcher };

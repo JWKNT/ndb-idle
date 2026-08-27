@@ -2,10 +2,12 @@ import type { AdventureState, DungeonRoom } from "@/game/adventure";
 import {
   type ProgressionState,
 } from "@/game/progression";
-import type {
-  AdventureAutoPauseRoom,
-  AdventureStrategy,
-  PortalType,
+import {
+  ADVENTURE_AUTO_PAUSE_ROOMS,
+  PORTAL_TYPES,
+  type AdventureAutoPauseRoom,
+  type AdventureStrategy,
+  type PortalType,
 } from "@/game/types";
 import { type GameDropdownOption } from "@/features/shared/GameDropdown";
 
@@ -15,6 +17,26 @@ const STRATEGY_LABELS: Record<AdventureStrategy, { compact: string; detailed: st
   together: { compact: "Stay together", detailed: "Stay together" },
   split: { compact: "Split apart", detailed: "Split apart" },
   ring: { compact: "Explore area", detailed: "Explore area" },
+};
+
+const PORTAL_AUTO_OPTIONS: Record<PortalType, {
+  label: string;
+  unlocked: (progression: ProgressionState) => boolean;
+}> = {
+  water: { label: "Enter water portals on auto", unlocked: (progression) => progression.fishingRod },
+  forge: { label: "Enter Forge portals on auto", unlocked: (progression) => progression.forgeDungeonVisited },
+};
+
+const AUTO_PAUSE_OPTIONS: Record<AdventureAutoPauseRoom, {
+  label: string;
+  unlocked: (progression: ProgressionState) => boolean;
+}> = {
+  blacksmith: { label: "Turn off auto at Blacksmith", unlocked: (progression) => progression.blacksmithDiscovered },
+  potionmaster: { label: "Turn off auto at Potionmaster", unlocked: (progression) => progression.potionmasterDiscovered },
+  oddityBrewer: { label: "Turn off auto at Charles", unlocked: (progression) => progression.oddityBrewerDiscovered },
+  cartographer: { label: "Turn off auto at Cartographer", unlocked: (progression) => progression.cartographerDiscovered },
+  angler: { label: "Turn off auto at Angler", unlocked: (progression) => progression.anglerDiscovered },
+  towerExterior: { label: "Turn off auto at Tower entrance", unlocked: (progression) => progression.towerDoorDiscovered },
 };
 
 const ADVENTURE_AREA_NAMES: Record<number, string> = {
@@ -106,14 +128,6 @@ export function AdvancedAdventureOptions({
   onToggleAutoPauseRoom: (room: AdventureAutoPauseRoom, enabled: boolean) => void;
   onTogglePortalType: (portalType: PortalType, enabled: boolean) => void;
 }) {
-  const showWaterPortal = progression.fishingRod;
-  const showForgePortal = progression.forgeDungeonVisited;
-  const showBlacksmith = progression.blacksmithDiscovered;
-  const showPotionmaster = progression.potionmasterDiscovered;
-  const showOddityBrewer = progression.oddityBrewerDiscovered;
-  const showCartographer = progression.cartographerDiscovered;
-  const showAngler = progression.anglerDiscovered;
-  const showTower = progression.towerDoorDiscovered;
   return (
     <details className="adventure-advanced-options">
       <summary>Advanced</summary>
@@ -128,86 +142,26 @@ export function AdvancedAdventureOptions({
             Ignore gold on auto
           </label>
         )}
-        {showWaterPortal && (
-          <label className="plain-option">
+        {PORTAL_TYPES.map((portalType) => PORTAL_AUTO_OPTIONS[portalType].unlocked(progression) && (
+          <label className="plain-option" key={portalType}>
             <input
-              checked={progression.autoEnterPortalTypes.includes("water")}
-              onChange={(event) => onTogglePortalType("water", event.target.checked)}
+              checked={progression.autoEnterPortalTypes.includes(portalType)}
+              onChange={(event) => onTogglePortalType(portalType, event.target.checked)}
               type="checkbox"
             />
-            Enter water portals on auto
+            {PORTAL_AUTO_OPTIONS[portalType].label}
           </label>
-        )}
-        {showForgePortal && (
-          <label className="plain-option">
+        ))}
+        {ADVENTURE_AUTO_PAUSE_ROOMS.map((room) => AUTO_PAUSE_OPTIONS[room].unlocked(progression) && (
+          <label className="plain-option" key={room}>
             <input
-              checked={progression.autoEnterPortalTypes.includes("forge")}
-              onChange={(event) => onTogglePortalType("forge", event.target.checked)}
+              checked={progression.autoPauseAdventureRooms.includes(room)}
+              onChange={(event) => onToggleAutoPauseRoom(room, event.target.checked)}
               type="checkbox"
             />
-            Enter Forge portals on auto
+            {AUTO_PAUSE_OPTIONS[room].label}
           </label>
-        )}
-        {showBlacksmith && (
-          <label className="plain-option">
-            <input
-              checked={progression.autoPauseAdventureRooms.includes("blacksmith")}
-              onChange={(event) => onToggleAutoPauseRoom("blacksmith", event.target.checked)}
-              type="checkbox"
-            />
-            Turn off auto at Blacksmith
-          </label>
-        )}
-        {showPotionmaster && (
-          <label className="plain-option">
-            <input
-              checked={progression.autoPauseAdventureRooms.includes("potionmaster")}
-              onChange={(event) => onToggleAutoPauseRoom("potionmaster", event.target.checked)}
-              type="checkbox"
-            />
-            Turn off auto at Potionmaster
-          </label>
-        )}
-        {showOddityBrewer && (
-          <label className="plain-option">
-            <input
-              checked={progression.autoPauseAdventureRooms.includes("oddityBrewer")}
-              onChange={(event) => onToggleAutoPauseRoom("oddityBrewer", event.target.checked)}
-              type="checkbox"
-            />
-            Turn off auto at Charles
-          </label>
-        )}
-        {showCartographer && (
-          <label className="plain-option">
-            <input
-              checked={progression.autoPauseAdventureRooms.includes("cartographer")}
-              onChange={(event) => onToggleAutoPauseRoom("cartographer", event.target.checked)}
-              type="checkbox"
-            />
-            Turn off auto at Cartographer
-          </label>
-        )}
-        {showAngler && (
-          <label className="plain-option">
-            <input
-              checked={progression.autoPauseAdventureRooms.includes("angler")}
-              onChange={(event) => onToggleAutoPauseRoom("angler", event.target.checked)}
-              type="checkbox"
-            />
-            Turn off auto at Angler
-          </label>
-        )}
-        {showTower && (
-          <label className="plain-option">
-            <input
-              checked={progression.autoPauseAdventureRooms.includes("towerExterior")}
-              onChange={(event) => onToggleAutoPauseRoom("towerExterior", event.target.checked)}
-              type="checkbox"
-            />
-            Turn off auto at Tower entrance
-          </label>
-        )}
+        ))}
       </div>
     </details>
   );

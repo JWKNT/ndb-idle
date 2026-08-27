@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const beastTamer: UnitDefinition = {
+export const beastTamer = defineUnit({
   id: "beast-tamer",
   name: "Beast Tamer",
   attackRange: 2,
@@ -20,4 +20,4 @@ export const beastTamer: UnitDefinition = {
     speed: new Decimal(34),
     luck: new Decimal(2),
   },
-};
+});

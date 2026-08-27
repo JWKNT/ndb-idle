@@ -1,4 +1,4 @@
-import type { StatKey } from "./types";
+import { STAT_KEYS, type StatKey } from "./types";
 
 export const MATERIAL_IDS = [
   "rat-pelt",
@@ -125,16 +125,7 @@ export const MATERIAL_META: Record<MaterialId, {
   },
 };
 
-export const FISH_STATS: StatKey[] = [
-  "hp",
-  "stamina",
-  "attack",
-  "defense",
-  "spAttack",
-  "spDefense",
-  "speed",
-  "luck",
-];
+export const FISH_STATS: readonly StatKey[] = STAT_KEYS;
 
 export type FishCounts = Record<StatKey, number>;
 export const FISH_BASE_STAT_BONUS = 3;
@@ -151,36 +142,11 @@ export const FISH_META: Record<StatKey, { name: string; sellPrice: number; descr
 };
 
 export function emptyMaterialCounts(): MaterialCounts {
-  return {
-    "rat-pelt": 0,
-    "ant-chitin": 0,
-    "ink-sac": 0,
-    "fire-alligator-hide": 0,
-    clay: 0,
-    "rotten-tentacle": 0,
-    driftwood: 0,
-    seaweed: 0,
-    "magic-bait": 0,
-    "rusty-metal": 0,
-    "rusty-gear": 0,
-    "mapmaker-chalk": 0,
-    "eye-of-frog": 0,
-    "mutated-rat-tail": 0,
-    "fire-ant-chitin": 0,
-  };
+  return Object.fromEntries(MATERIAL_IDS.map((id) => [id, 0])) as MaterialCounts;
 }
 
 export function emptyFishCounts(): FishCounts {
-  return {
-    hp: 0,
-    stamina: 0,
-    attack: 0,
-    defense: 0,
-    spAttack: 0,
-    spDefense: 0,
-    speed: 0,
-    luck: 0,
-  };
+  return Object.fromEntries(FISH_STATS.map((stat) => [stat, 0])) as FishCounts;
 }
 
 export function bulkSellAmounts(quantity: number): number[] {

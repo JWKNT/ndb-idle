@@ -1,6 +1,7 @@
+import type { EnemyId } from "./enemies";
 import type { SpriteName } from "./sprites";
 
-export const ENEMY_SPRITES: Record<string, SpriteName> = {
+export const ENEMY_SPRITES: Record<EnemyId, SpriteName> = {
   "dire-rat": "direRat",
   "soldier-ant": "soldierAnt",
   "sewer-toad": "sewerToad",
@@ -53,5 +54,9 @@ export const ENEMY_SPRITES: Record<string, SpriteName> = {
 };
 
 export function enemySprite(definitionId: string): SpriteName {
-  return ENEMY_SPRITES[definitionId] ?? "goblin";
+  const sprite = ENEMY_SPRITES[definitionId as EnemyId];
+  if (!sprite) {
+    throw new Error(`Missing enemy sprite mapping for ${definitionId}.`);
+  }
+  return sprite;
 }

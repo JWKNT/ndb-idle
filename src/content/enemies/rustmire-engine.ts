@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const rustmireEngine: UnitDefinition = {
+export const rustmireEngine = defineUnit({
   id: "rustmire-engine",
   name: "Rusttide Colossus",
   attackRange: 3,
@@ -31,4 +31,4 @@ export const rustmireEngine: UnitDefinition = {
     speed: new Decimal(48),
     luck: new Decimal(0),
   },
-};
+});

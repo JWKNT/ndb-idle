@@ -1,4 +1,5 @@
 import { FISHING_BAIT_IDS, MATERIAL_META, type MaterialId } from "@/game/items";
+import { milestoneGearHasEffect } from "@/game/gear";
 import type { PlayerId } from "@/game/types";
 import type { ProgressionState } from "./types";
 
@@ -33,7 +34,7 @@ export function startFishing(
 function memberHasTrident(state: ProgressionState, memberId: PlayerId): boolean {
   const weaponId = state.equipment[memberId]?.sword;
   return Boolean(weaponId && state.inventory.some(
-    (item) => item.id === weaponId && item.definitionId === "trident",
+    (item) => item.id === weaponId && milestoneGearHasEffect(item, "bait-conservation"),
   ));
 }
 

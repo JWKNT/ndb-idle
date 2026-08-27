@@ -2,17 +2,23 @@ import Decimal from "break_eternity.js";
 import { getLevel, hasLevel, levels } from "../content/levels";
 import { getEnemy } from "../content/enemies";
 import { getPlayer } from "../content/players";
-import { getQuest, quests, type QuestId } from "../content/quests";
+import { getQuest, quests, QUEST_COMPLETION_EFFECTS, type QuestId } from "../content/quests";
+import {
+  BATTLE_FIRST_CLEAR_CONTRACTS,
+  battleFirstClearContract,
+  type BattleFirstClearEffect,
+} from "../content/battle-first-clear";
 import { playerStatsWithTraining } from "./combat";
 import {
   EMPTY_EQUIPMENT,
   GEAR_SLOTS,
   createTridentGear,
   createUndeadGemGear,
-  createShamanRingGear,
-  createSuctionCupsGear,
+  createMilestoneGear,
   createRingGear,
   isMilestoneGear,
+  milestoneGearHasEffect,
+  milestoneGearIdForSavedItem,
   isGearSlot,
   restoreRingGear,
   type Equipment,
@@ -42,7 +48,11 @@ import {
   type PotionCounts,
 } from "./potions";
 import {
+  ADVENTURE_AUTO_PAUSE_ROOMS,
+  ADVENTURE_STRATEGIES,
   EMPTY_TRAINING,
+  PLAYER_IDS,
+  PORTAL_TYPES,
   type AdventureAutoPauseRoom,
   type AdventureStrategy,
   type PlayerId,
@@ -210,7 +220,7 @@ const SAVE_SLOT_MIGRATION_KEY = "idle-game-prototype-save-slots-migrated-v1";
 const SAVE_VERSION = 49;
 const HEALING_RATE_PER_SECOND = 0.08;
 const STAMINA_RECOVERY_RATE_PER_SECOND = 0.2;
-const PLAYER_ORDER: PlayerId[] = ["knight", "worm", "miner"];
+const PLAYER_ORDER: readonly PlayerId[] = PLAYER_IDS;
 
 interface StoredMemberProgress {
   hp: string;
@@ -811,18 +821,20 @@ function migrateStoredProgression(
   const needsTrident = Boolean(migrated.tridentTrialCompleted)
     && !inventory.some((item) => item?.id === trident.id || item?.definitionId === "trident");
   const inventoryWithTrident = needsTrident ? [...inventory, trident] : inventory;
-  const shamanRing = createShamanRingGear();
-  const needsShamanRing = completedRaids.includes(6)
-    && !inventoryWithTrident.some((item) => item?.id === shamanRing.id || item?.definitionId === "shaman-ring");
-  const inventoryWithShamanRing = needsShamanRing ? [...inventoryWithTrident, shamanRing] : inventoryWithTrident;
-  const suctionCups = createSuctionCupsGear();
-  const needsSuctionCups = completedRaids.includes(9)
-    && !inventoryWithShamanRing.some((item) =>
-      item?.id === suctionCups.id || item?.definitionId === "suction-cups"
-    );
-  const inventoryWithMilestones = needsSuctionCups
-    ? [...inventoryWithShamanRing, suctionCups]
-    : inventoryWithShamanRing;
+  const inventoryWithMilestones = Object.entries(BATTLE_FIRST_CLEAR_CONTRACTS)
+    .reduce<unknown[]>((current, [battle, contract]) => {
+      if (!completedRaids.includes(Number(battle)) || contract.effect.kind !== "grant-milestone-gear") {
+        return current;
+      }
+      const gearId = contract.effect.gearId;
+      const item = createMilestoneGear(gearId);
+      return current.some((candidate) => milestoneGearIdForSavedItem(
+        (candidate as Partial<GearItem> | null)?.definitionId,
+        (candidate as Partial<GearItem> | null)?.id,
+      ) === gearId)
+        ? current
+        : [...current, item];
+    }, inventoryWithTrident);
   return {
     ...migrated,
     version: SAVE_VERSION,
@@ -963,7 +975,7 @@ export function advanceProgression(
 function memberHasTrident(state: ProgressionState, memberId: PlayerId): boolean {
   const weaponId = state.equipment[memberId]?.sword;
   return Boolean(weaponId && state.inventory.some(
-    (item) => item.id === weaponId && item.definitionId === "trident",
+    (item) => item.id === weaponId && milestoneGearHasEffect(item, "bait-conservation"),
   ));
 }
 
@@ -1059,7 +1071,7 @@ export function offerFishAtWaterShrine(
   state: ProgressionState,
   tileStat: StatKey,
   fishStat: StatKey,
-  requiredStats: StatKey[] = FISH_STATS,
+  requiredStats: readonly StatKey[] = FISH_STATS,
 ): { state: ProgressionState; solved: boolean; error?: string } {
   if (!state.fishingRod) return { state, solved: state.waterShrineSolved, error: "Recover the Fishing Rod first." };
   const previousFish = state.waterShrineOfferings[tileStat];
@@ -1487,30 +1499,9 @@ export function recordVictory(
 ): { state: ProgressionState; unlocked: boolean; firstClear: boolean; rewardDiscarded?: boolean } {
   if (state.completedRaids.includes(level)) return { state, unlocked: false, firstClear: false };
   const unlocked = level >= state.highestUnlockedLevel && hasLevel(level + 1);
-  let rewardState = level === 6 ? grantMilestoneGear(state, createShamanRingGear()) : state;
-  if (
-    level === 3
-    && !rewardState.shopUnlocked
-    && !rewardState.completedQuestIds.includes("rescue-shopkeeper")
-    && !rewardState.purchasedQuestIds.includes("rescue-shopkeeper")
-  ) {
-    rewardState = {
-      ...rewardState,
-      purchasedQuestIds: [...rewardState.purchasedQuestIds, "rescue-shopkeeper"],
-      activeQuestId: rewardState.activeQuestId ?? "rescue-shopkeeper",
-      adventureStrategy: rewardState.adventureStrategy,
-    };
-  }
+  const effect = battleFirstClearContract(level).effect;
+  const rewardState = applyBattleFirstClearEffect(state, effect);
   const rewardDiscarded = false;
-  if (level === 8 && rewardState.materials["rotten-tentacle"] <= 0) {
-    rewardState = grantInventoryStack(rewardState, materialStackId("rotten-tentacle"));
-  }
-  if (level === 9) {
-    rewardState = grantMilestoneGear(rewardState, createSuctionCupsGear());
-  }
-  if (level === 10) {
-    rewardState = grantInventoryStack(rewardState, materialStackId("rusty-gear"));
-  }
   return {
     unlocked,
     firstClear: true,
@@ -1523,9 +1514,39 @@ export function recordVictory(
         : [...state.completedRaids, level].sort((a, b) => a - b),
       highestUnlockedLevel: unlocked ? level + 1 : state.highestUnlockedLevel,
       selectedLevel: unlocked ? level + 1 : state.selectedLevel,
-      adventureUnlocked: state.adventureUnlocked || level === 1,
+      adventureUnlocked: state.adventureUnlocked || effect.kind === "unlock-adventure",
     },
   };
+}
+
+function applyBattleFirstClearEffect(
+  state: ProgressionState,
+  effect: BattleFirstClearEffect,
+): ProgressionState {
+  switch (effect.kind) {
+    case "none":
+    case "unlock-adventure":
+      return state;
+    case "start-quest":
+      if (
+        state.completedQuestIds.includes(effect.questId)
+        || state.purchasedQuestIds.includes(effect.questId)
+      ) return state;
+      return {
+        ...state,
+        purchasedQuestIds: [...state.purchasedQuestIds, effect.questId],
+        activeQuestId: state.activeQuestId ?? effect.questId,
+      };
+    case "grant-milestone-gear":
+      return grantMilestoneGear(state, createMilestoneGear(effect.gearId));
+    case "grant-material":
+      if (effect.onlyIfNone && state.materials[effect.materialId] > 0) return state;
+      return grantInventoryStack(state, materialStackId(effect.materialId));
+    default: {
+      const unhandled: never = effect;
+      return unhandled;
+    }
+  }
 }
 
 function grantMilestoneGear(state: ProgressionState, item: GearItem): ProgressionState {
@@ -1595,25 +1616,44 @@ export function activateQuest(
 
 export function completeQuest(state: ProgressionState, questId: QuestId): ProgressionState {
   if (state.activeQuestId !== questId) return state;
-  const recruitedId = questId === "rescue-me"
-    ? "worm"
-    : questId === "find-miner"
-      ? "miner"
-      : null;
-  const party = recruitedId && !state.party[recruitedId]
-    ? { ...state.party, [recruitedId]: createMemberProgress(recruitedId) }
-    : state.party;
-  const equipment = recruitedId && !state.party[recruitedId]
-    ? { ...state.equipment, [recruitedId]: { ...EMPTY_EQUIPMENT } }
-    : state.equipment;
+  const effects = QUEST_COMPLETION_EFFECTS[questId];
+  let party = state.party;
+  let equipment = state.equipment;
+  let unlocksFishing = false;
+  let unlocksMining = false;
+  let unlocksShop = false;
+  for (const effect of effects) {
+    switch (effect.kind) {
+      case "unlock-shop":
+        unlocksShop = true;
+        break;
+      case "unlock-fishing":
+        unlocksFishing = true;
+        break;
+      case "unlock-mining":
+        unlocksMining = true;
+        break;
+      case "recruit-player":
+        if (!party[effect.playerId]) {
+          party = { ...party, [effect.playerId]: createMemberProgress(effect.playerId) };
+          equipment = { ...equipment, [effect.playerId]: { ...EMPTY_EQUIPMENT } };
+        }
+        break;
+      default: {
+        const unhandled: never = effect;
+        throw new Error(`Unhandled quest completion effect: ${String(unhandled)}`);
+      }
+    }
+  }
   return {
     ...state,
     party,
     equipment,
     activeQuestId: null,
-    fishingRod: state.fishingRod || questId === "retrieve-lost-item",
-    miningUnlocked: state.miningUnlocked || questId === "find-miner",
-    waterDungeonVisits: questId === "retrieve-lost-item"
+    shopUnlocked: state.shopUnlocked || unlocksShop,
+    fishingRod: state.fishingRod || unlocksFishing,
+    miningUnlocked: state.miningUnlocked || unlocksMining,
+    waterDungeonVisits: unlocksFishing
       ? Math.max(1, state.waterDungeonVisits)
       : state.waterDungeonVisits,
     adventureStrategy: state.adventureStrategy === "quest" ? "none" : state.adventureStrategy,
@@ -1707,20 +1747,9 @@ function sanitizeInventory(
     if (!candidate || typeof candidate !== "object") continue;
     const raw = candidate as Partial<GearItem>;
     if (typeof raw.id !== "string" || !isGearSlot(raw.slot)) continue;
-    if (raw.definitionId === "trident" || raw.id === createTridentGear().id) {
-      inventory.push(createTridentGear());
-      continue;
-    }
-    if (raw.definitionId === "undead-gem" || raw.id === createUndeadGemGear().id) {
-      inventory.push(createUndeadGemGear());
-      continue;
-    }
-    if (raw.definitionId === "shaman-ring" || raw.id === createShamanRingGear().id) {
-      inventory.push(createShamanRingGear());
-      continue;
-    }
-    if (raw.definitionId === "suction-cups" || raw.id === createSuctionCupsGear().id) {
-      inventory.push(createSuctionCupsGear());
+    const milestoneId = milestoneGearIdForSavedItem(raw.definitionId, raw.id);
+    if (milestoneId) {
+      inventory.push(createMilestoneGear(milestoneId));
       continue;
     }
     inventory.push(restoreRingGear({
@@ -1861,14 +1890,14 @@ function validActionProgress(value: unknown): number {
 }
 
 function sanitizeAdventureStrategy(value: unknown): AdventureStrategy {
-  return value === "none" || value === "quest" || value === "split" || value === "together" || value === "ring"
-    ? value
+  return typeof value === "string" && ADVENTURE_STRATEGIES.includes(value as AdventureStrategy)
+    ? value as AdventureStrategy
     : "none";
 }
 
 function sanitizePortalTypes(value: unknown): PortalType[] {
   if (!Array.isArray(value)) return [];
-  return (["water", "forge"] as PortalType[]).filter((portal) => value.includes(portal));
+  return PORTAL_TYPES.filter((portal) => value.includes(portal));
 }
 
 function sanitizeFishingLog(value: unknown): string[] {
@@ -1878,15 +1907,6 @@ function sanitizeFishingLog(value: unknown): string[] {
     .map((entry) => entry.trim())
     .slice(0, 12);
 }
-
-const ADVENTURE_AUTO_PAUSE_ROOMS: AdventureAutoPauseRoom[] = [
-  "blacksmith",
-  "potionmaster",
-  "oddityBrewer",
-  "cartographer",
-  "angler",
-  "towerExterior",
-];
 
 function sanitizeAutoPauseAdventureRooms(value: unknown): AdventureAutoPauseRoom[] {
   if (!Array.isArray(value)) return [...ADVENTURE_AUTO_PAUSE_ROOMS];

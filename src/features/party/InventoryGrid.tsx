@@ -1,4 +1,5 @@
 import { getPlayer } from "@/content/players";
+import { MILESTONE_GEAR_DESCRIPTIONS } from "@/content/item-descriptions";
 import {
   FISH_SPRITES,
   ESCAPE_ROPE_SPRITES,
@@ -331,14 +332,8 @@ function GearSlot({
   const skill = weaponSkill(item.weaponAbilityId);
   return (
     <InventoryCard
-      description={item.definitionId === "trident"
-        ? "A Merman threw this at your head, so legally it is yours. Right-click to throw it! Bonuses join base stats before Gold training."
-        : item.definitionId === "undead-gem"
-          ? "Turns off the Skele-King's coward bubble. Does nothing to living Kings, medium-dead Kings, or stains. Bonuses join base stats before Gold training."
-        : item.definitionId === "shaman-ring"
-          ? "20% chance to teleport away from Adventure damage. 80% chance to remain damp Goblin jewelry touching your skin. Bonuses join base stats before Gold training."
-        : item.definitionId === "suction-cups"
-          ? "15% chance to grab and paralyze a non-boss attacker. WHERE the Cups grab it is between the Cups and several lawyers. Bonuses join base stats before Gold training."
+      description={item.definitionId
+        ? MILESTONE_GEAR_DESCRIPTIONS[item.definitionId]
         : `Level ${item.ring} ${gearSlotLabel(item.slot)}. Wear it to convert small numbers into slightly fatter numbers. Truly, the fantasy of power.`}
       name={item.name}
                 sprite={gearSprite(item)}

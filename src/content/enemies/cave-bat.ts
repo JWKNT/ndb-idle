@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const caveBat: UnitDefinition = {
+export const caveBat = defineUnit({
   id: "cave-bat",
   name: "Cave Bat",
   attackName: "Fang Dive",
@@ -15,4 +15,4 @@ export const caveBat: UnitDefinition = {
     speed: new Decimal(22),
     luck: new Decimal(0),
   },
-};
+});

@@ -25,10 +25,14 @@ import {
 import type { MiningState } from "@/game/mining";
 import type { PlayerId, Position } from "@/game/types";
 import { retireForgeBlueprintObjective } from "@/game/adventure/forgeBlueprints";
+import { milestoneGearHasEffect } from "@/game/gear";
 
 export function memberHasTrident(progression: ProgressionState, id: PlayerId): boolean {
   const equipment = memberEquipment(progression, id);
-  return progression.inventory.find((item) => item.id === equipment.sword)?.definitionId === "trident";
+  return milestoneGearHasEffect(
+    progression.inventory.find((item) => item.id === equipment.sword),
+    "weapon-secondary",
+  );
 }
 
 export function memberWeaponAbility(progression: ProgressionState, id: PlayerId) {
@@ -38,12 +42,18 @@ export function memberWeaponAbility(progression: ProgressionState, id: PlayerId)
 
 export function memberHasShamanRing(progression: ProgressionState, id: PlayerId): boolean {
   const equipment = memberEquipment(progression, id);
-  return progression.inventory.find((item) => item.id === equipment.accessory)?.definitionId === "shaman-ring";
+  return milestoneGearHasEffect(
+    progression.inventory.find((item) => item.id === equipment.accessory),
+    "adventure-damage-teleport",
+  );
 }
 
 export function memberHasSuctionCups(progression: ProgressionState, id: PlayerId): boolean {
   const equipment = memberEquipment(progression, id);
-  return progression.inventory.find((item) => item.id === equipment.accessory)?.definitionId === "suction-cups";
+  return milestoneGearHasEffect(
+    progression.inventory.find((item) => item.id === equipment.accessory),
+    "retaliatory-paralysis",
+  );
 }
 
 export function adventureMemberStats(

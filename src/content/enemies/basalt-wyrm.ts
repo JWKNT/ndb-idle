@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const basaltWyrm: UnitDefinition = {
+export const basaltWyrm = defineUnit({
   id: "basalt-wyrm",
   name: "Basalt Wyrm",
   attackName: "Bedrock Bite",
@@ -15,4 +15,4 @@ export const basaltWyrm: UnitDefinition = {
     speed: new Decimal(18),
     luck: new Decimal(0),
   },
-};
+});

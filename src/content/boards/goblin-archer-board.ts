@@ -1,7 +1,7 @@
-import type { BoardDefinition } from "../../game/types";
+import { defineBoard } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
-export const goblinArcherBoard: BoardDefinition = {
+export const goblinArcherBoard = defineBoard({
   id: "goblin-archer-board",
   name: "Goblin Archerworks",
   width: 19,
@@ -41,4 +41,4 @@ export const goblinArcherBoard: BoardDefinition = {
     { position: { x: 17, y: 2 }, kind: "goblinTarget" },
     { position: { x: 16, y: 8 }, kind: "goblinRopeCoil" },
   ],
-};
+});

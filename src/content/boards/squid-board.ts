@@ -1,4 +1,4 @@
-import type { BoardDefinition, Position } from "../../game/types";
+import { defineBoard, type Position } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
 const layout = [
@@ -31,7 +31,7 @@ const deploymentTiles = positionsFor("W").filter(({ x, y }) =>
   || (x >= 5 && x <= 7 && y >= 5 && y <= 7)
 );
 
-export const squidBoard: BoardDefinition = {
+export const squidBoard = defineBoard({
   id: "squid-board",
   name: "Drowned Squidworks",
   width,
@@ -53,7 +53,7 @@ export const squidBoard: BoardDefinition = {
     { position: { x: 18, y: 2 }, kind: "drownedBarnacles" },
     { position: { x: 18, y: 10 }, kind: "drownedCoral" },
   ],
-};
+});
 
 export const squidKnightPositions = positionsFor("K");
 export const squidTentaclePositions = positionsFor("T");

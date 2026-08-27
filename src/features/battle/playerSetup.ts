@@ -6,6 +6,7 @@ import {
   type ProgressionState,
 } from "@/game/progression";
 import type { PlayerBattleSetup } from "@/game/combat";
+import { milestoneGearHasEffect } from "@/game/gear";
 import type { PlayerId } from "@/game/types";
 
 /** Converts persistent party/loadout state into isolated Battle actors. */
@@ -30,11 +31,12 @@ export function battlePartySetup(
       inventory: progression.inventory,
       equipment,
       stats: memberStats(progression, id),
-      weaponThrowUnlocked: progression.weaponThrowUnlocked && weapon?.definitionId === "trident",
-      hasTrident: weapon?.definitionId === "trident",
+      weaponThrowUnlocked: progression.weaponThrowUnlocked
+        && milestoneGearHasEffect(weapon, "weapon-secondary"),
+      hasTrident: milestoneGearHasEffect(weapon, "weapon-secondary"),
       weaponAbilityId: weapon?.weaponAbilityId,
-      hasUndeadGem: accessory?.definitionId === "undead-gem",
-      hasSuctionCups: accessory?.definitionId === "suction-cups",
+      hasUndeadGem: milestoneGearHasEffect(accessory, "undead-ward-bypass"),
+      hasSuctionCups: milestoneGearHasEffect(accessory, "retaliatory-paralysis"),
     };
   });
 }

@@ -19,21 +19,30 @@ interface EffectBounds {
   height: number;
 }
 
-const AREA_VISUALS = new Set<AttackVisualId>([
-  "sword-sweep",
-  "heavy-slam",
-  "burst-orb",
-]);
+type AreaPresentation = "none" | "source-surround" | "source-front" | "target-surround";
+type ProjectilePresentation = "never" | "always" | "distant-physical";
 
-const PROJECTILE_VISUALS = new Set<AttackVisualId>([
-  "worm-acid",
-  "fire",
-  "abyssal",
-  "magic",
-  "burst-orb",
-  "rapid-bolt",
-  "trident-throw",
-]);
+/**
+ * Adding an attack visual requires an explicit presentation decision. A new
+ * visual can never silently render nothing because it was omitted from a Set.
+ */
+export const ATTACK_VISUAL_CONTRACTS: Record<AttackVisualId, {
+  area: AreaPresentation;
+  projectile: ProjectilePresentation;
+}> = {
+  "knight-slash": { area: "none", projectile: "never" },
+  "worm-acid": { area: "none", projectile: "always" },
+  "miner-pick": { area: "none", projectile: "never" },
+  "sword-sweep": { area: "source-surround", projectile: "never" },
+  "heavy-slam": { area: "source-front", projectile: "never" },
+  "burst-orb": { area: "target-surround", projectile: "always" },
+  "rapid-bolt": { area: "none", projectile: "always" },
+  "trident-throw": { area: "none", projectile: "always" },
+  fire: { area: "none", projectile: "always" },
+  abyssal: { area: "none", projectile: "always" },
+  magic: { area: "none", projectile: "always" },
+  physical: { area: "none", projectile: "distant-physical" },
+};
 
 export function AttackEffectOverlay({
   visual,
@@ -76,7 +85,7 @@ export function AttackEffectOverlay({
 }
 
 export function attackEffectHasArea(visual: AttackVisualId | null | undefined): boolean {
-  return Boolean(visual && AREA_VISUALS.has(visual));
+  return Boolean(visual && ATTACK_VISUAL_CONTRACTS[visual].area !== "none");
 }
 
 export function attackEffectUsesProjectile(
@@ -84,9 +93,10 @@ export function attackEffectUsesProjectile(
   from: Position,
   to: Position,
 ): boolean {
-  if (PROJECTILE_VISUALS.has(visual)) return true;
-  return visual === "physical"
-    && Math.max(Math.abs(to.x - from.x), Math.abs(to.y - from.y)) > 1;
+  const presentation = ATTACK_VISUAL_CONTRACTS[visual].projectile;
+  if (presentation === "always") return true;
+  if (presentation === "never") return false;
+  return Math.max(Math.abs(to.x - from.x), Math.abs(to.y - from.y)) > 1;
 }
 
 export function attackEffectAreaBounds(
@@ -94,13 +104,14 @@ export function attackEffectAreaBounds(
   from: Position,
   to: Position,
 ): EffectBounds | null {
-  if (visual === "sword-sweep") {
+  const presentation = ATTACK_VISUAL_CONTRACTS[visual].area;
+  if (presentation === "none") return null;
+  if (presentation === "source-surround") {
     return { x: from.x - 1, y: from.y - 1, width: 3, height: 3 };
   }
-  if (visual === "burst-orb") {
+  if (presentation === "target-surround") {
     return { x: to.x - 1, y: to.y - 1, width: 3, height: 3 };
   }
-  if (visual !== "heavy-slam") return null;
 
   const deltaX = to.x - from.x;
   const deltaY = to.y - from.y;

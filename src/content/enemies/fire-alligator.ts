@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const fireAlligator: UnitDefinition = {
+export const fireAlligator = defineUnit({
   id: "fire-alligator",
   name: "Fire Alligator",
   attackName: "Magma Breath",
@@ -19,4 +19,4 @@ export const fireAlligator: UnitDefinition = {
     speed: new Decimal(24),
     luck: new Decimal(0),
   },
-};
+});

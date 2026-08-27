@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const oozeGuardian: UnitDefinition = {
+export const oozeGuardian = defineUnit({
   id: "ooze-guardian",
   name: "Ooze Guardian",
   attackRange: 2,
@@ -19,4 +19,4 @@ export const oozeGuardian: UnitDefinition = {
     speed: new Decimal(26),
     luck: new Decimal(0),
   },
-};
+});

@@ -8,16 +8,34 @@ import {
 } from "@/game/progression";
 import { formatWholeAmount } from "@/game/numbers";
 
-export type GameView =
-  | "adventure"
-  | "party"
-  | "battle"
-  | "shop"
-  | "training"
-  | "fishing"
-  | "mining"
-  | "bestiary"
-  | "crafting";
+export const GAME_VIEW_IDS = [
+  "battle",
+  "party",
+  "adventure",
+  "shop",
+  "training",
+  "fishing",
+  "bestiary",
+  "mining",
+  "crafting",
+] as const;
+export type GameView = (typeof GAME_VIEW_IDS)[number];
+
+export const GAME_VIEW_NAVIGATION: Record<GameView, {
+  label: string;
+  unlocked: (progression: ProgressionState) => boolean;
+  hasNewContent?: (progression: ProgressionState) => boolean;
+}> = {
+  battle: { label: "Battle", unlocked: () => true },
+  party: { label: "Party", unlocked: () => true },
+  adventure: { label: "Adventure", unlocked: adventureTabUnlocked },
+  shop: { label: "Shop", unlocked: shopTabUnlocked, hasNewContent: hasNewShopContent },
+  training: { label: "Training", unlocked: trainingTabUnlocked },
+  fishing: { label: "Fishing", unlocked: fishingTabUnlocked },
+  bestiary: { label: "Bestiary", unlocked: (progression) => progression.completedRaids.includes(7) },
+  mining: { label: "Mining", unlocked: (progression) => progression.miningUnlocked },
+  crafting: { label: "Crafting", unlocked: (progression) => progression.craftingUnlocked },
+};
 
 interface GameNavigationProps {
   progression: ProgressionState;
@@ -34,36 +52,24 @@ export function GameNavigation({
   onOpenHelp,
   onSaveAndQuit,
 }: GameNavigationProps) {
-  const item = (target: GameView, label: string) => (
-    <button
-      className={view === target ? "is-active" : ""}
-      onClick={() => onNavigate(target)}
-      type="button"
-    >
-      {label}
-    </button>
-  );
-
   return (
     <header className="app-header">
       <nav className="primary-nav" aria-label="Main sections">
-        {item("battle", "Battle")}
-        {item("party", "Party")}
-        {adventureTabUnlocked(progression) && item("adventure", "Adventure")}
-        {shopTabUnlocked(progression) && (
-          <button
-            className={view === "shop" ? "is-active" : ""}
-            onClick={() => onNavigate("shop")}
-            type="button"
-          >
-            Shop {hasNewShopContent(progression) && <span className="new-marker">NEW</span>}
-          </button>
-        )}
-        {trainingTabUnlocked(progression) && item("training", "Training")}
-        {fishingTabUnlocked(progression) && item("fishing", "Fishing")}
-        {progression.completedRaids.includes(7) && item("bestiary", "Bestiary")}
-        {progression.miningUnlocked && item("mining", "Mining")}
-        {progression.craftingUnlocked && item("crafting", "Crafting")}
+        {GAME_VIEW_IDS.map((target) => {
+          const item = GAME_VIEW_NAVIGATION[target];
+          if (!item.unlocked(progression)) return null;
+          return (
+            <button
+              className={view === target ? "is-active" : ""}
+              key={target}
+              onClick={() => onNavigate(target)}
+              type="button"
+            >
+              {item.label}
+              {item.hasNewContent?.(progression) && <> <span className="new-marker">NEW</span></>}
+            </button>
+          );
+        })}
       </nav>
       <div className="resource-display">
         <span>Gold: {formatWholeAmount(progression.gold)}</span>

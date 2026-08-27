@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const barnacleDrone: UnitDefinition = {
+export const barnacleDrone = defineUnit({
   id: "barnacle-drone",
   name: "Barnacle Drone",
   attackRange: 2,
@@ -19,4 +19,4 @@ export const barnacleDrone: UnitDefinition = {
     speed: new Decimal(32),
     luck: new Decimal(0),
   },
-};
+});

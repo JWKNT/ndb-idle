@@ -1,10 +1,10 @@
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 import { graveyardBoard, graveyardRandomSpawnPositions } from "../boards/graveyard-board";
 import { skeleton } from "../enemies/skeleton";
 import { skeletonGiraffe } from "../enemies/skeleton-giraffe";
 import { skeletonHippo } from "../enemies/skeleton-hippo";
 
-export const level02: LevelDefinition = {
+export const level02 = defineLevel({
   number: 2,
   name: "Restless Skeleton",
   description: "Defeat every enemy.",
@@ -20,4 +20,4 @@ export const level02: LevelDefinition = {
     { instanceId: "battle-skele-hippo-1", unit: skeletonHippo, position: { x: 5, y: 4 } },
     { instanceId: "battle-boss-skeleton", unit: skeleton, position: { x: 7, y: 3 } },
   ],
-};
+});

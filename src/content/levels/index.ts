@@ -12,6 +12,8 @@ import { level11 } from "./level-11";
 
 export const levels = [level01, level02, level03, level04, level05, level06, level07, level08, level09, level10, level11];
 
+export type BattleNumber = (typeof levels)[number]["number"];
+
 export function getLevel(number: number) {
   return levels.find((level) => level.number === number) ?? level01;
 }

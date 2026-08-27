@@ -1,9 +1,9 @@
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 import { goblinBridgeBoard } from "../boards/goblin-bridge-board";
 import { goblinChief } from "../enemies/goblin-chief";
 import { goblin } from "../enemies/goblin";
 
-export const level05: LevelDefinition = {
+export const level05 = defineLevel({
   number: 5,
   name: "Goblin Chief",
   description: "Cross the bridge and defeat the Goblin Chief.",
@@ -18,4 +18,4 @@ export const level05: LevelDefinition = {
     { instanceId: "battle-goblin-5-5", unit: goblin, position: { x: 16, y: 8 } },
     { instanceId: "battle-boss-goblin-chief", unit: goblinChief, position: { x: 17, y: 5 } },
   ],
-};
+});

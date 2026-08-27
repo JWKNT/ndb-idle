@@ -2251,12 +2251,14 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
         <CraftingView progression={progression} onCraft={handleCraft} />
       ) : view === "bestiary" ? (
         <BestiaryView defeatedEnemyIds={progression.defeatedEnemyIds} />
-      ) : (
+      ) : view === "training" ? (
         <TrainingView
           progression={progression}
           onTrain={handleTrain}
           onReturnToBattle={() => navigate("battle")}
         />
+      ) : (
+        assertNeverView(view)
       )}
 
       {rewardPopups[0] && (
@@ -2276,4 +2278,8 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
       {helpOpen && <HelpIndex progression={progression} onClose={() => setHelpOpen(false)} />}
     </div>
   );
+}
+
+function assertNeverView(view: never): never {
+  throw new Error(`Unhandled game view: ${view}`);
 }

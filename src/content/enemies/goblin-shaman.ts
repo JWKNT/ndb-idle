@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const goblinShaman: UnitDefinition = {
+export const goblinShaman = defineUnit({
   id: "goblin-shaman",
   name: "Goblin Shaman",
   attackRange: 3,
@@ -20,4 +20,4 @@ export const goblinShaman: UnitDefinition = {
     speed: new Decimal(22),
     luck: new Decimal(2),
   },
-};
+});

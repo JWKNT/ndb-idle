@@ -1,8 +1,8 @@
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 import { beastTamerBoard } from "../boards/beast-tamer-board";
 import { beastTamer } from "../enemies/beast-tamer";
 
-export const level07: LevelDefinition = {
+export const level07 = defineLevel({
   number: 7,
   name: "Beast Tamer",
   description: "Break the cages, defeat the summoned beasts, and defeat the Beast Tamer.",
@@ -12,4 +12,4 @@ export const level07: LevelDefinition = {
   enemies: [
     { instanceId: "battle-boss-beast-tamer", unit: beastTamer, position: { x: 11, y: 4 } },
   ],
-};
+});

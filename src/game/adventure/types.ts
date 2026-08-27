@@ -78,35 +78,37 @@ export type AdventureTileKind =
 
 export type ExitDirection = "north" | "east" | "south" | "west";
 
-export type AdventureEnemyKind =
-  | "rat"
-  | "ant"
-  | "clay-golem"
-  | "goblin"
-  | "goblin-archer"
-  | "spider"
-  | "octopus"
-  | "merman"
-  | "skeleton"
-  | "skeleton-giraffe"
-  | "skeleton-hippo"
-  | "skeleton-rhino"
-  | "skeleton-brachiosaurus"
-  | "squid-knight"
-  | "fire-ant"
-  | "alligator"
-  | "dragonfly"
-  | "bee"
-  | "mummy"
-  | "fire-alligator"
-  | "mimic"
-  | "forgeling"
-  | "chain-forgeling"
-  | "bellows-forgeling"
-  | "hammer-forgeling"
-  | "dire-rat"
-  | "soldier-ant"
-  | "sewer-toad";
+export const ADVENTURE_ENEMY_KINDS = [
+  "rat",
+  "ant",
+  "clay-golem",
+  "goblin",
+  "goblin-archer",
+  "spider",
+  "octopus",
+  "merman",
+  "skeleton",
+  "skeleton-giraffe",
+  "skeleton-hippo",
+  "skeleton-rhino",
+  "skeleton-brachiosaurus",
+  "squid-knight",
+  "fire-ant",
+  "alligator",
+  "dragonfly",
+  "bee",
+  "mummy",
+  "fire-alligator",
+  "mimic",
+  "forgeling",
+  "chain-forgeling",
+  "bellows-forgeling",
+  "hammer-forgeling",
+  "dire-rat",
+  "soldier-ant",
+  "sewer-toad",
+] as const;
+export type AdventureEnemyKind = (typeof ADVENTURE_ENEMY_KINDS)[number];
 
 export type DungeonTheme = "earth" | "water" | "forge";
 
@@ -168,6 +170,35 @@ export interface AdventureExit {
   position: Position;
 }
 
+export const DUNGEON_ROOM_KINDS = [
+  "normal",
+  "treasure",
+  "regen",
+  "rescue",
+  "portal",
+  "waterPortal",
+  "lostItem",
+  "offering",
+  "mermanThrone",
+  "shopkeeper",
+  "blacksmith",
+  "miner",
+  "hammerVault",
+  "lottery",
+  "dice",
+  "potionmaster",
+  "oddityBrewer",
+  "cartographer",
+  "angler",
+  "towerExterior",
+  "forgePortal",
+  "forgeNormal",
+  "forgeArena",
+  "forgeTreasure",
+  "forgeBlueprint",
+] as const;
+export type DungeonRoomKind = (typeof DUNGEON_ROOM_KINDS)[number];
+
 export interface DungeonRoom {
   key: string;
   number: number;
@@ -177,32 +208,7 @@ export interface DungeonRoom {
   tiles: AdventureTile[][];
   exits: AdventureExit[];
   ring: number;
-  kind:
-    | "normal"
-    | "treasure"
-    | "regen"
-    | "rescue"
-    | "portal"
-    | "waterPortal"
-    | "lostItem"
-    | "offering"
-    | "mermanThrone"
-    | "shopkeeper"
-    | "blacksmith"
-    | "miner"
-    | "hammerVault"
-    | "lottery"
-    | "dice"
-    | "potionmaster"
-    | "oddityBrewer"
-    | "cartographer"
-    | "angler"
-    | "towerExterior"
-    | "forgePortal"
-    | "forgeNormal"
-    | "forgeArena"
-    | "forgeTreasure"
-    | "forgeBlueprint";
+  kind: DungeonRoomKind;
   mapHidden?: boolean;
   regenUsedBy: string[];
   offeringDoorOpened?: boolean;

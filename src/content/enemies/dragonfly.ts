@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const dragonfly: UnitDefinition = {
+export const dragonfly = defineUnit({
   id: "dragonfly",
   name: "Dragonfly",
   attackRange: 2,
@@ -17,4 +17,4 @@ export const dragonfly: UnitDefinition = {
     speed: new Decimal(32),
     luck: new Decimal(0),
   },
-};
+});

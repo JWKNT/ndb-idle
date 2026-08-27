@@ -1,4 +1,4 @@
-import type { LevelDefinition, Position } from "../../game/types";
+import { defineLevel, type Position } from "../../game/types";
 import { rustmireBoard } from "../boards/rustmire-board";
 import { barnacleDrone } from "../enemies/barnacle-drone";
 import { brineDynamo } from "../enemies/brine-dynamo";
@@ -12,7 +12,7 @@ const dronePositions: Position[] = [
   { x: 22, y: 5 }, { x: 22, y: 9 },
 ];
 
-export const level10: LevelDefinition = {
+export const level10 = defineLevel({
   number: 10,
   name: "Rusttide Colossus",
   description: "Destroy the Brine Dynamo to remove the Colossus's shield, then defeat the boss.",
@@ -32,4 +32,4 @@ export const level10: LevelDefinition = {
     { instanceId: "enemy-brine-dynamo", unit: brineDynamo, position: { x: 24, y: 7 } },
     { instanceId: "battle-boss-rustmire-engine", unit: rustmireEngine, position: { x: 18, y: 7 } },
   ],
-};
+});

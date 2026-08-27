@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "@/game/types";
+import { defineUnit } from "@/game/types";
 
-export const mimic: UnitDefinition = {
+export const mimic = defineUnit({
   id: "mimic",
   name: "Mimic",
   attackName: "Ravenous Bite",
@@ -15,4 +15,4 @@ export const mimic: UnitDefinition = {
     speed: new Decimal(44),
     luck: new Decimal(0),
   },
-};
+});

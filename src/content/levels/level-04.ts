@@ -1,4 +1,4 @@
-import type { LevelDefinition } from "../../game/types";
+import { defineLevel } from "../../game/types";
 import { graveyardBoard, graveyardRandomSpawnPositions } from "../boards/graveyard-board";
 import { skeletonBrachiosaurus } from "../enemies/skeleton-brachiosaurus";
 import { skeletonGiraffe } from "../enemies/skeleton-giraffe";
@@ -6,7 +6,7 @@ import { skeletonHippo } from "../enemies/skeleton-hippo";
 import { skeletonKing } from "../enemies/skeleton-king";
 import { skeletonRhino } from "../enemies/skeleton-rhino";
 
-export const level04: LevelDefinition = {
+export const level04 = defineLevel({
   number: 4,
   name: "Skele-King",
   description: "Defeat the Skele-King and its guards.",
@@ -21,4 +21,4 @@ export const level04: LevelDefinition = {
     { instanceId: "battle-skele-brachiosaurus-1", unit: skeletonBrachiosaurus, position: { x: 5, y: 4 } },
     { instanceId: "battle-boss-skele-king", unit: skeletonKing, position: { x: 7, y: 3 } },
   ],
-};
+});

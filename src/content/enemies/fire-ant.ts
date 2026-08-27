@@ -1,7 +1,7 @@
 import Decimal from "break_eternity.js";
-import type { UnitDefinition } from "../../game/types";
+import { defineUnit } from "../../game/types";
 
-export const fireAnt: UnitDefinition = {
+export const fireAnt = defineUnit({
   id: "fire-ant",
   name: "Fire Ant",
   attackRange: 99,
@@ -18,4 +18,4 @@ export const fireAnt: UnitDefinition = {
     speed: new Decimal(26),
     luck: new Decimal(0),
   },
-};
+});

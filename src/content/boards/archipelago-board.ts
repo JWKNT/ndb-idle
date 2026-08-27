@@ -1,4 +1,4 @@
-import type { BoardDefinition, Position } from "../../game/types";
+import { defineBoard, type Position } from "../../game/types";
 import { battleTerrain } from "./battle-terrain";
 
 export const ARCHIPELAGO_WIDTH = 39;
@@ -54,7 +54,7 @@ const gaps = Array.from(
 const deploymentTiles = rectangle(0, 9, 7, 5)
   .filter((position) => landKeys.has(key(position)));
 
-export const archipelagoBoard: BoardDefinition = {
+export const archipelagoBoard = defineBoard({
   id: "archipelago-board",
   name: "The Extremely Available Archipelago",
   width: ARCHIPELAGO_WIDTH,
@@ -84,4 +84,4 @@ export const archipelagoBoard: BoardDefinition = {
     { position: { x: 35, y: 8 }, kind: "beachPalm" },
     { position: { x: 37, y: 14 }, kind: "beachPalm" },
   ],
-};
+});

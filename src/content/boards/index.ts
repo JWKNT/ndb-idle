@@ -18,4 +18,6 @@ export const boards = {
   [archipelagoBoard.id]: archipelagoBoard,
 };
 
+export type BoardId = keyof typeof boards;
+
 export { archipelagoBoard, beastTamerBoard, graveyardBoard, graveyardRandomSpawnPositions, goblinBridgeBoard, goblinArcherBoard, oozeBoard, rustmireBoard, squidBoard };

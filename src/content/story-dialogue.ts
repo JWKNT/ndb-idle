@@ -6,6 +6,7 @@
 
 import type { SpriteName } from "./sprites";
 import type { enemies } from "./enemies";
+import type { BattleNumber } from "./levels";
 
 export interface StoryLine {
   speaker?: string;
@@ -36,7 +37,7 @@ export type ConversationId =
   | "charles-complete"
   | "forge-blueprints-delivered";
 
-type OpeningBattle = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11;
+type OpeningBattle = BattleNumber;
 
 /** Keeps long prose readable in source without inserting visible line breaks. */
 function copy(...lines: string[]): string {

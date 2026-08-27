@@ -7,7 +7,7 @@ interface MiningVisualBand {
   rock: SpriteName;
 }
 
-const MINING_VISUAL_BANDS: readonly MiningVisualBand[] = [
+export const MINING_VISUAL_BANDS: readonly MiningVisualBand[] = [
   { firstRoom: 1, floor: "miningFloor", wall: "miningWall", rock: "miningRock" },
   { firstRoom: 3, floor: "miningFloor2", wall: "miningWall2", rock: "miningRock2" },
   { firstRoom: 5, floor: "miningFloor3", wall: "miningWall3", rock: "miningRock3" },
