@@ -1179,6 +1179,65 @@ describe("progression", () => {
     }
   });
 
+  it("repairs and persists garbled generated gear identities from version 48 saves", () => {
+    const values = new Map<string, string>();
+    vi.stubGlobal("localStorage", {
+      getItem: (key: string) => values.get(key) ?? null,
+      setItem: (key: string, value: string) => values.set(key, value),
+      removeItem: (key: string) => values.delete(key),
+    });
+
+    try {
+      const key = "idle-game-prototype-save-v2-slot-1";
+      const garbledHeavySword = {
+        ...createRingGear("sword", 4, "crafted-heavy-sword-4-1", [8]),
+        name: "Level 4 Burst Staff",
+        ring: 99,
+        power: 100,
+        bonuses: { spAttack: 400 },
+        weaponAbilityId: "burst-staff" as const,
+      };
+      const garbledHelmet = {
+        ...createRingGear("helmet", 2, "saved-helmet"),
+        name: "Level 4 Helmet",
+        ring: 4,
+        power: 5,
+        bonuses: { hp: 999 },
+      };
+      saveProgression({
+        ...defaultProgression(),
+        inventory: [garbledHeavySword, garbledHelmet],
+      }, 1);
+      const stored = JSON.parse(values.get(key)!);
+      values.set(key, JSON.stringify({ ...stored, version: 48 }));
+
+      const loaded = loadProgression(1);
+      expect(loaded.inventory).toEqual([
+        expect.objectContaining({
+          id: garbledHeavySword.id,
+          name: "Level 4 Heavy Sword",
+          ring: 4,
+          power: 5,
+          weaponAbilityId: "heavy-slam",
+          bonuses: { attack: 15 },
+        }),
+        expect.objectContaining({
+          id: garbledHelmet.id,
+          name: "Level 2 Helmet",
+          ring: 2,
+          power: 3,
+          bonuses: { hp: 12, spDefense: 3 },
+        }),
+      ]);
+
+      const repairedSave = JSON.parse(values.get(key)!);
+      expect(repairedSave.version).toBe(49);
+      expect(repairedSave.inventory).toEqual(loaded.inventory);
+    } finally {
+      vi.unstubAllGlobals();
+    }
+  });
+
   it("persists purchased quests separately from the selected active quest", () => {
     const values = new Map<string, string>();
     vi.stubGlobal("localStorage", {

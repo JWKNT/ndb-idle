@@ -5,7 +5,7 @@ import {
   type ForgeRecipeId,
   type ForgeRecipeSymbol,
 } from "@/content/forge-recipes";
-import { createRingGear, type GearItem, type GearSlot } from "./gear";
+import { createRingGear, restoreRingGear, type GearItem, type GearSlot } from "./gear";
 import { canAddUniqueInventoryItem } from "./inventory-capacity";
 import type { MaterialId } from "./items";
 import type { ProgressionState } from "./progression/types";
@@ -130,11 +130,17 @@ export function craftItem(state: ProgressionState, grid: readonly (MaterialId | 
 
   const sourceKey = nextCraftedItemSourceKey(state, recipe.recipeId, recipe.level);
   const baseItem = createRingGear(recipe.slot!, recipe.level, sourceKey, state.completedRaids);
-  const item: GearItem = recipe.recipeId === "sword"
-    ? { ...baseItem, name: recipe.name, weaponAbilityId: "sweep" }
-    : recipe.recipeId === "heavy-sword"
-      ? { ...baseItem, name: recipe.name, weaponAbilityId: "heavy-slam" }
-      : { ...baseItem, name: recipe.name };
+  const item: GearItem = {
+    ...restoreRingGear({
+      ...baseItem,
+      weaponAbilityId: recipe.recipeId === "sword"
+        ? "sweep"
+        : recipe.recipeId === "heavy-sword"
+          ? "heavy-slam"
+          : undefined,
+    }, state.completedRaids),
+    name: recipe.name,
+  };
 
   return {
     state: {

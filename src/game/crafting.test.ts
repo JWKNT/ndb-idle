@@ -74,10 +74,35 @@ describe("Forge crafting clues", () => {
       slot: "sword",
       ring: 4,
       weaponAbilityId: "heavy-slam",
+      bonuses: { attack: 15 },
     });
     expect(result.state.materials["rusty-metal"]).toBe(0);
     expect(result.state.materials["fire-alligator-hide"]).toBe(0);
     expect(result.state.materials.driftwood).toBe(0);
+  });
+
+  it("always gives crafted weapon families matching names, abilities, and bonuses", () => {
+    for (const recipeId of ["sword", "heavy-sword"] as const) {
+      const grid = craftingPattern(recipeId, 3);
+      const state = {
+        ...defaultProgression(),
+        craftingUnlocked: true,
+        completedRaids: [1, 2, 3, 4, 5, 6, 7, 8],
+        materials: Object.fromEntries(
+          Object.entries(emptyMaterialCounts()).map(([id, quantity]) => [
+            id,
+            quantity + grid.filter((ingredient) => ingredient === id).length,
+          ]),
+        ) as ReturnType<typeof emptyMaterialCounts>,
+      };
+      const result = craftItem(state, grid);
+      expect(result.item).toMatchObject({
+        name: recipeId === "sword" ? "Level 3 Sweeping Sword" : "Level 3 Heavy Sword",
+        weaponAbilityId: recipeId === "sword" ? "sweep" : "heavy-slam",
+        bonuses: { attack: 12 },
+      });
+      expect(result.item?.bonuses.spAttack).toBeUndefined();
+    }
   });
 
   it("keeps crafted item ids unique after an earlier copy is sold", () => {

@@ -89,6 +89,15 @@ const SLOT_LABELS: Record<GearSlot, string> = {
   accessory: "Accessory",
 };
 
+type GeneratedWeaponAbilityId = Exclude<WeaponAbilityId, "trident-throw">;
+
+const GENERATED_WEAPON_NAMES: Record<GeneratedWeaponAbilityId, string> = {
+  sweep: "Sweeping Sword",
+  "heavy-slam": "Great Slammer",
+  "burst-staff": "Burst Staff",
+  "rapid-staff": "Eightfold Staff",
+};
+
 export function createRingGear(
   slot: GearSlot,
   ring: number,
@@ -96,7 +105,55 @@ export function createRingGear(
   completedBattleNumbers: readonly number[] = [],
 ): GearItem {
   const safeRing = Math.max(0, Math.floor(ring));
-  const power = safeRing + 1;
+  const weaponAbilityId = slot === "sword"
+    ? treasureWeaponAbility(sourceKey, safeRing, completedBattleNumbers.includes(8))
+    : undefined;
+  return buildRingGear(slot, safeRing, sourceKey, weaponAbilityId);
+}
+
+/**
+ * Rebuilds generated gear without rerolling its identity during save loading.
+ * The item id owns its original source, slot, and level; the saved weapon
+ * ability owns its family. Names and bonuses are then derived from those
+ * stable fields so an already-garbled display is repaired on load.
+ */
+export function restoreRingGear(
+  raw: Pick<GearItem, "id" | "slot"> & Partial<Pick<GearItem, "ring" | "weaponAbilityId">>,
+  completedBattleNumbers: readonly number[] = [],
+): GearItem {
+  const parsed = parseRingGearId(raw.id);
+  const slot = parsed?.slot ?? raw.slot;
+  const ring = parsed?.ring ?? Math.max(0, Math.floor(Number(raw.ring) || 0));
+  const sourceKey = parsed?.sourceKey ?? raw.id;
+  const craftedRecipeId = craftedRecipeFromSourceKey(sourceKey);
+  const savedAbility = isGeneratedWeaponAbilityId(raw.weaponAbilityId)
+    ? raw.weaponAbilityId
+    : undefined;
+  const weaponAbilityId = slot === "sword"
+    ? craftedRecipeId === "heavy-sword"
+      ? "heavy-slam"
+      : craftedRecipeId === "sword"
+        ? "sweep"
+        : savedAbility ?? treasureWeaponAbility(sourceKey, ring, completedBattleNumbers.includes(8))
+    : undefined;
+  const restored = buildRingGear(slot, ring, sourceKey, weaponAbilityId);
+  const craftedName = craftedRecipeId === "heavy-sword"
+    ? `Level ${ring} Heavy Sword`
+    : undefined;
+  return {
+    ...restored,
+    id: raw.id,
+    name: craftedName ?? restored.name,
+  };
+}
+
+function buildRingGear(
+  slot: GearSlot,
+  ring: number,
+  sourceKey: string,
+  weaponAbilityId: GeneratedWeaponAbilityId | undefined,
+): GearItem {
+  const power = ring + 1;
   const bonuses: Record<GearSlot, Partial<Record<StatKey, number>>> = {
     helmet: { hp: 4 * power, spDefense: power },
     chestplate: { hp: 6 * power, defense: 2 * power },
@@ -105,37 +162,50 @@ export function createRingGear(
     sword: { attack: 3 * power },
     accessory: { spDefense: 2 * power, luck: power },
   };
-  const weaponAbilityId = slot === "sword"
-    ? treasureWeaponAbility(sourceKey, safeRing, completedBattleNumbers.includes(8))
-    : undefined;
-  const weaponNames: Partial<Record<WeaponAbilityId, string>> = {
-    sweep: "Sweeping Sword",
-    "heavy-slam": "Great Slammer",
-    "burst-staff": "Burst Staff",
-    "rapid-staff": "Eightfold Staff",
-  };
   const weaponBonuses = weaponAbilityId === "burst-staff" || weaponAbilityId === "rapid-staff"
     ? { spAttack: 4 * power }
     : bonuses.sword;
   return {
-    id: `treasure-${sourceKey}-${slot}-r${safeRing}`,
+    id: `treasure-${sourceKey}-${slot}-r${ring}`,
     name: slot === "sword"
-      ? `Level ${safeRing} ${weaponNames[weaponAbilityId!] ?? SLOT_LABELS[slot]}`
-      : `Level ${safeRing} ${SLOT_LABELS[slot]}`,
+      ? `Level ${ring} ${weaponAbilityId ? GENERATED_WEAPON_NAMES[weaponAbilityId] : SLOT_LABELS[slot]}`
+      : `Level ${ring} ${SLOT_LABELS[slot]}`,
     slot,
-    ring: safeRing,
+    ring,
     power,
     bonuses: slot === "sword" ? weaponBonuses : bonuses[slot],
     weaponAbilityId,
   };
 }
 
+function parseRingGearId(id: string): { sourceKey: string; slot: GearSlot; ring: number } | null {
+  const match = /^treasure-(.+)-(helmet|chestplate|leggings|boots|sword|accessory)-r(\d+)$/.exec(id);
+  if (!match) return null;
+  return {
+    sourceKey: match[1],
+    slot: match[2] as GearSlot,
+    ring: Math.max(0, Math.floor(Number(match[3]) || 0)),
+  };
+}
+
+function craftedRecipeFromSourceKey(sourceKey: string): "sword" | "heavy-sword" | null {
+  const match = /^crafted-(heavy-sword|sword)-[1-4]-\d+$/.exec(sourceKey);
+  return match ? match[1] as "sword" | "heavy-sword" : null;
+}
+
+function isGeneratedWeaponAbilityId(value: unknown): value is GeneratedWeaponAbilityId {
+  return value === "sweep"
+    || value === "heavy-slam"
+    || value === "burst-staff"
+    || value === "rapid-staff";
+}
+
 function treasureWeaponAbility(
   sourceKey: string,
   ring: number,
   lateWeaponsUnlocked: boolean,
-): WeaponAbilityId {
-  const pool: WeaponAbilityId[] = lateWeaponsUnlocked
+): GeneratedWeaponAbilityId {
+  const pool: GeneratedWeaponAbilityId[] = lateWeaponsUnlocked
     ? ["sweep", "burst-staff", "heavy-slam", "rapid-staff"]
     : ["sweep", "burst-staff"];
   let hash = 2166136261;

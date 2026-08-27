@@ -14,7 +14,7 @@ import {
   createRingGear,
   isMilestoneGear,
   isGearSlot,
-  isWeaponAbilityId,
+  restoreRingGear,
   type Equipment,
   type GearItem,
   type GearSlot,
@@ -207,7 +207,7 @@ export {
 const LEGACY_SAVE_KEY = "idle-game-prototype-save-v2";
 const SAVE_SLOT_KEY_PREFIX = "idle-game-prototype-save-v2-slot-";
 const SAVE_SLOT_MIGRATION_KEY = "idle-game-prototype-save-slots-migrated-v1";
-const SAVE_VERSION = 48;
+const SAVE_VERSION = 49;
 const HEALING_RATE_PER_SECOND = 0.08;
 const STAMINA_RECOVERY_RATE_PER_SECOND = 0.2;
 const PLAYER_ORDER: PlayerId[] = ["knight", "worm", "miner"];
@@ -398,7 +398,8 @@ export function loadProgression(slot: SaveSlot = 1): ProgressionState {
     const stored = migrateStoredProgression(parsed);
     if (stored !== parsed) localStorage.setItem(saveSlotKey(slot), JSON.stringify(stored));
     const highest = Math.min(levels.length, Math.max(1, Math.floor(stored.highestUnlockedLevel ?? 1)));
-    const inventory = sanitizeInventory(stored.inventory);
+    const completedRaids = sanitizeCompletedRaids(stored.completedRaids, highest);
+    const inventory = sanitizeInventory(stored.inventory, completedRaids);
     const completedQuestIds = sanitizeQuestIds(stored.completedQuestIds);
     const equipment = sanitizePartyEquipment(stored.equipment, inventory, completedQuestIds);
     const now = Date.now();
@@ -413,7 +414,6 @@ export function loadProgression(slot: SaveSlot = 1): ProgressionState {
       activeMysteryPotions,
       now,
     );
-    const completedRaids = sanitizeCompletedRaids(stored.completedRaids, highest);
     const materials = sanitizeMaterialCounts(stored.materials);
     const defeatedEnemyIds = sanitizeDefeatedEnemyIds(
       stored.defeatedEnemyIds,
@@ -820,6 +820,9 @@ function migrateStoredProgression(
     && !inventoryWithShamanRing.some((item) =>
       item?.id === suctionCups.id || item?.definitionId === "suction-cups"
     );
+  const inventoryWithMilestones = needsSuctionCups
+    ? [...inventoryWithShamanRing, suctionCups]
+    : inventoryWithShamanRing;
   return {
     ...migrated,
     version: SAVE_VERSION,
@@ -828,7 +831,7 @@ function migrateStoredProgression(
       ? [...new Set([...migrated.autoPauseAdventureRooms, "oddityBrewer" as const])]
       : migrated.autoPauseAdventureRooms,
     materials: shouldRestoreRustyGear ? { ...materials, "rusty-gear": 1 } : materials,
-    inventory: needsSuctionCups ? [...inventoryWithShamanRing, suctionCups] : inventoryWithShamanRing,
+    inventory: sanitizeInventory(inventoryWithMilestones, completedRaids),
   };
 }
 
@@ -1694,7 +1697,10 @@ function sanitizeTraining(value: Partial<TrainingLevels> | undefined): TrainingL
   };
 }
 
-function sanitizeInventory(value: unknown): GearItem[] {
+function sanitizeInventory(
+  value: unknown,
+  completedBattleNumbers: readonly number[] = [],
+): GearItem[] {
   if (!Array.isArray(value)) return [];
   const inventory: GearItem[] = [];
   for (const candidate of value) {
@@ -1717,15 +1723,12 @@ function sanitizeInventory(value: unknown): GearItem[] {
       inventory.push(createSuctionCupsGear());
       continue;
     }
-    const ring = Math.max(0, Math.floor(Number(raw.ring) || 0));
-    const canonical = createRingGear(raw.slot, ring, raw.id);
-    inventory.push({
-      ...canonical,
+    inventory.push(restoreRingGear({
       id: raw.id,
-      weaponAbilityId: isWeaponAbilityId(raw.weaponAbilityId)
-        ? raw.weaponAbilityId
-        : canonical.weaponAbilityId,
-    });
+      slot: raw.slot,
+      ring: raw.ring,
+      weaponAbilityId: raw.weaponAbilityId,
+    }, completedBattleNumbers));
   }
   return inventory;
 }

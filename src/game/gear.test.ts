@@ -1,6 +1,13 @@
 import { describe, expect, it } from "vitest";
 import { createTreasureRoomTiles } from "../content/adventure-rooms/treasure-room";
-import { createRingGear, createShamanRingGear, createSuctionCupsGear, createTridentGear, treasureGearSlot } from "./gear";
+import {
+  createRingGear,
+  createShamanRingGear,
+  createSuctionCupsGear,
+  createTridentGear,
+  restoreRingGear,
+  treasureGearSlot,
+} from "./gear";
 import { addGear, defaultProgression, equipGear, memberEquipment, memberMaxHp } from "./progression";
 
 describe("treasure gear", () => {
@@ -72,5 +79,54 @@ describe("treasure gear", () => {
     expect(new Set(early)).toEqual(new Set(["sweep", "burst-staff"]));
     expect(late).toContain("heavy-slam");
     expect(late).toContain("rapid-staff");
+  });
+
+  it("restores every generated weapon family from stable saved identity", () => {
+    const cases = [
+      ["sweep", "Sweeping Sword", "attack"],
+      ["heavy-slam", "Great Slammer", "attack"],
+      ["burst-staff", "Burst Staff", "spAttack"],
+      ["rapid-staff", "Eightfold Staff", "spAttack"],
+    ] as const;
+
+    for (const [weaponAbilityId, weaponName, bonusStat] of cases) {
+      const item = restoreRingGear({
+        id: `treasure-family-${weaponAbilityId}-sword-r4`,
+        slot: "sword",
+        ring: 99,
+        weaponAbilityId,
+      }, [8]);
+      expect(item).toMatchObject({
+        name: `Level 4 ${weaponName}`,
+        slot: "sword",
+        ring: 4,
+        power: 5,
+        weaponAbilityId,
+      });
+      expect(item.bonuses).toEqual({ [bonusStat]: bonusStat === "attack" ? 15 : 20 });
+    }
+  });
+
+  it("restores crafted weapon names from their recipe ids", () => {
+    expect(restoreRingGear({
+      id: "treasure-crafted-sword-3-2-sword-r3",
+      slot: "sword",
+      ring: 3,
+      weaponAbilityId: "burst-staff",
+    })).toMatchObject({
+      name: "Level 3 Sweeping Sword",
+      weaponAbilityId: "sweep",
+      bonuses: { attack: 12 },
+    });
+    expect(restoreRingGear({
+      id: "treasure-crafted-heavy-sword-4-1-sword-r4",
+      slot: "sword",
+      ring: 4,
+      weaponAbilityId: "burst-staff",
+    })).toMatchObject({
+      name: "Level 4 Heavy Sword",
+      weaponAbilityId: "heavy-slam",
+      bonuses: { attack: 15 },
+    });
   });
 });
