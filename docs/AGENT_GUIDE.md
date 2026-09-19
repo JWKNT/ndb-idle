@@ -107,12 +107,12 @@ pages on a fresh save.
 
 ## Visual direction
 
-The writing keeps the company’s unreasonable self-esteem. The interface follows
-the owner’s September 19 Readers direction across jehlp.net:
+The interface should resemble blunt software made by a company with unreasonable
+self-esteem:
 
-- Georgia text and controls; bold Palatino headings.
-- Warm off-white paper and neutral surfaces.
-- Thin quiet outlines and square geometry; no decorative offset shadows.
+- Arial-like sans-serif typography.
+- Flat gray and off-white surfaces.
+- Hard dark outlines, square geometry, restrained shadows.
 - Color used sparingly for selection, danger, rewards, and strong state changes.
 - Compact, legible boxes without decorative side stripes unless the stripe communicates
   real state.
@@ -120,7 +120,7 @@ the owner’s September 19 Readers direction across jehlp.net:
 Avoid:
 
 - Paper textures, parchment, tape, seals, ornamental dividers, or renaissance styling.
-- Ornamental fantasy styling: quality comes from type, alignment, and restraint.
+- Regal polish, fantasy-book elegance, or overly curated boutique UI.
 - A card inside a card inside another card when a bounded box is enough.
 - Decorative vertical or horizontal accent bars on every element.
 - Disabled actions for nonexistent operations. If an empty equipment slot cannot be

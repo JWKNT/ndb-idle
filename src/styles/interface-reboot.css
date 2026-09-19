@@ -1,20 +1,20 @@
 /*
- * Shared paper-and-ink UI
+ * Raw utility UI
  * --------------
- * Aligned with jehlp.net Readers: Georgia text, Palatino headings, quiet rules. No tape,
- * scrapbook details, ornamental rules, or simulated craftsmanship.
+ * Intentionally plain, loud, square, and a little cheap. No parchment, tape,
+ * heraldry, scrapbook details, ornamental rules, or simulated craftsmanship.
  * SVGs and the actual board art are not changed here.
  */
 
 :root {
-  font-family: Georgia, "Times New Roman", serif !important;
-  --raw-bg: #fbfaf7;
-  --raw-panel: #f4f2ed;
-  --raw-panel-light: #fbfaf7;
-  --raw-panel-dark: #e7e3db;
-  --raw-ink: #181817;
-  --raw-muted: #6f6c66;
-  --raw-line: #aaa49a;
+  font-family: Arial, Helvetica, sans-serif !important;
+  --raw-bg: #c9c9c9;
+  --raw-panel: #e8e8e8;
+  --raw-panel-light: #f5f5f5;
+  --raw-panel-dark: #b7b7b7;
+  --raw-ink: #202020;
+  --raw-muted: #5e5e5e;
+  --raw-line: #303030;
   --raw-shadow: #777;
   --raw-yellow: #ffd83d;
   --raw-red: #c84a43;
@@ -24,7 +24,7 @@
   --app-bg: var(--raw-bg);
   --surface: var(--raw-panel);
   --surface-raised: var(--raw-panel-light);
-  --surface-muted: #e7e3db;
+  --surface-muted: #d3d3d3;
   --ink: var(--raw-ink);
   --muted: var(--raw-muted);
   --line: #8c8c8c;
@@ -37,17 +37,13 @@
 body,
 #root,
 #root * {
-  font-family: Georgia, "Times New Roman", serif;
-}
-
-#root :is(h1, h2, h3, .launch-wordmark) {
-  font-family: "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 
 body {
   color: var(--raw-ink);
   background: var(--raw-bg);
-  line-height: 1.45;
+  line-height: 1.25;
 }
 
 ::selection {
@@ -79,9 +75,9 @@ body {
   padding: 12px 9px 10px;
   overflow: hidden;
   border: 0;
-  border-right: 1px solid var(--raw-line);
-  background: var(--raw-panel);
-  box-shadow: none;
+  border-right: 3px solid #222;
+  background: #adadad;
+  box-shadow: 4px 0 0 #777;
 }
 
 .app-header::before,
@@ -104,13 +100,13 @@ body {
   min-height: 38px;
   margin: 0;
   padding: 7px 9px;
-  border: 1px solid var(--raw-line);
-  border-left: 2px solid var(--raw-line);
+  border: 2px solid #282828;
+  border-left: 7px solid #575757;
   color: #171717;
-  background: var(--raw-panel);
-  box-shadow: none;
+  background: linear-gradient(#f1f1f1, #c7c7c7);
+  box-shadow: 2px 2px 0 #676767;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 800;
   letter-spacing: 0;
   text-align: left;
   text-shadow: none;
@@ -123,7 +119,7 @@ body {
   border-left-color: var(--raw-red);
   color: #111;
   background: var(--raw-yellow);
-  box-shadow: none;
+  box-shadow: 2px 2px 0 #555;
 }
 
 .primary-nav button.is-active,
@@ -131,11 +127,11 @@ body {
 .primary-nav button.is-active:active:not(:disabled) {
   width: 100%;
   transform: none;
-  border: 1px solid var(--raw-line);
-  border-left: 2px solid var(--raw-line);
+  border: 3px solid #1e1e1e;
+  border-left: 9px solid var(--raw-red);
   color: #111;
   background: var(--raw-yellow);
-  box-shadow: none;
+  box-shadow: 2px 2px 0 #555;
 }
 
 .primary-nav button.is-active::before,
@@ -161,7 +157,7 @@ body {
 .resource-display {
   gap: 6px;
   padding-top: 9px;
-  border-top: 1px solid var(--raw-line);
+  border-top: 2px solid #444;
 }
 
 .resource-display::before,
@@ -173,10 +169,10 @@ body {
 .resource-display > span,
 .resource-display button {
   padding: 7px 8px;
-  border: 1px solid var(--raw-line);
+  border: 2px solid #292929;
   color: #111;
-  background: var(--raw-panel);
-  box-shadow: none;
+  background: #d4d4d4;
+  box-shadow: 2px 2px 0 #676767;
   font-size: 12px;
   text-align: left;
 }
@@ -188,22 +184,22 @@ body {
 
 .resource-display button {
   min-height: 34px;
-  font-weight: 700;
+  font-weight: 800;
   line-height: 1.15;
 }
 
 .resource-display button:hover:not(:disabled) {
   border-color: #111;
-  background: var(--raw-panel);
+  background: #efefef;
   transform: none;
 }
 
 .resource-display button:nth-of-type(1) {
-  background: var(--raw-panel);
+  background: #fff;
 }
 
 .resource-display button:nth-of-type(2) {
-  border-left: 2px solid var(--raw-line);
+  border-left: 7px solid var(--raw-red);
 }
 
 .resource-display small {
@@ -224,7 +220,7 @@ body {
 .adventure-setup-view,
 .mining-view,
 .crafting-view {
-  background: var(--raw-bg);
+  background: linear-gradient(135deg, var(--page-tint), #d8d8d8 420px);
 }
 
 .page-heading {
@@ -235,10 +231,10 @@ body {
   margin-bottom: 18px;
   padding: 9px 14px 10px;
   overflow: hidden;
-  border: 1px solid var(--raw-line);
+  border: 3px solid #222;
   color: #111;
-  background: var(--raw-panel);
-  box-shadow: none;
+  background: #f0f0f0;
+  box-shadow: 4px 4px 0 #777;
   transform: none;
 }
 
@@ -253,7 +249,7 @@ body {
   margin: 0;
   color: #111;
   font-size: 27px;
-  font-weight: 700;
+  font-weight: 900;
   line-height: 1;
   letter-spacing: -.035em;
   text-shadow: none;
@@ -304,10 +300,10 @@ h3 { font-size: 16px; }
 .battle-camera-controls,
 .crafting-inventory {
   position: relative;
-  border: 1px solid var(--raw-line);
+  border: 2px solid #303030;
   color: #202020;
-  background: var(--raw-panel);
-  box-shadow: none;
+  background: #ededed;
+  box-shadow: 3px 3px 0 #888;
 }
 
 .simple-page > section::before,
@@ -356,7 +352,7 @@ h3 { font-size: 16px; }
 .adventure-sidebar section > h2:first-child,
 .party-inventory > h2:first-child {
   padding-bottom: 5px;
-  border-bottom: 1px solid var(--raw-line);
+  border-bottom: 2px solid #777;
 }
 
 .party-member {
@@ -828,7 +824,7 @@ progress::-moz-progress-bar { background: var(--page-accent); }
 .adventure-sidebar *,
 .quest-log,
 .quest-log * {
-  font-family: Georgia, "Times New Roman", serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 
 .adventure-advanced-options {
@@ -1029,7 +1025,7 @@ progress::-moz-progress-bar { background: var(--page-accent); }
 
 .crafting-view,
 .crafting-view * {
-  font-family: Georgia, "Times New Roman", serif !important;
+  font-family: Arial, Helvetica, sans-serif !important;
 }
 
 .crafting-layout {
@@ -1309,7 +1305,7 @@ progress::-moz-progress-bar { background: var(--page-accent); }
   z-index: 0;
   color: rgb(30 30 30 / 10%);
   font-size: 190px;
-  font-weight: 700;
+  font-weight: 900;
   line-height: .75;
   content: "000000\A 111111\A 000000";
   white-space: pre;
@@ -1579,7 +1575,7 @@ progress::-moz-progress-bar { background: var(--page-accent); }
   min-height: 100vh;
   padding: 32px;
   overflow: auto;
-  background: var(--raw-panel);
+  background: #c7c7c7;
 }
 
 .launch-view::before,
@@ -1594,10 +1590,10 @@ progress::-moz-progress-bar { background: var(--page-accent); }
   justify-items: center;
   gap: 44px;
   padding: clamp(36px, 7vw, 72px);
-  border: 1px solid var(--raw-line);
+  border: 3px solid #222;
   color: #171717;
-  background: var(--raw-panel);
-  box-shadow: none;
+  background: #dedede;
+  box-shadow: 7px 7px 0 #6b6b6b;
   text-align: center;
 }
 
@@ -1611,7 +1607,7 @@ progress::-moz-progress-bar { background: var(--page-accent); }
   margin: 0;
   color: #333;
   font-size: 12px;
-  font-weight: 700;
+  font-weight: 900;
   line-height: 1.35;
   letter-spacing: .12em;
 }
@@ -1619,34 +1615,34 @@ progress::-moz-progress-bar { background: var(--page-accent); }
 .launch-wordmark {
   margin: 0;
   padding: 0 0 18px;
-  border-bottom: 1px solid var(--raw-line);
+  border-bottom: 4px solid #333;
   color: #111;
-  font-size: clamp(38px, 7vw, 72px);
-  font-weight: 700;
-  line-height: 1.1;
-  letter-spacing: -.015em;
+  font-size: clamp(66px, 11vw, 112px);
+  font-weight: 1000;
+  line-height: .82;
+  letter-spacing: -.08em;
 }
 
 .launch-minimal .launch-start {
   width: min(280px, 100%);
   min-height: 74px;
   padding: 10px 20px;
-  border: 1px solid var(--raw-line);
+  border: 3px solid #222;
   color: #111;
-  background: var(--raw-panel);
-  box-shadow: none;
+  background: #eeeeee;
+  box-shadow: 4px 4px 0 #666;
 }
 
 .launch-minimal .launch-start:hover:not(:disabled) {
   border-color: #111;
-  background: var(--raw-panel);
-  box-shadow: none;
-  transform: none;
+  background: #fff;
+  box-shadow: 6px 6px 0 #555;
+  transform: translate(-2px, -2px);
 }
 
 .launch-minimal .launch-start:active:not(:disabled) {
-  box-shadow: none;
-  transform: none;
+  box-shadow: 2px 2px 0 #555;
+  transform: translate(2px, 2px);
 }
 
 .launch-minimal .launch-start strong {
@@ -2089,8 +2085,8 @@ progress::-moz-progress-bar { background: var(--page-accent); }
     padding: 7px;
     overflow: visible;
     border-right: 0;
-    border-bottom: 1px solid var(--raw-line);
-    box-shadow: none;
+    border-bottom: 3px solid #222;
+    box-shadow: 0 3px 0 #777;
   }
 
   .primary-nav {
