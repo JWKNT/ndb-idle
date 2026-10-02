@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import Decimal from "break_eternity.js";
+import { shouldHandleGameShortcut } from "./features/shared/gameKeyboard";
 import {
   AdventureView,
   BattleView,
@@ -2050,11 +2051,7 @@ export function Game({ saveSlot, onQuitToTitle }: GameProps) {
   useEffect(() => {
     const handleKey = (event: KeyboardEvent) => {
       if (conversationActiveRef.current) return;
-      if (
-        event.target instanceof HTMLInputElement
-        || event.target instanceof HTMLSelectElement
-        || event.target instanceof HTMLTextAreaElement
-      ) return;
+      if (!shouldHandleGameShortcut(event)) return;
       const key = event.key.toLowerCase();
       if (key === "q") {
         event.preventDefault();
