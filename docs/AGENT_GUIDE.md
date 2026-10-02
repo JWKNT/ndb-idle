@@ -79,6 +79,11 @@ Avoid:
 
 ### Copy has different jobs
 
+Use ASD-STE100 Issue 9 for technical Help, instructions, and interface text.
+Read `../../site-theme/docs/WRITING-STYLE.md` for the writing and review rules.
+Preserve the fictional dialogue, story text, bestiary prose, and item descriptions specified above.
+This writing rule does not change the game mechanics or its visual design.
+
 Humor must not leak into text whose job is to explain state or mechanics. Logs, Help,
 toasts, errors, controls, quest objectives, Battle objectives, reward summaries, prices,
 status messages, and labels are standard, brief, and informative.

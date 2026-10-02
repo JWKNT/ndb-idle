@@ -52,7 +52,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
         paragraphs: [],
         items: [
           { label: "WASD / Arrows", text: "Move the active character one tile." },
-          { label: "Space", text: "Use a basic attack on an enemy in range. If none is available, pass the turn." },
+          { label: "Space", text: "Use a basic attack on an enemy in range. If no enemy is in range, pass the turn." },
           { label: "Q", text: "Toggle auto mode for the current activity." },
           { label: "Escape", text: "Close an open Help or conversation-style overlay." },
         ],
@@ -75,11 +75,9 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: always,
     sections: [{
       paragraphs: [
-        "Choose available party members, place them on deployment tiles, and start the battle. "
-          + "Defeat every enemy to clear it.",
-        "Combat is turn-based. Movement, basic attacks, secondary attacks, and passing consume a "
-          + "turn. The right panel keeps party HP, the current story, and a factual attack log.",
-        "Auto mode chooses actions for the party. Turn it off whenever you want to act manually.",
+        "Choose available party members. Place them on deployment tiles. Start the battle. To complete the battle, defeat every enemy.",
+        "Combat is turn-based. Movement, basic attacks, secondary attacks, and passes consume a turn. The right panel shows party HP, the current story, and the attack log.",
+        "Auto mode chooses actions for the party. For manual control, turn auto mode off.",
       ],
     }],
   },
@@ -94,21 +92,21 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
         title: "The eight stats",
         paragraphs: [],
         items: [
-          { label: "HP", text: "How much damage a unit can take. At 0 HP, the unit is defeated." },
-          { label: "Stamina", text: "Spent by certain activities. A member leaves an activity at 0." },
-          { label: "Attack", text: "Raises damage dealt by physical attacks." },
-          { label: "Defense", text: "Reduces damage received from physical attacks." },
-          { label: "Sp. Attack", text: "Raises damage dealt by special attacks." },
-          { label: "Sp. Defense", text: "Reduces damage received from special attacks." },
-          { label: "Speed", text: "Determines how quickly a unit reaches its next turn." },
-          { label: "Luck", text: "Improves applicable random rewards and outcomes." },
+          { label: "HP", text: "HP is the damage that a unit can take. At 0 HP, the unit is defeated." },
+          { label: "Stamina", text: "Some activities consume Stamina. A member leaves an activity at 0 Stamina." },
+          { label: "Attack", text: "Attack increases physical attack damage." },
+          { label: "Defense", text: "Defense decreases damage from physical attacks." },
+          { label: "Sp. Attack", text: "Sp. Attack increases special attack damage." },
+          { label: "Sp. Defense", text: "Sp. Defense decreases damage from special attacks." },
+          { label: "Speed", text: "Speed controls how soon a unit gets its next turn." },
+          { label: "Luck", text: "Luck improves the random rewards and outcomes that use Luck." },
         ],
       },
       {
         title: "Other combat values",
         paragraphs: [],
         items: [
-          { label: "Range", text: "How many tiles a basic attack can reach. Weapons and character type can change it." },
+          { label: "Range", text: "Range is the number of tiles that a basic attack can reach. Weapons and character type can change it." },
         ],
       },
     ],
@@ -121,10 +119,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: always,
     sections: [{
       paragraphs: [
-        "A party member can occupy only one activity at a time. Assigning or deploying a member "
-          + "makes them unavailable elsewhere.",
-        "Every unassigned member restores HP and Stamina no matter which menu is open. Release the "
-          + "member from their current assignment and recovery begins automatically.",
+        "A party member can do only one activity at a time. An assigned or deployed member is unavailable for other activities.",
+        "Every unassigned member restores HP and Stamina, regardless of the open menu. To start automatic recovery, release the member from the current assignment.",
       ],
     }],
   },
@@ -137,8 +133,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     sections: [{
       paragraphs: [
         "The Party screen shows stats, current activity, and equipment for every recruited member.",
-        "Equipment changes stats or combat behavior. Weapons control basic attacks and secondary "
-          + "abilities. Unequip an item before selling it.",
+        "Equipment changes stats or combat behavior. Weapons control basic attacks and secondary abilities. Before you sell an item, unequip it.",
       ],
     }],
   },
@@ -150,9 +145,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.partyTrainingUnlocked,
     sections: [{
       paragraphs: [
-        "Training permanently raises one chosen stat for one chosen party member. Each level makes "
-          + "the next level more expensive.",
-        "Training prices and gold balances are whole numbers. Fractional balances are rounded down.",
+        "Training permanently increases one selected stat for one selected party member. Each level increases the cost of the next level.",
+        "Training prices and gold balances are whole numbers. The game rounds fractional balances down.",
       ],
     }],
   },
@@ -164,10 +158,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.shopUnlocked,
     sections: [{
       paragraphs: [
-        "The Shop buys and sells whatever categories have been unlocked. NEW marks a category with "
-          + "something you have not inspected since it appeared.",
-        "Inventory has a limit on distinct slots and a separate limit on each stack. Slot upgrades "
-          + "increase the number of distinct stacks. Stack upgrades increase each stack limit.",
+        "The Shop buys and sells items from unlocked categories. NEW identifies a category with an item that you have not inspected since it appeared.",
+        "Inventory has a limit on distinct slots and a separate limit on each stack. Slot upgrades increase the number of distinct stacks. Stack upgrades increase each stack limit.",
       ],
     }],
   },
@@ -179,8 +171,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.shopUnlocked,
     sections: [{
       paragraphs: [
-        "Consume potions from the Party screen. Their effects apply to the party for a limited time. "
-          + "Using the same level again extends the timer.",
+        "Consume potions from the Party screen. Their effects apply to the party for a limited time. If you consume another potion of the same level, the timer extends.",
         "When different levels of the same effect overlap, only the stronger value applies.",
       ],
     }],
@@ -193,11 +184,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.adventureUnlocked,
     sections: [{
       paragraphs: [
-        "Choose available party members and begin an expedition. Move between rooms, fight enemies, "
-          + "collect materials, interact with objects, and speak to characters.",
-        "Gold found during an expedition is carried rather than banked. It becomes permanent when the "
-          + "party exits safely. Death removes 30% of that member's collected gold; stamina exhaustion "
-          + "removes 20%.",
+        "Choose available party members. Start an expedition. During an expedition, the party can move between rooms, fight enemies, collect materials, use objects, and speak to characters.",
+        "The party carries gold that it finds during an expedition. A safe exit adds this gold to the permanent balance. Death removes 30% of that member's collected gold. Stamina exhaustion removes 20%.",
       ],
     }],
   },
@@ -209,11 +197,9 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.adventureUnlocked,
     sections: [{
       paragraphs: [
-        "The map records visited rooms and the passages connecting them. Expand it for a larger view.",
-        "Quests appear in the order obtained. Activating one places its marker on the relevant route. "
-          + "Conversation boxes pause the event until their dialogue is clicked through.",
-        "Evacuation supplies end the expedition safely and bank carried gold when used within their "
-          + "listed reach.",
+        "The map records visited rooms and their connections. For a larger view, expand the map.",
+        "Quests appear in the order that you obtain them. An active quest shows a marker on the applicable route. Conversation boxes pause the event until you click through all dialogue.",
+        "When used within their listed reach, evacuation supplies end the expedition safely. They add carried gold to the permanent balance.",
       ],
     }],
   },
@@ -225,8 +211,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.adventureUnlocked,
     sections: [{
       paragraphs: [
-        "Adventure auto mode chooses movement, targets, and routine interactions. Advanced settings "
-          + "change routing priorities, stopping conditions, portal behavior, and gold handling.",
+        "Adventure auto mode chooses movement, targets, and routine interactions. Advanced settings change routing priorities, stopping conditions, portal behavior, and gold handling.",
         "Automation follows the selected settings. Turn it off when you need to make a manual decision.",
       ],
     }],
@@ -239,10 +224,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.fishingRod,
     sections: [{
       paragraphs: [
-        "Assign an available party member and select bait currently held in inventory. Bait controls "
-          + "catch chance and can change what the pool produces.",
-        "Ordinary bait is consumed when fishing begins. Reusable bait is not. Auto fishing repeats "
-          + "casts until bait is depleted or you stop the activity.",
+        "Assign an available party member. Select bait from inventory. Bait controls catch probability. It can change what the pool produces.",
+        "Fishing consumes ordinary bait at the start. It does not consume reusable bait. Auto fishing repeats casts until no bait remains or you stop the activity.",
       ],
     }],
   },
@@ -254,10 +237,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.fishingRod,
     sections: [{
       paragraphs: [
-        "Fish can be sold or fed to party members. Feeding permanently raises the stat associated with "
-          + "that fish until the current feeding limit is reached.",
-        "Fishing equipment can change catch behavior or favor one family of fish. Favoring redistributes "
-          + "successful catches; it does not increase the total chance of catching something.",
+        "You can sell fish or feed them to party members. Feeding a fish permanently increases the associated stat, up to the current feeding limit.",
+        "Fishing equipment can change catch behavior or favor one family of fish. Favoring changes the distribution of successful catches. It does not increase the total catch probability.",
       ],
     }],
   },
@@ -269,10 +250,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.miningUnlocked,
     sections: [{
       paragraphs: [
-        "Assign an available member and excavate rock connected to the cleared area. Rock can contain "
-          + "materials, enemies, keys, or passages. Most early rocks are empty.",
-        "Auto mining selects reachable frontier tiles. Stop mining to release the assigned member for "
-          + "recovery or another activity.",
+        "Assign an available member. Excavate rock connected to the cleared area. Rock can contain materials, enemies, keys, or passages. Most early rocks are empty.",
+        "Auto mining selects reachable frontier tiles. For recovery or another activity, stop mining to release the member.",
       ],
     }],
   },
@@ -284,10 +263,8 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.craftingUnlocked,
     sections: [{
       paragraphs: [
-        "Place materials into the 4 × 4 grid. Recipes match the entire arrangement, including empty "
-          + "spaces.",
-        "A matching known recipe displays its output. Crafting consumes the placed materials and adds "
-          + "the completed item to inventory.",
+        "Place materials into the 4 × 4 grid. Recipes match the entire arrangement, including empty spaces.",
+        "A known recipe shows its output when the grid matches it. Crafting consumes the placed materials. It adds the completed item to inventory.",
       ],
     }],
   },
@@ -299,8 +276,7 @@ export const HELP_ENTRIES: readonly HelpEntry[] = [
     unlocked: (progression) => progression.completedRaids.includes(7),
     sections: [{
       paragraphs: [
-        "Defeated enemies are recorded in the Bestiary. Hover an entry to inspect its portrait, "
-          + "description, and combat stats.",
+        "The Bestiary records defeated enemies. To inspect a portrait, description, and combat stats, move the pointer over an entry.",
         "Only defeated enemies appear.",
       ],
     }],

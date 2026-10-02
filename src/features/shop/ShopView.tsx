@@ -199,7 +199,7 @@ export function ShopView({
       {mode === "buy" && buyCategory === "potions" && (
         <section>
           <h2>Potions</h2>
-          <p>Potions are stored in Party inventory until consumed. Reusing the same level extends its duration; when levels overlap, only the stronger effect applies.</p>
+          <p>Potions stay in Party inventory until use. If you consume another potion of the same level, the effect’s duration extends. If levels overlap, only the stronger effect applies.</p>
           <table className="inventory-table">
             <thead><tr><th>Potion</th><th>Effect</th><th>Owned</th><th>Price</th><th>Action</th></tr></thead>
             <tbody>
