@@ -2,7 +2,6 @@
  * Ordered style entry point. Keep imports in cascade order: feature foundations
  * first, then the intentionally rough Renaissance skin and focused overrides.
  */
-@import "./styles/typography.css";
 @import "./styles/core.css";
 @import "./styles/battle.css";
 @import "./styles/adventure.css";

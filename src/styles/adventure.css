@@ -457,7 +457,7 @@
   border: 1px solid #38203f;
   background: #eee1c5;
   color: #38203f;
-  font: 700 10px/1 var(--font-text);
+  font: 700 10px/1 serif;
   box-shadow: 1px 1px 0 #896d69;
 }
 
@@ -1748,7 +1748,7 @@
 
 .map-room-marker small {
   color: #555;
-  font-family: var(--font-text);
+  font-family: sans-serif;
   font-size: 9px;
   font-weight: 700;
   line-height: 1;

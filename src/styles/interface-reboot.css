@@ -7,7 +7,7 @@
  */
 
 :root {
-  font-family: var(--font-text);
+  font-family: Arial, Helvetica, sans-serif !important;
   --raw-bg: #c9c9c9;
   --raw-panel: #e8e8e8;
   --raw-panel-light: #f5f5f5;
@@ -34,6 +34,11 @@
   --accent-soft: #cad9c3;
 }
 
+body,
+#root,
+#root * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 
 body {
   color: var(--raw-ink);
@@ -809,6 +814,18 @@ progress::-moz-progress-bar { background: var(--page-accent); }
   font-size: 12px;
 }
 
+.adventure-setup-view,
+.adventure-setup-view *,
+.adventure-setup-layout,
+.adventure-setup-layout *,
+.adventure-controls,
+.adventure-controls *,
+.adventure-sidebar,
+.adventure-sidebar *,
+.quest-log,
+.quest-log * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 
 .adventure-advanced-options {
   border: 2px solid #333;
@@ -1006,6 +1023,10 @@ progress::-moz-progress-bar { background: var(--page-accent); }
 
 /* Crafting: override the entire old workshop skin --------------------- */
 
+.crafting-view,
+.crafting-view * {
+  font-family: Arial, Helvetica, sans-serif !important;
+}
 
 .crafting-layout {
   width: min(100%, 840px);
