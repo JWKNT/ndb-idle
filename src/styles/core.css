@@ -1,5 +1,5 @@
 :root {
-  font-family: "Avenir Next", Avenir, "Trebuchet MS", sans-serif;
+  font-family: var(--font-text);
   color: #272119;
   background: #e8e2d6;
   --app-bg: #e8e2d6;

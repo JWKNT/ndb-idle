@@ -1,6 +1,6 @@
 /* Renaissance workshop skin: legible old-style type, parchment, walnut, and worn metal. */
 :root {
-  font-family: "EB Garamond", Garamond, Georgia, serif;
+  font-family: var(--font-text);
   color: #2b2118;
   background: #c9b995;
   --app-bg: #c9b995;
